@@ -1,19 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { storeData, getData } from "../../middleWare/asyncStorage";
-// import { socket_routes } from "../../middleWare/socket_routes";
 
 export const initialization = createAsyncThunk(
     'state/initialization',
     async (_, { dispatch }) => {
         try {
-            // dispatch(setSocket(await socket_routes()))
             const data = await getData('userData')
             console.log(data);
             if (data !== null) {
                 dispatch(setIsLogined(true))
                 dispatch(setUserDataWithoutStore(data))
-            }
+                dispatch(navigate('home'))
+            } else dispatch(setCurrentScreen('login'))
             return data.idUser
         } catch (e) {
             console.log(e.message);
@@ -77,10 +76,25 @@ export const loginUser = createAsyncThunk(
     }
 )
 
+function headerFormater(screen) {
+    switch (screen) {
+        case 'clientMoneyRequest': return 'выставить счет'
+        case 'transferBetweenCurrencyes': return 'перевод между счетами'
+        case 'login':  return 'Вход'
+        case 'register': return 'Регистрация'
+        case 'error': return 'Error'
+
+        default: return 'Wallet'
+    }
+}
+
 const stateSlice = createSlice({
     name: 'state',
     initialState: {
-        socket: null,
+        loading:false,
+        currentScreen: 'greeting',
+        currentScreenHeaderText: null,
+        stack: [],
         isLogined: false,
         userData: {
             idUser: null,
@@ -91,8 +105,23 @@ const stateSlice = createSlice({
         serverErrorMessage: null,
     },
     reducers: {
-        setSocket(state, action) {
-            state.socket = action.payload
+        setCurrentScreenHeaderText(state, action) {
+            state.currentScreenHeaderText = action.payload
+        },
+        navigate(state, action) {
+            state.stack.push(action.payload)
+            state.currentScreen = action.payload
+            state.currentScreenHeaderText = headerFormater(action.payload)
+        },
+        backButtonPress(state, action) {
+            console.log('backButtonPress');
+            console.log(state.stack);
+            if (state.stack.length > 1) {
+                state.stack.pop()
+                // navigate(state.stack[state.stack.length - 1])
+                state.currentScreen = state.stack[state.stack.length - 1]
+                state.currentScreenHeaderText = headerFormater(state.stack[state.stack.length - 1])
+            }
         },
         setLogin(state, action) {
             state.userData.login = action.payload
@@ -138,11 +167,20 @@ const stateSlice = createSlice({
                 console.log('registerNewUser is rejected');
                 console.log(action.payload);
             })
+        builder
+            .addCase(initialization.fulfilled, (state, action) => {
+                state.loading = false
+            })
+            .addCase(initialization.pending, (state, action) => {
+                state.loading = true
+            })
     }
 })
 
 export const {
-    setSocket,
+    navigate,
+    setCurrentScreenHeaderText,
+    backButtonPress,
     setIdUser,
     setLogin,
     setPhoneNumber,

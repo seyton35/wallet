@@ -1,9 +1,17 @@
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { useDispatch } from "react-redux";
+import { navigate } from "../store/slices/stateReducer";
 
-export default function Service({ navigation, service, }) {
+export default function Service({ service, }) {
+    const dispatch = useDispatch()
+
+    function servicePress() {
+        dispatch(navigate((service.screen)))
+    }
+
     return (
         <TouchableOpacity style={styles.container}
-            onPress={() => { navigation.navigate(service.screen) }}// TODO: переход к действию
+            onPress={servicePress}
         >
             <View style={styles.serviceView}>
                 <Text style={styles.serviceTxt}>{service.title}</Text>

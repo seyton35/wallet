@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, View, } from "react-native"
 import Service from "../components/Service"
 
-export default function ServicesScreen({ navigation }) {
+export default function ServicesScreen() {
     const servicesArray = [
         {title:'перевести со своего счета Wallet', screen:'transferBetweenCurrencyes'},
         {title:'запросить у другого клиента Wallet', screen:'clientMoneyRequest'},
@@ -18,7 +18,6 @@ export default function ServicesScreen({ navigation }) {
                         return <Service
                             key={index}
                             service={service}
-                            navigation={navigation}
                         ></Service>
                     })
                 }

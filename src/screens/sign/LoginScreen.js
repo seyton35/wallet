@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import Header from '../../components/Header'
@@ -6,7 +6,7 @@ import Header from '../../components/Header'
 import { loginUser } from '../../store/slices/stateReducer'
 
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen() {
     const [phoneNumber, setPhoneNumber] = useState('+')
     const [password, setPassword] = useState()
     const [error, setError] = useState()
@@ -14,17 +14,9 @@ export default function LoginScreen({ navigation }) {
     const [isPhoneOk, setIsPhoneOk] = useState(false)
     const [isPasswordOk, setIsPasswordOk] = useState(false)
 
-    const isLogined = useSelector(s => s.state.isLogined)
     const serverErrorMessage = useSelector(s => s.state.serverErrorMessage)
 
     const dispatch = useDispatch()
-
-    // useEffect(() => {
-    //     if (isLogined) {
-    //         navigation.navigate('home')
-    //     }
-    // }, [isLogined])
-
 
     function phoneNumHandler(val) {
         let num = val.split('')
@@ -81,9 +73,6 @@ export default function LoginScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-
-            <Header  headerText='Wallet'></Header>
-            
 
             {errorShow()}
 
