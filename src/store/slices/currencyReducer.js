@@ -38,7 +38,7 @@ export const fetchAwalableCurrency = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             //TODO: запрос на курсы доступных валют
-            // const res = await fetch(`myApi/awalableCurencyArray.json`) TODO: запрос на сервер
+            // const res = await fetch(`myApi/awalableCurencyArray.json`)
             // const data = await res.json()
             return [
                 { type: 'USD', limMin: 1, limMax: 10000 },
@@ -59,7 +59,6 @@ export const clientMoneyRequest = createAsyncThunk(
     'currency/ClientMoneyRequest',
     async ({ receiver, sender, currency, sum, comment, socket }, { dispatch }) => {
         try {
-            console.log(sender);
             const res = await fetch(
                 'http://192.168.31.254:8000/api/transaction/ClientMoneyRequest', {
                 method: 'POST',
@@ -73,7 +72,6 @@ export const clientMoneyRequest = createAsyncThunk(
             })
             const data = await res.json()
             if (res.status == 200) {
-                console.log(data.message);
                 dispatch(setToastMessage(data.message))
                 dispatch(setRequestStatus(data.status))
                 dispatch(resetValueAfterRequest())
@@ -91,9 +89,7 @@ export const clientMoneyRequest = createAsyncThunk(
 export const fetchIssuedInvoices = createAsyncThunk(
     'currency/fetchIssuedInvoices',
     async (idUser, { dispatch }) => {
-        console.log(idUser);
         try {
-            console.log('fetching invoices');
             const res = await fetch(
                 'http://192.168.31.254:8000/api/dataBase/IssuedInvoices', {
                 method: 'POST',

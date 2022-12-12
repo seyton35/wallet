@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -13,16 +13,9 @@ export default function RegisterScreen({ navigation }) {
     const [isPhoneOk, setIsPhoneOk] = useState(false)
     const [isPasswordOk, setIsPasswordOk] = useState(false)
 
-    const isLogined = useSelector(s => s.state.isLogined)
     const serverErrorMessage = useSelector(s => s.state.serverErrorMessage)
 
     const dispatch = useDispatch()
-
-    useEffect(() => {
-        if (isLogined) {
-            navigation.navigate('home')
-        }
-    }, [isLogined])
 
     function phoneNumHandler(val) {
         let num = val.split('')

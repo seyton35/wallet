@@ -1,14 +1,12 @@
 import { StyleSheet, ToastAndroid, View } from 'react-native'
-import { createContext, useEffect, useMemo, useRef, useState } from 'react'
+import { createContext, useEffect, useMemo, useRef } from 'react'
 import { io } from 'socket.io-client'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Stack from './navigation/Stack'
-import Greeting from './screens/noStack/Greeting'
 
 import { initialization } from './store/slices/stateReducer'
 import { SocketReducer } from './middleWare/socket_routes'
-import LoginScreen from './screens/sign/LoginScreen'
 
 export const SocketContext = createContext()
 
@@ -17,7 +15,6 @@ export default function Main() {
   const currencyToastMessage = useSelector(s => s.currency.toastAndroidMessage)
   const isLogined = useSelector(s => s.state.isLogined)
 
-  const [initialized, setInitialized] = useState(false)
   const socket = useRef(null)
 
   const dispatch = useDispatch()
@@ -33,7 +30,6 @@ export default function Main() {
 
   async function init() {
     const data = await dispatch(initialization())
-    setInitialized(true)
     if (socket.current) {
       socket.current.on('/', (data, cb) => {
         const sock = socket.current
@@ -52,21 +48,12 @@ export default function Main() {
     init()
   }, [true])
 
-  function selectScreen() {
-    return <LoginScreen></LoginScreen>
-    return <Greeting></Greeting>
-    if (!initialized) return <Greeting></Greeting>
-    else if (initialized) {
-      if (isLogined) return <Stack></Stack>
-      else return <LoginScreen></LoginScreen>
-    }
-  }
 
   return (
     <View style={styles.container}>
       <SocketContext.Provider
         value={socket.current}>
-        {selectScreen()}
+        <Stack></Stack>
       </SocketContext.Provider>
     </View>
   )

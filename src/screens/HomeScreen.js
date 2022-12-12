@@ -3,12 +3,13 @@ import { View, StyleSheet, Text, ScrollView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 import Currency from "../components/Currency";
-import { fetchIssuedInvoices, selectCurrency } from "../store/slices/currencyReducer";
 
-export default function Home({ navigation }) {
+import { fetchIssuedInvoices, selectCurrency } from "../store/slices/currencyReducer";
+import { navigate } from "../store/slices/stateReducer";
+
+export default function Home() {
     const { currencyArray } = useSelector(s => s.currency)
     const { idUser } = useSelector(s => s.state.userData)
-    console.log(idUser);
     const { issuedInvoicesArr } = useSelector(s => s.currency)
 
     const dispatch = useDispatch()
@@ -18,8 +19,8 @@ export default function Home({ navigation }) {
     }, [true])
 
     function goToCurrencyScreen(cur) { 
-        navigation.navigate('services', { cur })
         dispatch(selectCurrency(cur))
+        dispatch(navigate('service'))
     }
 
 
