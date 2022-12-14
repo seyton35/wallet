@@ -139,7 +139,8 @@ const styles = StyleSheet.create({
         height: 40,
         borderBottomWidth: 1,
         borderBottomColor: '#000',
-        marginHorizontal:10
+        paddingHorizontal:10,
+        backgroundColor: '#d3d3d3',
     },
     serviceTouchArea: {
         marginLeft: 5,

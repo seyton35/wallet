@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { navigate } from "./stateReducer";
+import { popToTop } from "./stateReducer";
 
 
 export const fetchAllCurrencyes = createAsyncThunk(
@@ -65,7 +65,7 @@ export const transferBetweenCurrencyes = createAsyncThunk(
             console.log(data);
 
             if (res.status == 200) {
-                dispatch(navigate('home'))
+                dispatch(popToTop('home'))
                 dispatch(setToastMessage(data.message))
                 dispatch(resetValueAfterRequest())
                 // dispatch(fetchAllCurrencyes()) TODO: 
@@ -119,6 +119,7 @@ export const clientMoneyRequest = createAsyncThunk(
                 dispatch(setToastMessage(data.message))
                 dispatch(setRequestStatus(data.status))
                 dispatch(resetValueAfterRequest())
+                dispatch(popToTop('home'))
                 socket.emit("/", {
                     way: 'CHECK_YOUR_ISSUES',
                     id: data.receiverId

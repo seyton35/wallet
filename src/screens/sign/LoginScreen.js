@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { loginUser } from '../../store/slices/stateReducer'
+import { loginUser, popToTop } from '../../store/slices/stateReducer'
 
 
 export default function LoginScreen() {
@@ -69,11 +69,24 @@ export default function LoginScreen() {
         }
     }
 
+    function changeAuth() {
+        dispatch(popToTop('register'))
+    }
 
     return (
         <View style={styles.container}>
 
             {errorShow()}
+
+            <View style={styles.changeAuthBox}>
+                <Text style={styles.changeAuthTxt}>еще нет кошелека?</Text>
+                <TouchableOpacity
+                    style={styles.changeAuthBtn}
+                    onPress={changeAuth}
+                >
+                    <Text style={styles.changeAuthBtnTxt}>зарегистрироваться</Text>
+                </TouchableOpacity>
+            </View>
 
             <View style={styles.formView}>
 
@@ -116,6 +129,30 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#d3d3d3',
+    },
+    changeAuthBox: {
+        flexDirection: 'row',
+        marginHorizontal: 15,
+        marginTop: 5,
+        alignSelf: 'flex-end',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    changeAuthTxt: {
+        fontSize: 17,
+        color: '#000',
+        marginRight: 5
+    },
+    changeAuthBtn: {
+        backgroundColor: '#97cbff',
+        paddingHorizontal: 5,
+        paddingVertical: 3,
+        borderRadius: 10,
+    },
+    changeAuthBtnTxt: {
+        fontSize: 17,
+        color: '#000',
+        fontWeight: 'bold'
     },
     errorView: {
         paddingHorizontal: 10,

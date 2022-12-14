@@ -7,7 +7,7 @@ import Dialog from 'react-native-dialog'
 import { SocketContext } from '../../Main'
 import { clientMoneyRequest, fetchAwalableCurrency, resetMessage } from '../../store/slices/currencyReducer'
 
-export default function ClientMoneyRequestScreen({ navigation }) {
+export default function ClientMoneyRequestScreen() {
   const [commentView, setCommentView] = useState(false)
   const [commentText, setCommentText] = useState()
   const [pickerCurrency, setPickerCurrency] = useState()
@@ -21,7 +21,6 @@ export default function ClientMoneyRequestScreen({ navigation }) {
   const [dialogVisible, setDialogVisible] = useState(false)
 
   const currencyArray = useSelector(s => s.currency.awalableCurrency)
-  const requestStatus = useSelector(s => s.currency.requestStatus)
   const serverErrorMessage = useSelector(s => s.currency.error)
 
   const sender = useSelector(s => s.state.userData.phoneNumber)
@@ -33,17 +32,6 @@ export default function ClientMoneyRequestScreen({ navigation }) {
     dispatch(resetMessage())
     dispatch(fetchAwalableCurrency())
   }, [])
-
-  useEffect(() => {
-    if (requestStatus == 'success') {
-      goToHomeScreen()
-    }
-  }, [requestStatus])
-
-
-  function goToHomeScreen() {
-    navigation.navigate('home')
-  }
 
   function phoneNumHandler(num) {
     if (num == '') {

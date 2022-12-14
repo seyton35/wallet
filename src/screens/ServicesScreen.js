@@ -29,6 +29,7 @@ export default function ServicesScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#d3d3d3',
     },
     serviceItem:{
     }

@@ -11,9 +11,8 @@ export const initialization = createAsyncThunk(
             if (data !== null) {
                 dispatch(setIsLogined(true))
                 dispatch(setUserDataWithoutStore(data))
-                dispatch(navigate('register'))
-                // dispatch(navigate('home'))
-            } else dispatch(navigate('register'))
+                dispatch(popToTop('home'))
+            } else dispatch(popToTop('register'))
             return data.idUser
         } catch (e) {
             console.log(e.message);
@@ -38,7 +37,7 @@ export const registerNewUser = createAsyncThunk(
             if (res.status === 200) {
                 console.log('registered');
                 dispatch(setIsLogined(true))
-                dispatch(navigate('home'))
+                dispatch(popToTop('home'))
                 dispatch(storeAndSetUserData({
                     id: data.id,
                     phoneNumber: data.phoneNumber
@@ -66,7 +65,7 @@ export const loginUser = createAsyncThunk(
             if (res.status === 200) {
                 console.log('logined');
                 dispatch(setIsLogined(true))
-                dispatch(navigate('home'))
+                dispatch(popToTop('home'))
                 dispatch(storeAndSetUserData({
                     id: data.id,
                     phoneNumber: data.phoneNumber
@@ -83,7 +82,7 @@ function headerFormater(screen) {
     switch (screen) {
         case 'clientMoneyRequest': return 'выставить счет'
         case 'transferBetweenCurrencyes': return 'перевод между счетами'
-        case 'login':  return 'Вход'
+        case 'login': return 'Вход'
         case 'register': return 'Регистрация'
         case 'error': return 'Error'
 
@@ -94,7 +93,7 @@ function headerFormater(screen) {
 const stateSlice = createSlice({
     name: 'state',
     initialState: {
-        loading:false,
+        loading: false,
         currentScreen: 'greeting',
         currentScreenHeaderText: null,
         stack: [],
@@ -113,6 +112,11 @@ const stateSlice = createSlice({
         },
         navigate(state, action) {
             state.stack.push(action.payload)
+            state.currentScreen = action.payload
+            state.currentScreenHeaderText = headerFormater(action.payload)
+        },
+        popToTop(state, action) {
+            state.stack = [action.payload]
             state.currentScreen = action.payload
             state.currentScreenHeaderText = headerFormater(action.payload)
         },
@@ -181,6 +185,7 @@ const stateSlice = createSlice({
 
 export const {
     navigate,
+    popToTop,
     setCurrentScreenHeaderText,
     backButtonPress,
     setIdUser,
