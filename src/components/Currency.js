@@ -1,11 +1,11 @@
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 export default function Currency({ cur, navigate }) {
-    const { value, type } = cur
+    const { count, type } = cur
     return (
         <View style={styles.container}>
             <Text style={styles.walet}>{type}</Text>
-            <Text style={styles.walet}>{value.toFixed(3)}</Text>
+            <Text style={styles.walet}>{count.toFixed(3)}</Text>
 
             <TouchableOpacity
             style={styles.btn}

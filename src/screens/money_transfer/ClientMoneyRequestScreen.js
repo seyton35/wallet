@@ -4,8 +4,8 @@ import { Picker } from '@react-native-picker/picker'
 import { useDispatch, useSelector } from 'react-redux'
 import Dialog from 'react-native-dialog'
 
-import { clientMoneyRequest, fetchAwalableCurrency, resetValueAfterRequest } from '../../store/slices/currencyReducer'
 import { SocketContext } from '../../Main'
+import { clientMoneyRequest, fetchAwalableCurrency, resetMessage } from '../../store/slices/currencyReducer'
 
 export default function ClientMoneyRequestScreen({ navigation }) {
   const [commentView, setCommentView] = useState(false)
@@ -14,16 +14,15 @@ export default function ClientMoneyRequestScreen({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState('+')
   const [sum, setSum] = useState()
   const [MoneyRequestLimits, setMoneyRequestLimits] = useState()
-  const [error, setError] = useState()
+  const [errorMessage, setError] = useState()
 
   const [isPhoneOk, setIsPhoneOk] = useState(false)
   const [isSumOk, setIsSumOk] = useState(false)
   const [dialogVisible, setDialogVisible] = useState(false)
 
   const currencyArray = useSelector(s => s.currency.awalableCurrency)
-  const toastMessage = useSelector(s => s.currency.toastMessage)
   const requestStatus = useSelector(s => s.currency.requestStatus)
-  const serverErrorMessage = useSelector(s => s.currency.serverErrorMessage)
+  const serverErrorMessage = useSelector(s => s.currency.error)
 
   const sender = useSelector(s => s.state.userData.phoneNumber)
   const socket = useContext(SocketContext)
@@ -31,14 +30,16 @@ export default function ClientMoneyRequestScreen({ navigation }) {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    dispatch(resetMessage())
+    dispatch(fetchAwalableCurrency())
+  }, [])
+
+  useEffect(() => {
     if (requestStatus == 'success') {
       goToHomeScreen()
     }
   }, [requestStatus])
 
-  useEffect(() => {
-    dispatch(fetchAwalableCurrency())
-  }, [true])
 
   function goToHomeScreen() {
     navigation.navigate('home')
@@ -114,11 +115,11 @@ export default function ClientMoneyRequestScreen({ navigation }) {
           <Text style={styles.errorText}>{serverErrorMessage}</Text>
         </View>
       )
-    } else if (error) {
+    } else if (errorMessage) {
 
       return (
         < View style={styles.errorView}>
-          <Text style={styles.errorText}>{error}</Text>
+          <Text style={styles.errorText}>{errorMessage}</Text>
         </View>
       )
     }

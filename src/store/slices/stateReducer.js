@@ -11,8 +11,9 @@ export const initialization = createAsyncThunk(
             if (data !== null) {
                 dispatch(setIsLogined(true))
                 dispatch(setUserDataWithoutStore(data))
-                dispatch(navigate('home'))
-            } else dispatch(setCurrentScreen('login'))
+                dispatch(navigate('register'))
+                // dispatch(navigate('home'))
+            } else dispatch(navigate('register'))
             return data.idUser
         } catch (e) {
             console.log(e.message);
@@ -37,6 +38,7 @@ export const registerNewUser = createAsyncThunk(
             if (res.status === 200) {
                 console.log('registered');
                 dispatch(setIsLogined(true))
+                dispatch(navigate('home'))
                 dispatch(storeAndSetUserData({
                     id: data.id,
                     phoneNumber: data.phoneNumber
@@ -64,6 +66,7 @@ export const loginUser = createAsyncThunk(
             if (res.status === 200) {
                 console.log('logined');
                 dispatch(setIsLogined(true))
+                dispatch(navigate('home'))
                 dispatch(storeAndSetUserData({
                     id: data.id,
                     phoneNumber: data.phoneNumber
@@ -118,7 +121,6 @@ const stateSlice = createSlice({
             console.log(state.stack);
             if (state.stack.length > 1) {
                 state.stack.pop()
-                // navigate(state.stack[state.stack.length - 1])
                 state.currentScreen = state.stack[state.stack.length - 1]
                 state.currentScreenHeaderText = headerFormater(state.stack[state.stack.length - 1])
             }
