@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import Header from '../../components/Header'
 
 import { loginUser } from '../../store/slices/stateReducer'
 

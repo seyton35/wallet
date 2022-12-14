@@ -1,9 +1,36 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { navigate } from "./stateReducer";
 
+
+export const fetchAllCurrencyes = createAsyncThunk(
+    'currency/fetchAllCurrencyes',
+    async (idUser, { dispatch }) => {
+        try {
+            const res = await fetch(
+                'http://192.168.31.254:8000/api/database/fetchAllCurrencyes', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    idUser,
+                })
+            })
+            const data = await res.json()
+            if (res.status == 200) {
+                dispatch(setCurrencyArray(data.currencyesArr))
+            } else {
+                dispatch(setToastMessage(data.message))
+            }
+        } catch (e) {
+            return e.message
+        }
+    }
+)
 
 export const fetchExchangeRate = createAsyncThunk(
     'currency/fetchExchangeRate',
-    async ({ cur, goal }, { rejectWithValue }) => {
+    async ({ cur, goal },) => {
         cur = cur.toLowerCase()
         goal = goal.toLowerCase()
         try {
@@ -18,17 +45,34 @@ export const fetchExchangeRate = createAsyncThunk(
 
 export const transferBetweenCurrencyes = createAsyncThunk(
     'currency/transferBetweenCurrencyes',
-    async ({ sum, donor }, { rejectWithValue, fulfillWithValue }) => {
+    async ({ id, sum, rate, recipient, donor }, { dispatch }) => {
         try {
-            // TODO: обновление в базе
-            return fulfillWithValue({
-                donor, sum,
-                status: 'success',
-                message: 'перевод выполнен'
+            const res = await fetch(
+                'http://192.168.31.254:8000/api/transaction/transferBetweenCurrencyes', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id,
+                    sum,
+                    rate,
+                    recipient,
+                    donor
+                })
             })
+            const data = await res.json()
+            console.log(data);
+
+            if (res.status == 200) {
+                dispatch(navigate('home'))
+                dispatch(setToastMessage(data.message))
+                dispatch(resetValueAfterRequest())
+                // dispatch(fetchAllCurrencyes()) TODO: 
+            } else dispatch(setErrorMessage(data.message))
 
         } catch (e) {
-            return rejectWithValue(e.message)
+            return e.message
         }
     }
 )
@@ -79,7 +123,7 @@ export const clientMoneyRequest = createAsyncThunk(
                     way: 'CHECK_YOUR_ISSUES',
                     id: data.receiverId
                 });
-            } else dispatch(setServerErrorMessage(data.message))
+            } else dispatch(setErrorMessage(data.message))
         } catch (e) {
             return e.message
         }
@@ -113,11 +157,7 @@ export const fetchIssuedInvoices = createAsyncThunk(
 const currencySlice = createSlice({
     name: 'currency',
     initialState: {
-        currencyArray: [
-            { type: 'USD', value: 10 },
-            { type: 'EUR', value: 20 },
-            { type: 'RUB', value: 30 },
-        ],
+        currencyArray: [],
         selectedCurrency: null,
         rateStatus: null,
         error: null,
@@ -135,6 +175,9 @@ const currencySlice = createSlice({
                 value: 0
             })
         },
+        setCurrencyArray(state, action) {
+            state.currencyArray = action.payload
+        },
         selectCurrency(state, action) {
             state.selectedCurrency = action.payload
         },
@@ -144,8 +187,8 @@ const currencySlice = createSlice({
         setToastMessage(state, action) {
             state.toastAndroidMessage = action.payload
         },
-        setServerErrorMessage(state, action) {
-            state.serverErrorMessage = action.payload
+        setErrorMessage(state, action) {
+            state.error = action.payload
         },
         resetValueAfterRequest(state, action) {
             state.selectedCurrency = null
@@ -155,6 +198,9 @@ const currencySlice = createSlice({
             state.transferStatus = null
             state.toastAndroidMessage = null
             state.requestStatus = null
+        },
+        resetMessage(state, action) {
+            state.error = null
         },
         setIssuedInvoicesArr(state, action) {
             state.issuedInvoicesArr = action.payload
@@ -175,25 +221,7 @@ const currencySlice = createSlice({
             })
 
         builder
-            .addCase(transferBetweenCurrencyes.fulfilled, (state, action) => {
-                state.transferStatus = action.payload.status
-                state.toastMessage = action.payload.message
-                const { donor, sum } = action.payload
-                let flag = 0
-                for (let i = 0; i < state.currencyArray.length; i++) {
-                    const cur = state.currencyArray[i];
-                    if (cur.type == donor) {
-                        cur.value -= sum * state.rate
-                        flag += 1
-                    }
-                    if (cur.type == state.selectedCurrency.type) {
-                        cur.value += Number(sum)
-                        state.selectedCurrency = cur
-                        flag += 1
-                    }
-                    if (flag === 2) return
-                }
-            })
+
             .addCase(transferBetweenCurrencyes.pending, (state, action) => {
                 state.transferStatus = 'loading'
             })
@@ -215,11 +243,13 @@ const currencySlice = createSlice({
 
 export const {
     addCurrency,
+    setCurrencyArray,
     selectCurrency,
     setRequestStatus,
     setToastMessage,
-    setServerErrorMessage,
+    setErrorMessage,
     resetValueAfterRequest,
+    resetMessage,
     setIssuedInvoicesArr
 } = currencySlice.actions
 

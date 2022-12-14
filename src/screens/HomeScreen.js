@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Currency from "../components/Currency";
 
-import { fetchIssuedInvoices, selectCurrency } from "../store/slices/currencyReducer";
+import { fetchAllCurrencyes, fetchIssuedInvoices, selectCurrency } from "../store/slices/currencyReducer";
 import { navigate } from "../store/slices/stateReducer";
 
 export default function Home() {
@@ -16,6 +16,7 @@ export default function Home() {
 
     useEffect(() => {
         dispatch(fetchIssuedInvoices(idUser))
+        dispatch(fetchAllCurrencyes(idUser))
     }, [true])
 
     function goToCurrencyScreen(cur) { 
