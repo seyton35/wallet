@@ -18,3 +18,11 @@ export const getData = async (key) => {
         console.log(e.message);
     }
 }
+
+export const removeData = async(key)=>{
+    try {
+        await AsyncStorage.removeItem(key)
+    } catch (e) {
+        console.log(e.message);
+    }
+}

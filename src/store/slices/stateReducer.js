@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { storeData, getData } from "../../middleWare/asyncStorage";
+import { storeData, getData, removeData } from "../../middleWare/asyncStorage";
 
 export const initialization = createAsyncThunk(
     'state/initialization',
@@ -9,10 +9,10 @@ export const initialization = createAsyncThunk(
             const data = await getData('userData')
             console.log(data);
             if (data !== null) {
-                dispatch(setIsLogined(true))
                 dispatch(setUserDataWithoutStore(data))
+                dispatch(setIsLogined(true))
                 dispatch(popToTop('home'))
-            } else dispatch(popToTop('register'))
+            } else dispatch(popToTop('login'))
             return data.idUser
         } catch (e) {
             console.log(e.message);
@@ -36,12 +36,12 @@ export const registerNewUser = createAsyncThunk(
             console.log(data);
             if (res.status === 200) {
                 console.log('registered');
-                dispatch(setIsLogined(true))
-                dispatch(popToTop('home'))
                 dispatch(storeAndSetUserData({
                     id: data.id,
                     phoneNumber: data.phoneNumber
                 }))
+                dispatch(setIsLogined(true))
+                dispatch(popToTop('home'))
                 dispatch(setToastAndroidMessage(data.message))
             } else dispatch(setServerErrorMessage(data.error))
         } catch (e) {
@@ -64,12 +64,12 @@ export const loginUser = createAsyncThunk(
             const data = await res.json()
             if (res.status === 200) {
                 console.log('logined');
-                dispatch(setIsLogined(true))
-                dispatch(popToTop('home'))
                 dispatch(storeAndSetUserData({
                     id: data.id,
                     phoneNumber: data.phoneNumber
                 }))
+                dispatch(setIsLogined(true))
+                dispatch(popToTop('home'))
                 dispatch(setToastAndroidMessage(data.message))
             } else dispatch(setServerErrorMessage(data.error))
         } catch (e) {
@@ -143,6 +143,15 @@ const stateSlice = createSlice({
             state.userData.phoneNumber = action.payload.phoneNumber
             storeData('userData', state.userData)
         },
+        removeUserData(state, action) {
+            setIsLogined(false)
+            state.userData = {
+                idUser: null,
+                login: null,
+                phoneNumber: null,
+            }
+            removeData('userData')
+        },
         setUserDataWithoutStore(state, action) {
             state.userData = action.payload
         },
@@ -193,6 +202,7 @@ export const {
     setPhoneNumber,
     storeAndSetUserData,
     setUserDataWithoutStore,
+    removeUserData,
     setServerErrorMessage,
     setIsLogined,
     setToastAndroidMessage,
