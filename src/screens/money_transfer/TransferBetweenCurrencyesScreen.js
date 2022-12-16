@@ -1,7 +1,8 @@
 import { Picker } from '@react-native-picker/picker'
 import { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+import Header from '../../components/Header'
 
 import { fetchExchangeRate, resetMessage, transferBetweenCurrencyes } from '../../store/slices/currencyReducer'
 
@@ -44,7 +45,7 @@ export default function ClientMoneyRequestScreen() {
     }
 
     function summHandler(num) {
-        if(num == '') return setSum(0)
+        if (num == '') return setSum(0)
         if (num[0] == '.') num = '0' + num
         const reg = /[^0-9\.]/
         if (num.search(reg) === -1) {
@@ -87,48 +88,53 @@ export default function ClientMoneyRequestScreen() {
 
     return (
         <View style={styles.container}>
+            <Header headerText='перевод между счетами' />
             {showErrors()}
-            <Text style={styles.text}>выберите счет</Text>
-            <Picker
-                selectedValue={pickerCurrency}
-                onValueChange={setPickerCurrency}
-            >
-                {
-                    currencyArray.map((cur, index) => {
-                        if (cur.type !== currency.type) {
-                            return (
-                                <Picker.Item
-                                    key={index}
-                                    label={`${cur.type}   ${cur.count.toFixed(3)}...`}
-                                    value={cur.type}
-                                />
-                            )
-                        }
-                    })
+            <ScrollView style={styles.screenScroll}>
+
+
+                <Text style={styles.text}>выберите счет</Text>
+                <Picker
+                    selectedValue={pickerCurrency}
+                    onValueChange={setPickerCurrency}
+                >
+                    {
+                        currencyArray.map((cur, index) => {
+                            if (cur.type !== currency.type) {
+                                return (
+                                    <Picker.Item
+                                        key={index}
+                                        label={`${cur.type}   ${cur.count.toFixed(3)}...`}
+                                        value={cur.type}
+                                    />
+                                )
+                            }
+                        })
+                    }
+                </Picker>
+                <Text style={styles.text}>введите сумму в {currency.type}</Text>
+                <TextInput
+                    style={styles.sumRequest}
+                    keyboardType='decimal-pad'
+                    placeholder={'0'}
+                    value={sum}
+                    onChangeText={num => summHandler(num)}
+                />
+                {rateStatus === 'complete'
+                    ? <Text>1 {currency.type} = {rate} {pickerCurrency}</Text>
+                    : <Text>{rateStatus}</Text>
                 }
-            </Picker>
-            <Text style={styles.text}>введите сумму в {currency.type}</Text>
-            <TextInput
-                style={styles.sumRequest}
-                keyboardType='decimal-pad'
-                placeholder={'0'}
-                value={sum}
-                onChangeText={num => summHandler(num)}
-            />
-            {rateStatus === 'complete'
-                ? <Text>1 {currency.type} = {rate} {pickerCurrency}</Text>
-                : <Text>{rateStatus}</Text>
-            }
-            <Text style={styles.text}>без коммисии</Text>
-            <Text style={styles.text}>иторго</Text>
-            <Text style={styles.transferResult}>- {transferResult} {pickerCurrency}</Text>
-            <Text style={styles.transferSum}>+ {sum} {currency.type}</Text>
-            <TouchableOpacity
-                style={styles.transferBtn}
-                onPress={transfer}
-            >
-                <Text style={styles.transferBtnTxt}>перевести</Text>
-            </TouchableOpacity>
+                <Text style={styles.text}>без коммисии</Text>
+                <Text style={styles.text}>иторго</Text>
+                <Text style={styles.transferResult}>- {transferResult} {pickerCurrency}</Text>
+                <Text style={styles.transferSum}>+ {sum} {currency.type}</Text>
+                <TouchableOpacity
+                    style={styles.transferBtn}
+                    onPress={transfer}
+                >
+                    <Text style={styles.transferBtnTxt}>перевести</Text>
+                </TouchableOpacity>
+            </ScrollView>
         </View >
     )
 }
@@ -137,10 +143,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         height: 40,
-        borderBottomWidth: 1,
-        borderBottomColor: '#000',
-        paddingHorizontal:10,
+        width: '100%',
         backgroundColor: '#d3d3d3',
+    },
+    screenScroll: {
+        paddingHorizontal: 10
     },
     serviceTouchArea: {
         marginLeft: 5,
@@ -166,7 +173,7 @@ const styles = StyleSheet.create({
     },
     transferSum: {
         fontSize: 25,
-        fontWeight:'bold',
+        fontWeight: 'bold',
         color: '#000'
     },
     transferBtn: {

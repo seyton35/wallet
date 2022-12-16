@@ -6,6 +6,7 @@ import Dialog from 'react-native-dialog'
 
 import { SocketContext } from '../../Main'
 import { clientMoneyRequest, fetchAwalableCurrency, resetMessage } from '../../store/slices/currencyReducer'
+import Header from '../../components/Header'
 
 export default function ClientMoneyRequestScreen() {
   const [commentView, setCommentView] = useState(false)
@@ -115,6 +116,7 @@ export default function ClientMoneyRequestScreen() {
 
   return (
     <View style={styles.container}>
+      <Header headerText='выставить счет'/>
 
       <Dialog.Container
         visible={dialogVisible}

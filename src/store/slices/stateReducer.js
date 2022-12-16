@@ -13,7 +13,6 @@ export const initialization = createAsyncThunk(
                 dispatch(setIsLogined(true))
                 dispatch(popToTop('home'))
             } else dispatch(popToTop('login'))
-            return data.idUser
         } catch (e) {
             console.log(e.message);
         }
@@ -107,26 +106,18 @@ const stateSlice = createSlice({
         serverErrorMessage: null,
     },
     reducers: {
-        setCurrentScreenHeaderText(state, action) {
-            state.currentScreenHeaderText = action.payload
-        },
         navigate(state, action) {
             state.stack.push(action.payload)
             state.currentScreen = action.payload
-            state.currentScreenHeaderText = headerFormater(action.payload)
         },
         popToTop(state, action) {
             state.stack = [action.payload]
             state.currentScreen = action.payload
-            state.currentScreenHeaderText = headerFormater(action.payload)
         },
         backButtonPress(state, action) {
-            console.log('backButtonPress');
-            console.log(state.stack);
             if (state.stack.length > 1) {
                 state.stack.pop()
                 state.currentScreen = state.stack[state.stack.length - 1]
-                state.currentScreenHeaderText = headerFormater(state.stack[state.stack.length - 1])
             }
         },
         setLogin(state, action) {
@@ -195,7 +186,6 @@ const stateSlice = createSlice({
 export const {
     navigate,
     popToTop,
-    setCurrentScreenHeaderText,
     backButtonPress,
     setIdUser,
     setLogin,

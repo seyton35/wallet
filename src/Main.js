@@ -37,9 +37,7 @@ export default function Main() {
   }, [stateToastMessage])
 
   useEffect(() => {
-    console.log(1);
     if (isLogined && socket.current != null) {
-      console.log(2);
       socket.current.emit('/', {
         way: 'SUBSCRIBE_BY_ID',
         id: idUser
@@ -83,11 +81,16 @@ export default function Main() {
 
   return (
     <View style={styles.container}>
-      <Button title='screen' onPress={() => console.log(currentScreen)}></Button>
-      <Button title='log out' onPress={() => {
-        dispatch(removeUserData())
-        dispatch(popToTop('login'))
-      }}></Button>
+      <View style={{
+        width:'100%',
+        flexDirection:'row',
+        position:'absolute',
+        zIndex:900,
+        alignContent :'flex-end',
+      }}>
+        <Button title='screen' onPress={() => console.log(currentScreen)}></Button>
+      </View>
+
       <SocketContext.Provider
         value={socket.current}>
         <Stack></Stack>

@@ -1,8 +1,10 @@
 import { Text, View, StyleSheet } from "react-native";
+import Header from "../components/Header";
 
 export default function Error() {
     return(
         <View style={styles.container}>
+            <Header headerText="error" showHeaderButton={false}/>
             <Text style={styles.errHead}>Error</Text>
             <Text style={styles.errText}>В приложении произошла ошибка</Text>
         </View>

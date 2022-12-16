@@ -1,30 +1,12 @@
-import { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { backButtonPress } from '../store/slices/stateReducer'
 
 
-export default function Header({ headerText }) {
-  const currentScreen = useSelector(s => s.state.currentScreen)
-  const [showHeader, setShowHeader] = useState(false)
-  const [showHeaderButton, setShowHeaderButton] = useState(true)
+export default function Header({ headerText ='Wallet', showHeaderButton = true }) {
 
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    if (
-      currentScreen == 'login' ||
-      currentScreen == 'register' ||
-      currentScreen == 'home'
-    ) setShowHeaderButton(false)
-    else setShowHeaderButton(true)
-
-    if (currentScreen == 'greeting') setShowHeader(false)
-    else setShowHeader(true)
-
-
-  }, [currentScreen])
 
   function navigate() {
     dispatch(backButtonPress())
@@ -32,30 +14,27 @@ export default function Header({ headerText }) {
 
 
   return (
-    <>
-      {showHeader
+
+    < View style={styles.header} >
+      {showHeaderButton
         ?
-        < View style={styles.header} >
-          {showHeaderButton
-            ?
-            <TouchableOpacity style={styles.headerButton}
-              onPress={navigate}
-            >
-              <Text style={styles.headerButtonIcon}>{'<'}</Text>
-            </TouchableOpacity>
-            : null
-          }
-          <Text style={styles.headerText}>{headerText}</Text>
-        </View >
+        <TouchableOpacity style={styles.headerButton}
+          onPress={navigate}
+        >
+          <Text style={styles.headerButtonIcon}>{'<'}</Text>
+        </TouchableOpacity>
         : null
       }
-    </>
+      <Text style={styles.headerText}>{headerText}</Text>
+    </View >
+
   )
 }
 
 const styles = StyleSheet.create({
   header: {
     height: 50,
+    width:'100%',
     backgroundColor: '#fff',
     alignItems: 'center',
     flexDirection: 'row'

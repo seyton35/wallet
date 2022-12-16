@@ -1,4 +1,5 @@
 import { ScrollView, StyleSheet, View, } from "react-native"
+import Header from "../components/Header"
 import Service from "../components/Service"
 
 export default function ServicesScreen() {
@@ -10,6 +11,7 @@ export default function ServicesScreen() {
     ]
     return (
         <View style={styles.container}>
+            <Header headerText="пополнить счет"/>
             <ScrollView
             style={styles.serviceScroll}
             >

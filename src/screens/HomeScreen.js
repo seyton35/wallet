@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, ScrollView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 import Currency from "../components/Currency";
+import Header from "../components/Header";
 
 import { fetchAllCurrencyes, fetchIssuedInvoices, selectCurrency } from "../store/slices/currencyReducer";
 import { navigate } from "../store/slices/stateReducer";
@@ -27,6 +28,8 @@ export default function Home() {
 
     return (
         <View style={styles.container}>
+            <Header showHeaderButton={false}/>
+
             <Text>my walets</Text>
             <ScrollView
                 horizontal={true}

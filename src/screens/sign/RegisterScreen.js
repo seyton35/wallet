@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+import Header from '../../components/Header'
 
 import { popToTop, registerNewUser } from '../../store/slices/stateReducer'
 
-export default function RegisterScreen({ navigation }) {
+export default function RegisterScreen() {
     const [phoneNumber, setPhoneNumber] = useState('+')
     const [password, setPassword] = useState()
     const [repeatPassword, setRepeatPassword] = useState()
@@ -95,13 +96,14 @@ export default function RegisterScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <Header showHeaderButton={false} />
             {errorShow()}
 
             <View style={styles.changeAuthBox}>
                 <Text style={styles.changeAuthTxt}>уже есть кошелек?</Text>
                 <TouchableOpacity
                     style={styles.changeAuthBtn}
-                onPress={changeAuth}
+                    onPress={changeAuth}
                 >
                     <Text style={styles.changeAuthBtnTxt}>войти</Text>
                 </TouchableOpacity>
@@ -171,7 +173,7 @@ const styles = StyleSheet.create({
     changeAuthBox: {
         flexDirection: 'row',
         marginHorizontal: 15,
-        marginTop:5,
+        marginTop: 5,
         alignSelf: 'flex-end',
         alignItems: 'center',
         justifyContent: 'center',
@@ -184,7 +186,7 @@ const styles = StyleSheet.create({
     changeAuthBtn: {
         backgroundColor: '#97cbff',
         paddingHorizontal: 5,
-        paddingVertical:3,
+        paddingVertical: 3,
         borderRadius: 10,
     },
     changeAuthBtnTxt: {
