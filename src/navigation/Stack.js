@@ -2,6 +2,8 @@ import { StyleSheet, View } from "react-native";
 
 import { useSelector } from "react-redux";
 
+//components
+import BottomTab from '../components/BottomTab'
 //screens
 import Greeting from "../screens/noStack/Greeting";
 import Error from "../screens/ErrorScreen";
@@ -12,8 +14,9 @@ import ServicesScreen from "../screens/ServicesScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import TransferBetweenCurrencyScreen from "../screens/money_transfer/TransferBetweenCurrencyesScreen";
 import ClientMoneyRequestScreen from "../screens/money_transfer/ClientMoneyRequestScreen";
-//components
-import BottomTab from '../components/BottomTab'
+import BillPaymentScreen from "../screens/money_transfer/BillPaymentScreen";
+import AllBillsScreen from "../screens/AllBilsScreen";
+import HistoryScreen from "../screens/HistoryScreen";
 
 export default function Stack() {
 
@@ -25,14 +28,18 @@ export default function Stack() {
             case 'greeting': return <Greeting />
 
             case 'home': return <Home />
-            case 'error': return <Error />
             case 'service': return <ServicesScreen />
             case 'profile': return <ProfileScreen />
-
+            case 'history': return <HistoryScreen />
+            
             case 'login': return <LoginScreen />
             case 'register': return <RegisterScreen />
+            
             case 'transferBetweenCurrencyes': return <TransferBetweenCurrencyScreen />
             case 'clientMoneyRequest': return <ClientMoneyRequestScreen />
+            case 'billPayment': return <BillPaymentScreen />
+            case 'allBills': return <AllBillsScreen />
+            case 'error': return <Error />
             default:
                 break;
         }

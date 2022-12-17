@@ -1,11 +1,21 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { billPayment } from '../store/slices/currencyReducer'
+import { navigate } from '../store/slices/stateReducer'
 
 export default function Issue({ issue }) {
-    const {idUser} = useSelector(s=>s.state.userData) 
+    const { idUser } = useSelector(s => s.state.userData)
 
     const dispatch = useDispatch()
+
+    function billPressHandler() {
+        dispatch(navigate({
+            screen: 'billPayment',
+            data: {
+                bill: issue
+            }
+        }))
+    }
 
     function payBtnHandler() {
         Alert.alert(
@@ -20,7 +30,7 @@ export default function Issue({ issue }) {
                     text: 'оплатить',
                     onPress: () => {
                         dispatch(billPayment({
-                            idUser, idBill:issue._id,currency:issue.currency
+                            idUser, idBill: issue._id, currency: issue.currency
                         }))
                     }
                 }
@@ -30,6 +40,7 @@ export default function Issue({ issue }) {
 
     return (
         <TouchableOpacity style={styles.container}
+            onPress={billPressHandler}
         >
             <View style={{ flexDirection: 'row' }}>
                 <View>{/*TODO: заменить на icon для счета */}

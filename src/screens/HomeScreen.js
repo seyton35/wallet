@@ -26,6 +26,10 @@ export default function Home() {
         dispatch(navigate('service'))
     }
 
+    function allBillsBtnHandler() {
+        dispatch(navigate('allBills'))
+    }
+
 
     return (
         <View style={styles.container}>
@@ -57,17 +61,23 @@ export default function Home() {
                             }()}
                         </Text>
                         {issuedInvoicesArr.map((issue, index) => {
-                            if (index>=3) {
+                            if (index >= 3) {
                                 return null
                             } else {
                                 return (
                                     <Issue issue={issue} key={index}></Issue>
-                                    )
-                                }
+                                )
+                            }
                         })}
-                        <TouchableOpacity style={styles.allIssuesBtn}>
-                            <Text style={styles.allIssuesBtnTxt}>Все счета</Text>
-                        </TouchableOpacity>
+                        {issuedInvoicesArr.length > 3
+                            ?
+                            <TouchableOpacity style={styles.allBillsBtn}
+                                onPress={allBillsBtnHandler}
+                            >
+                                <Text style={styles.allIssuesBtnTxt}>Все счета</Text>
+                            </TouchableOpacity>
+                            : null
+                        }
                     </View>
                     : null
                 }
@@ -100,7 +110,7 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: 17
     },
-    allIssuesBtn: {
+    allBillsBtn: {
         padding: 10,
         marginTop: 5,
         alignItems: 'center',

@@ -172,6 +172,34 @@ export const billPayment = createAsyncThunk(
             if (res.status == 200) {
                 console.log(data);
                 dispatch(setToastMessage(data.message))
+                dispatch(fetchIssuedInvoices(idUser))
+            }else dispatch(setToastMessage(data.message))
+            
+
+        } catch (e) {
+            return e.message
+        }
+    }
+)
+
+export const rejectBillPayment = createAsyncThunk(
+    'currency/rejectBillPayment',
+    async ({ idUser, idBill }, { dispatch }) => {
+        try {
+            console.log(idUser, idBill);
+            const res = await fetch(
+                'http://192.168.31.254:8000/api/transaction/rejectBillPayment', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ idUser, idBill })
+            })
+            const data = await res.json()
+            if (res.status == 200) {
+                console.log(data);
+                dispatch(setToastMessage(data.message))
+                dispatch(fetchIssuedInvoices(idUser))
             }else dispatch(setToastMessage(data.message))
             
 
