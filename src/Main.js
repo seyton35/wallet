@@ -81,16 +81,6 @@ export default function Main() {
 
   return (
     <View style={styles.container}>
-      <View style={{
-        width:'100%',
-        flexDirection:'row',
-        position:'absolute',
-        zIndex:900,
-        alignContent :'flex-end',
-      }}>
-        <Button title='screen' onPress={() => console.log(currentScreen)}></Button>
-      </View>
-
       <SocketContext.Provider
         value={socket.current}>
         <Stack></Stack>

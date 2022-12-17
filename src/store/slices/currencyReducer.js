@@ -155,6 +155,32 @@ export const fetchIssuedInvoices = createAsyncThunk(
     }
 )
 
+export const billPayment = createAsyncThunk(
+    'currency/billPayment',
+    async ({ idUser, idBill, currency }, { dispatch }) => {
+        try {
+            console.log(idUser, idBill, currency);
+            const res = await fetch(
+                'http://192.168.31.254:8000/api/transaction/billPayment', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ idUser, idBill, currency })
+            })
+            const data = await res.json()
+            if (res.status == 200) {
+                console.log(data);
+                dispatch(setToastMessage(data.message))
+            }else dispatch(setToastMessage(data.message))
+            
+
+        } catch (e) {
+            return e.message
+        }
+    }
+)
+
 const currencySlice = createSlice({
     name: 'currency',
     initialState: {
