@@ -4,8 +4,8 @@ import Header from '../components/Header'
 import { rejectBillPayment } from '../store/slices/currencyReducer'
 import { navigate } from '../store/slices/stateReducer'
 
-export default function AllBillsScreen() {
-    const { issuedInvoicesArr } = useSelector(s => s.currency)
+export default function ActiveBillsScreen() {
+    const { activeBills } = useSelector(s => s.currency)
     const { idUser } = useSelector(s => s.state.userData)
 
     const dispatch = useDispatch()
@@ -43,13 +43,13 @@ export default function AllBillsScreen() {
             <Header headerText='неоплаченные счета' />
 
             <ScrollView style={styles.screenScroll}>
-                {issuedInvoicesArr.map((bill, index) => {
+                {activeBills.map((bill, index) => {
                     return <TouchableOpacity style={styles.billBtn} key={index}
                         onPress={() => billBtnHandler(bill)}
                     >
                         <View style={styles.billInfoView}>
-                            <Text style={styles.billInfoSenderTxt}>{bill.sender.phoneNumber}</Text>
-                            <Text style={styles.billInfoSumTxt}>{bill.sum} {bill.currency}</Text>
+                            <Text style={styles.billInfoSenderTxt}>{bill.sender.number}</Text>
+                            <Text style={styles.billInfoSumTxt}>{bill.sender.sum} {bill.sender.currency}</Text>
                             <Text style={styles.billInfoDateTxt}>{bill.registerDate}</Text>
                         </View>
                         <TouchableOpacity style={styles.rejectBillBtn}

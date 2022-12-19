@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { popToTop, removeUserData } from '../store/slices/stateReducer'
 
@@ -32,8 +32,8 @@ export default function ProfileScreen() {
         <View style={styles.container}>
 
             <View style={styles.phoneNumberView}>
-            <Text style={styles.phoneNumberTitleTxt}>номер кошелька</Text>
-            <Text style={styles.phoneNumberTxt}>+{phoneNumber}</Text>
+                <Text style={styles.phoneNumberTitleTxt}>номер кошелька</Text>
+                <Text style={styles.phoneNumberTxt}>+{phoneNumber}</Text>
             </View>
 
             <TouchableOpacity style={styles.signOutBtn}
@@ -41,6 +41,32 @@ export default function ProfileScreen() {
             >
                 <Text style={styles.signOutBtnTxt}>выйти из приложения</Text>
             </TouchableOpacity>
+
+            <View>
+                <Button title='delete all requests' onPress={async () => {
+                    const res = await fetch(
+                        'http://192.168.31.254:8000/api/admin/deleteAllRequests', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/json'
+                        }
+                    })
+                    const data = await res.json()
+                    console.log(data.message);
+                }}></Button>
+                <Button title='make 10 requests' onPress={async () => {
+                    const res = await fetch(
+                        'http://192.168.31.254:8000/api/admin/make10Requests', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/json'
+                        }
+                    })
+                    const data = await res.json()
+                    console.log(data.message);
+                }}></Button>
+            </View>
+
         </View>
     )
 }
@@ -50,9 +76,9 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#d3d3d3',
     },
-    phoneNumberView:{
-        alignItems:'center',
-        padding:10,
+    phoneNumberView: {
+        alignItems: 'center',
+        padding: 10,
     },
     phoneNumberTitleTxt: {
         color: '#000',

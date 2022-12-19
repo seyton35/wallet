@@ -4,7 +4,7 @@ import Service from "../components/Service"
 
 export default function ServicesScreen() {
     const servicesArray = [
-        {title:'перевести со своего счета Wallet', screen:'transferBetweenCurrencyes'},
+        {title:'перевести со своего счета Wallet', screen:'currencyСonversion'},
         {title:'запросить у другого клиента Wallet', screen:'clientMoneyRequest'},
         {title:'запросить у клиента другого банка', screen:''},
         

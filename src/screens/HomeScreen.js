@@ -6,19 +6,19 @@ import Currency from "../components/Currency";
 import Header from "../components/Header";
 import Issue from "../components/Issue";
 
-import { fetchAllCurrencyes, fetchIssuedInvoices, selectCurrency } from "../store/slices/currencyReducer";
+import { fetchActiveBills, fetchAllCurrencyes, selectCurrency } from "../store/slices/currencyReducer";
 import { navigate } from "../store/slices/stateReducer";
 
 export default function Home() {
     const { currencyArray } = useSelector(s => s.currency)
     const { idUser } = useSelector(s => s.state.userData)
-    const { issuedInvoicesArr } = useSelector(s => s.currency)
+    const { activeBills } = useSelector(s => s.currency)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(fetchAllCurrencyes(idUser))
-        dispatch(fetchIssuedInvoices(idUser))
+        dispatch(fetchActiveBills(idUser))
     }, [true])
 
     function goToCurrencyScreen(cur) {
@@ -27,7 +27,7 @@ export default function Home() {
     }
 
     function allBillsBtnHandler() {
-        dispatch(navigate('allBills'))
+        dispatch(navigate('activeBills'))
     }
 
 
@@ -49,27 +49,27 @@ export default function Home() {
                         )
                     })}
                 </ScrollView>
-                {issuedInvoicesArr.length > 0
+                {activeBills.length > 0
                     ?
                     <View style={styles.issuesScroll}>
                         <Text style={styles.issuesScrollTxt}>
                             {function () {
-                                const len = issuedInvoicesArr.length
+                                const len = activeBills.length
                                 if (len == 1) return len + ' неоплаченный счет'
                                 else if (5 > len || len > 1) return len + ' неоплаченных счета'
                                 else return len + ' неоплаченных счетов'
                             }()}
                         </Text>
-                        {issuedInvoicesArr.map((issue, index) => {
+                        {activeBills.map((bill, index) => {
                             if (index >= 3) {
                                 return null
                             } else {
                                 return (
-                                    <Issue issue={issue} key={index}></Issue>
+                                    <Issue bill={bill} key={index}></Issue>
                                 )
                             }
                         })}
-                        {issuedInvoicesArr.length > 3
+                        {activeBills.length > 3
                             ?
                             <TouchableOpacity style={styles.allBillsBtn}
                                 onPress={allBillsBtnHandler}

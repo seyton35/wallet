@@ -2,11 +2,12 @@ import { Picker } from '@react-native-picker/picker'
 import { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+
+import { fetchExchangeRate, resetMessage, currencyСonversion } from '../../store/slices/currencyReducer'
+
 import Header from '../../components/Header'
 
-import { fetchExchangeRate, resetMessage, transferBetweenCurrencyes } from '../../store/slices/currencyReducer'
-
-export default function ClientMoneyRequestScreen() {
+export default function CurrencyСonversionScreen() {
     const [pickerCurrency, setPickerCurrency] = useState()
     const [sum, setSum] = useState(0)
     const [message, setMessage] = useState(null)
@@ -68,12 +69,11 @@ export default function ClientMoneyRequestScreen() {
         }
     }
 
-    function transfer() {
+    function conversion() {
         if (!message) {
-            console.log(idUser);
-            dispatch(transferBetweenCurrencyes({
+            dispatch(currencyСonversion({
                 id: idUser,
-                sum,
+                sum: Number(sum),
                 rate,
                 recipient: currency.type,
                 donor: pickerCurrency
@@ -130,7 +130,7 @@ export default function ClientMoneyRequestScreen() {
                 <Text style={styles.transferSum}>+ {sum} {currency.type}</Text>
                 <TouchableOpacity
                     style={styles.transferBtn}
-                    onPress={transfer}
+                    onPress={conversion}
                 >
                     <Text style={styles.transferBtnTxt}>перевести</Text>
                 </TouchableOpacity>

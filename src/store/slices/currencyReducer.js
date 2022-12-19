@@ -43,12 +43,12 @@ export const fetchExchangeRate = createAsyncThunk(
     }
 )
 
-export const transferBetweenCurrencyes = createAsyncThunk(
-    'currency/transferBetweenCurrencyes',
+export const currencyСonversion = createAsyncThunk(
+    'currency/currencyСonversion',
     async ({ id, sum, rate, recipient, donor }, { dispatch }) => {
         try {
             const res = await fetch(
-                'http://192.168.31.254:8000/api/transaction/transferBetweenCurrencyes', {
+                'http://192.168.31.254:8000/api/transaction/currencyConversion', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -100,11 +100,11 @@ export const fetchAwalableCurrency = createAsyncThunk(
 )
 
 export const clientMoneyRequest = createAsyncThunk(
-    'currency/ClientMoneyRequest',
+    'currency/clientMoneyRequest',
     async ({ receiver, sender, currency, sum, comment, socket }, { dispatch }) => {
         try {
             const res = await fetch(
-                'http://192.168.31.254:8000/api/transaction/ClientMoneyRequest', {
+                'http://192.168.31.254:8000/api/transaction/clientMoneyRequest', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -131,12 +131,13 @@ export const clientMoneyRequest = createAsyncThunk(
     }
 )
 
-export const fetchIssuedInvoices = createAsyncThunk(
-    'currency/fetchIssuedInvoices',
+export const fetchActiveBills = createAsyncThunk(
+    'currency/fetchActiveBills',
     async (idUser, { dispatch }) => {
         try {
+            console.log("fetchActiveBills whith :", idUser);
             const res = await fetch(
-                'http://192.168.31.254:8000/api/dataBase/IssuedInvoices', {
+                'http://192.168.31.254:8000/api/dataBase/fetchActiveBills', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -145,7 +146,7 @@ export const fetchIssuedInvoices = createAsyncThunk(
             })
             const data = await res.json()
             if (res.status == 200) {
-                dispatch(setIssuedInvoicesArr(data.issuedInvoicesArr))
+                dispatch(setActiveBills(data.activeBills))
             }
             if (res.status == 204) return
 
@@ -157,24 +158,24 @@ export const fetchIssuedInvoices = createAsyncThunk(
 
 export const billPayment = createAsyncThunk(
     'currency/billPayment',
-    async ({ idUser, idBill, currency }, { dispatch }) => {
+    async ({ idUser, idBill, currencyType }, { dispatch }) => {
         try {
-            console.log(idUser, idBill, currency);
             const res = await fetch(
                 'http://192.168.31.254:8000/api/transaction/billPayment', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
                 },
-                body: JSON.stringify({ idUser, idBill, currency })
+                body: JSON.stringify({ idUser, idBill, currencyType })
             })
             const data = await res.json()
             if (res.status == 200) {
-                console.log(data);
                 dispatch(setToastMessage(data.message))
-                dispatch(fetchIssuedInvoices(idUser))
-            }else dispatch(setToastMessage(data.message))
-            
+                dispatch(fetchActiveBills(idUser))
+            } else {
+                dispatch(setToastMessage(data.message))
+            }
+
 
         } catch (e) {
             return e.message
@@ -197,11 +198,35 @@ export const rejectBillPayment = createAsyncThunk(
             })
             const data = await res.json()
             if (res.status == 200) {
-                console.log(data);
                 dispatch(setToastMessage(data.message))
-                dispatch(fetchIssuedInvoices(idUser))
-            }else dispatch(setToastMessage(data.message))
-            
+                dispatch(fetchActiveBills(idUser))
+            } else dispatch(setToastMessage(data.message))
+
+
+        } catch (e) {
+            return e.message
+        }
+    }
+)
+
+export const fetchClosedBills = createAsyncThunk(
+    'currency/fetchClosedBills',
+    async (idUser, { dispatch }) => {
+        try {
+            const res = await fetch(
+                'http://192.168.31.254:8000/api/database/fetchClosedBills', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ idUser })
+            })
+            const data = await res.json()
+            if (res.status == 200) {
+                dispatch(setClosedBills(data.closedBills))
+            }
+            // else dispatch(setToastMessage(data.message))
+
 
         } catch (e) {
             return e.message
@@ -221,7 +246,8 @@ const currencySlice = createSlice({
         awalableCurrency: [],
         toastAndroidMessage: null,
         requestStatus: null,
-        issuedInvoicesArr: []
+        activeBills: [],
+        closedBills: []
     },
     reducers: {
         addCurrency(state, action) {// TODO: сохранение нового кошеля в базу в asyn
@@ -257,9 +283,12 @@ const currencySlice = createSlice({
         resetMessage(state, action) {
             state.error = null
         },
-        setIssuedInvoicesArr(state, action) {
-            state.issuedInvoicesArr = action.payload
-        }
+        setActiveBills(state, action) {
+            state.activeBills = action.payload
+        },
+        setClosedBills(state, action) {
+            state.closedBills = action.payload
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -277,10 +306,10 @@ const currencySlice = createSlice({
 
         builder
 
-            .addCase(transferBetweenCurrencyes.pending, (state, action) => {
+            .addCase(currencyСonversion.pending, (state, action) => {
                 state.transferStatus = 'loading'
             })
-            .addCase(transferBetweenCurrencyes.rejected, (state, action) => {
+            .addCase(currencyСonversion.rejected, (state, action) => {
                 state.transferStatus = 'rejected',
                     state.error = action.payload
             })
@@ -305,7 +334,8 @@ export const {
     setErrorMessage,
     resetValueAfterRequest,
     resetMessage,
-    setIssuedInvoicesArr
+    setActiveBills,
+    setClosedBills
 } = currencySlice.actions
 
 export default currencySlice.reducer

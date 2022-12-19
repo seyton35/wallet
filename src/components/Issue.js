@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { billPayment } from '../store/slices/currencyReducer'
 import { navigate } from '../store/slices/stateReducer'
 
-export default function Issue({ issue }) {
+export default function Issue({ bill }) {
     const { idUser } = useSelector(s => s.state.userData)
+    const { currencyArray } = useSelector(s => s.currency)
 
     const dispatch = useDispatch()
 
@@ -12,15 +13,39 @@ export default function Issue({ issue }) {
         dispatch(navigate({
             screen: 'billPayment',
             data: {
-                bill: issue
+                bill
             }
         }))
+    }
+
+    function pay() {
+        let flag = false
+        for (let i = 0; i < currencyArray.length; i++) {
+            const cur = currencyArray[i];
+            if (cur.type == bill.sender.currency)
+                flag = true
+        }
+        if (flag) {
+            dispatch(billPayment({
+                idUser,
+                idBill: bill._id,
+                currencyType: bill.sender.currency
+            }))
+        }
+        else {
+            dispatch(navigate({
+                screen: 'billPayment',
+                data: {
+                    bill
+                }
+            }))
+        }
     }
 
     function payBtnHandler() {
         Alert.alert(
             "Оплата",
-            `оплатить счет ${issue.type} на сумму ${issue.sum} ${issue.currency}?`,
+            `оплатить счет ${bill.type} на сумму ${bill.sender.sum} ${bill.sender.currency}?`,
             [
                 {
                     text: 'отмена',
@@ -28,11 +53,7 @@ export default function Issue({ issue }) {
                 },
                 {
                     text: 'оплатить',
-                    onPress: () => {
-                        dispatch(billPayment({
-                            idUser, idBill: issue._id, currency: issue.currency
-                        }))
-                    }
+                    onPress: () => { pay() }
                 }
             ]
         )
@@ -47,8 +68,8 @@ export default function Issue({ issue }) {
                     <Text style={{ color: 'black', fontSize: 25 }}>@</Text>
                 </View>
                 <View>
-                    <Text style={styles.issueType}>{issue.type}</Text>
-                    <Text style={styles.issueSum}>{issue.sum} {issue.currency}</Text>
+                    <Text style={styles.billType}>{bill.type}</Text>
+                    <Text style={styles.billSum}>{bill.sender.sum} {bill.sender.currency}</Text>
                 </View>
             </View>
             <TouchableOpacity style={styles.payBtn}
@@ -65,11 +86,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
-    issueType: {
+    billType: {
         color: '#000',
         fontSize: 17
     },
-    issueSum: {
+    billSum: {
 
     },
     payBtn: {

@@ -12,11 +12,11 @@ import RegisterScreen from "../screens/sign/RegisterScreen";
 import LoginScreen from "../screens/sign/LoginScreen";
 import ServicesScreen from "../screens/ServicesScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import TransferBetweenCurrencyScreen from "../screens/money_transfer/TransferBetweenCurrencyesScreen";
 import ClientMoneyRequestScreen from "../screens/money_transfer/ClientMoneyRequestScreen";
 import BillPaymentScreen from "../screens/money_transfer/BillPaymentScreen";
-import AllBillsScreen from "../screens/AllBilsScreen";
+import ActiveBillsScreen from "../screens/ActiveBilsScreen";
 import HistoryScreen from "../screens/HistoryScreen";
+import CurrencyСonversionScreen from "../screens/money_transfer/CurrencyСonversionScreen";
 
 export default function Stack() {
 
@@ -35,10 +35,10 @@ export default function Stack() {
             case 'login': return <LoginScreen />
             case 'register': return <RegisterScreen />
             
-            case 'transferBetweenCurrencyes': return <TransferBetweenCurrencyScreen />
+            case 'currencyСonversion': return <CurrencyСonversionScreen />
             case 'clientMoneyRequest': return <ClientMoneyRequestScreen />
             case 'billPayment': return <BillPaymentScreen />
-            case 'allBills': return <AllBillsScreen />
+            case 'activeBills': return <ActiveBillsScreen />
             case 'error': return <Error />
             default:
                 break;

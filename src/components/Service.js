@@ -6,7 +6,7 @@ export default function Service({ service, }) {
     const dispatch = useDispatch()
 
     function servicePress() {
-        dispatch(navigate((service.screen)))
+        dispatch(navigate(service.screen))
     }
 
     return (
