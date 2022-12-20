@@ -158,22 +158,23 @@ export const fetchActiveBills = createAsyncThunk(
 
 export const billPayment = createAsyncThunk(
     'currency/billPayment',
-    async ({ idUser, idBill, currencyType }, { dispatch }) => {
+    async ({ idUser, idBill, currencyType, rate }, { dispatch }) => {
         try {
+            console.log(idUser, idBill, currencyType);
             const res = await fetch(
                 'http://192.168.31.254:8000/api/transaction/billPayment', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
                 },
-                body: JSON.stringify({ idUser, idBill, currencyType })
+                body: JSON.stringify({ idUser, idBill, currencyType, rate })
             })
             const data = await res.json()
-            if (res.status == 200) {
-                dispatch(setToastMessage(data.message))
+            dispatch(setToastMessage(data.message))
+            if (res.status == 200 || res.status == 202) {
                 dispatch(fetchActiveBills(idUser))
+                dispatch(popToTop('home'))
             } else {
-                dispatch(setToastMessage(data.message))
             }
 
 

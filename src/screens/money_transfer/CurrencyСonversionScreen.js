@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { fetchExchangeRate, resetMessage, currencyСonversion } from '../../store/slices/currencyReducer'
+import { fetchExchangeRate, resetMessage, currencyСonversion, setErrorMessage } from '../../store/slices/currencyReducer'
 
 import Header from '../../components/Header'
 
@@ -70,6 +70,10 @@ export default function CurrencyСonversionScreen() {
     }
 
     function conversion() {
+        if (sum <=0) {
+            setMessage('введите сумму')
+            return 
+        }
         if (!message) {
             dispatch(currencyСonversion({
                 id: idUser,
@@ -129,10 +133,10 @@ export default function CurrencyСonversionScreen() {
                 <Text style={styles.transferResult}>- {transferResult} {pickerCurrency}</Text>
                 <Text style={styles.transferSum}>+ {sum} {currency.type}</Text>
                 <TouchableOpacity
-                    style={styles.transferBtn}
+                    style={styles.conversionBtn}
                     onPress={conversion}
                 >
-                    <Text style={styles.transferBtnTxt}>перевести</Text>
+                    <Text style={styles.conversionBtnTxt}>перевести</Text>
                 </TouchableOpacity>
             </ScrollView>
         </View >
@@ -161,7 +165,8 @@ const styles = StyleSheet.create({
         borderTopColor: '#d1d1d1',
     },
     message: {
-        color: '#ff0000'
+        color: '#ff0000',
+        paddingLeft:10
     },
     text: {
         color: '#000',
@@ -176,14 +181,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#000'
     },
-    transferBtn: {
+    conversionBtn: {
         backgroundColor: '#00abfd',
         margin: 100,
         padding: 10,
         alignItems: 'center',
         borderRadius: 3
     },
-    transferBtnTxt: {
+    conversionBtnTxt: {
         color: '#000',
         fontSize: 25,
         fontWeight: 'bold'

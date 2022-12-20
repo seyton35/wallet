@@ -1,14 +1,163 @@
-import { StyleSheet, Text, View } from 'react-native'
-import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 import Header from '../../components/Header'
+import { billPayment, fetchExchangeRate } from '../../store/slices/currencyReducer'
 
 export default function BillPaymentScreen() {
     const { bill } = useSelector(s => s.state.navigationData)
-    console.log(bill);
+    const { currencyArray } = useSelector(s => s.currency)
+    const { rate } = useSelector(s => s.currency)
+
+    const [showAllCurrency, setShowAllCurrency] = useState(false)
+    const [shownCurrencyLimit, setShownCurrencyLimit] = useState(3)
+    const [selectedCurrency, setSelectedCurrency] = useState(currencyArray[0])
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        const firstCur = selectedCurrency.type
+        const billCur = bill.sender.currency
+        if (billCur !== firstCur) {
+            dispatch(fetchExchangeRate({
+                cur: billCur,
+                goal: firstCur
+            }))
+
+        }
+    }, [selectedCurrency])
+
+    function calculateCost() {
+        if (selectedCurrency.type == bill.sender.currency) {
+            return `${bill.sender.sum} ${selectedCurrency.type}`
+        } else {
+            return `${(bill.sender.sum * rate).toFixed(2)} ${selectedCurrency.type}`
+        }
+    }
+
+    function selectCurrencyBtnHandler(currency) {
+        setSelectedCurrency(currency)
+    }
+
+    function payBtnHandler() {
+        Alert.alert(
+            'Оплатита',
+            'вы действительно хотите оплатить счет?',
+            [
+                {
+                    text: 'отмена',
+                    onPress: () => null
+                },
+                {
+                    text: 'оплатить',
+                    onPress: () => {
+                        pay()
+                    }
+                },
+            ]
+        )
+    }
+
+    function pay() {
+        dispatch(billPayment({
+            idUser: bill.receiver.id,
+            idBill: bill._id,
+            currencyType: selectedCurrency.type,
+            rate
+        }))
+    }
+
+    function moreCurrencyBtnHandler() {
+        setShowAllCurrency(!showAllCurrency)
+    }
+
     return (
         <View style={styles.container}>
-            <Header headerText='оплата счета' />
-            <Text>BillPaymentScreen</Text>
+            <Header headerText={bill.type} />
+
+            <ScrollView style={styles.screenScroll}>
+
+                <View style={styles.cardView}>
+                    <View style={styles.blockView}>
+                        <Text style={styles.labelTxt}>Адресат</Text>
+                        <Text style={styles.text}>{bill.sender.number}</Text>
+                    </View>
+                    <View style={styles.blockView}>
+                        <Text style={styles.labelTxt}>Дата</Text>
+                        <Text style={styles.text}>{bill.registerDate}</Text>
+                    </View>
+                    {bill.comment
+                        ? <View style={styles.blockView}>
+                            <Text style={styles.labelTxt}>Комментарий</Text>
+                            <Text style={styles.text}>{bill.comment}</Text>
+                        </View>
+                        : null
+                    }
+                </View>
+
+                <View style={styles.cardView}>
+                    <View style={[styles.blockView, { borderStyle: 'solid' }]}>
+                        <Text style={styles.labelTxt}>способы оплаты</Text>
+                        {currencyArray.map((currency, index) => {
+                            if (index < shownCurrencyLimit || showAllCurrency) {
+                                return <TouchableOpacity style={styles.currencyView} key={index}
+                                    onPress={() => selectCurrencyBtnHandler(currency)}
+                                >
+                                    <Text style={{ color: 'orange' }}>@</Text>
+                                    <Text style={styles.currencyTxt}>{currency.count} {currency.type}</Text>
+                                    {currency.type == selectedCurrency.type
+                                        ? <Text style={{ fontSize: 17, color: '#000' }}>{'<'}</Text>
+                                        : null
+                                    }
+                                </TouchableOpacity>
+                            } else return null
+                        })}
+                    </View>
+                    {currencyArray.length > shownCurrencyLimit && !showAllCurrency
+                        ? <TouchableOpacity style={styles.moreCurrencyBtn}
+                            onPress={moreCurrencyBtnHandler}
+                        >
+                            <Text style={styles.currencyTxt}>Другие способы оплаты</Text>
+                        </TouchableOpacity>
+                        : null
+                    }
+                </View>
+
+                <View style={styles.cardView}>
+                    <View style={styles.blockView}>
+                        <Text style={styles.labelTxt}>сумма</Text>
+                        <Text style={styles.text}>{bill.sender.sum} {bill.sender.currency}</Text>
+                    </View>
+                    <View style={styles.costBlockView}>
+                        <View style={styles.costItem}>
+                            <Text style={styles.commissionTxt}>коммисия Wallet</Text>
+                            <Text style={styles.commissionTxt}>0,00 {bill.sender.currency}</Text>
+                        </View>
+                        <View style={styles.costItem}>
+                            <Text style={styles.commissionTxt}>коммисия</Text>
+                            <Text style={styles.commissionTxt}>0,00 {bill.sender.currency}</Text>
+                        </View>
+                        {selectedCurrency.type != bill.sender.currency
+                            ? <View style={styles.costItem}>
+                                <Text style={styles.costDataTxt}>курс конвертации</Text>
+                                <Text style={styles.costDataTxt}>1 {bill.sender.currency} = {(1 * rate).toFixed(2)} {selectedCurrency.type}</Text>
+                            </View>
+                            : null
+                        }
+                        <View style={styles.costItem}>
+                            <Text style={[styles.costDataTxt, { color: '#000' }]}>итого к оплате</Text>
+                            <Text style={[styles.costDataTxt, { color: '#000', fontWeight: "bold" }]}>{calculateCost()}</Text>
+                        </View>
+                    </View>
+                </View>
+
+                <TouchableOpacity style={styles.payBtn}
+                    onPress={payBtnHandler}>
+                    <Text style={styles.payBtnTxt}>Оплатить</Text>
+                </TouchableOpacity>
+
+            </ScrollView>
         </View>
     )
 }
@@ -20,4 +169,75 @@ const styles = StyleSheet.create({
         backgroundColor: '#d3d3d3',
         height: '100%'
     },
+    screenScroll: {
+        alignSelf: 'stretch'
+    },
+
+    cardView: {
+        backgroundColor: '#fff',
+        marginTop: 5,
+        marginHorizontal: 5,
+        paddingBottom: 20,
+        paddingHorizontal: 15,
+        borderRadius: 4
+    },
+    blockView: {
+        borderBottomColor: '#ddd',
+        borderBottomWidth: 1.5,
+        borderStyle: 'dotted',
+        paddingVertical: 10
+    },
+    labelTxt: {
+        color: '#444',
+        fontSize: 12
+    },
+    text: {
+        color: 'gray',
+        fontSize: 17
+    },
+    currencyView: {
+        flexDirection: 'row',
+        paddingTop: 10
+    },
+    icon: {
+        color: 'orange'
+    },
+    currencyTxt: {
+        fontSize: 17,
+        color: '#000',
+        paddingLeft: 5
+    },
+
+    moreCurrencyBtn: {
+        paddingTop: 10,
+        flexDirection: 'row',
+
+    },
+
+    costBlockView: {
+        paddingTop: 10
+    },
+    costItem: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    costDataTxt: {
+        fontSize: 14,
+        color: '#444',
+    },
+
+    payBtn: {
+        backgroundColor: '#00abfd',
+        marginTop: 50,
+        padding: 10,
+        alignItems: 'center',
+        alignSelf: 'center',
+        width: 150,
+        borderRadius: 3
+    },
+    payBtnTxt: {
+        color: '#000',
+        fontSize: 20,
+        fontWeight: 'bold'
+    }
 })

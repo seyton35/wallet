@@ -32,31 +32,32 @@ export default function HistoryScreen() {
                     return (
                         <View style={styles.billView} key={index}>
                             <View style={styles.billInfoView}>
-                                <Text style={styles.billInfoTypeTxt}>{bill.type}</Text>
-                                <Text style={styles.billInfoSenderTxt}>
-                                    {bill.sender.id == idUser
-                                        ? bill.receiver.number
-                                        : bill.sender.number
-                                    }
-                                </Text>
-                                {bill.comment
-                                    ?
-                                    <View style={styles.billInfoCommentView}>
-                                        <Text style={styles.billInfoCommentTxt}>{bill.comment}</Text>
-                                    </View>
-                                    : null
-                                }
-                                {/* <Text style={styles.billInfoDateTxt}>{bill.registerDate}</Text> */}
+                                <View >
+                                    <Text style={styles.billInfoTypeTxt}>{bill.type}</Text>
+                                    <Text style={styles.billInfoSenderTxt}>
+                                        {bill.sender.id == idUser
+                                            ? bill.receiver.number
+                                            : bill.sender.number
+                                        }
+                                    </Text>
+                                </View>
+                                < View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                                    <Text style={styles.billInfoSumTxt}>
+                                        {bill.receiver.id == idUser
+                                            ? '-'
+                                            : '+'
+                                        }
+                                    </Text>
+                                    <Text style={styles.billInfoSumTxt}>{bill.receiver.sum} {bill.receiver.currency}</Text>
+                                </View>
                             </View>
-                            < View style={{ alignItems: 'center', flexDirection: 'row' }}>
-                                <Text style={styles.billInfoSumTxt}>
-                                    {bill.receiver.id == idUser
-                                        ? '-'
-                                        : '+'
-                                    }
-                                </Text>
-                                <Text style={styles.billInfoSumTxt}>{bill.receiver.sum} {bill.receiver.currency}</Text>
-                            </View>
+                            {bill.comment
+                                ?
+                                <View style={styles.billInfoCommentView}>
+                                    <Text style={styles.billInfoCommentTxt}>{bill.comment}</Text>
+                                </View>
+                                : null
+                            }
                         </View>
                     )
                 })}
@@ -76,24 +77,27 @@ const styles = StyleSheet.create({
     billView: {
         paddingHorizontal: 20,
         paddingVertical: 10,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
         backgroundColor: '#fff',
         marginTop: 5
     },
-    billInfoView: {},
+    billInfoView: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
     billInfoTypeTxt: {
         color: '#000',
         fontSize: 17
     },
     billInfoSenderTxt: {},
     billInfoCommentView: {
-        padding: 5,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
         backgroundColor: '#ddd',
         borderRadius: 20,
-
+        alignSelf:'flex-start'
     },
-    billInfoCommentTxt: {},
+    billInfoCommentTxt: {
+    },
     billInfoSumTxt: {
         color: '#000',
     },
