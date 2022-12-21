@@ -1,8 +1,11 @@
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+
 import Header from '../components/Header'
+
 import { rejectBillPayment } from '../store/slices/currencyReducer'
 import { navigate } from '../store/slices/stateReducer'
+import * as dataFormater from '../middleWare/dataFormater'
 
 export default function ActiveBillsScreen() {
     const { activeBills } = useSelector(s => s.currency)
@@ -50,7 +53,7 @@ export default function ActiveBillsScreen() {
                         <View style={styles.billInfoView}>
                             <Text style={styles.billInfoSenderTxt}>{bill.sender.number}</Text>
                             <Text style={styles.billInfoSumTxt}>{bill.sender.sum} {bill.sender.currency}</Text>
-                            <Text style={styles.billInfoDateTxt}>{bill.registerDate}</Text>
+                            <Text style={styles.billInfoDateTxt}>{dataFormater.allRus(bill.registerDate)}</Text>
                         </View>
                         <TouchableOpacity style={styles.rejectBillBtn}
                             onPress={() => rejectBillBtnHandler(bill)}

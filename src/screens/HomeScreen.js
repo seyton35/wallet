@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Currency from "../components/Currency";
 import Header from "../components/Header";
-import Issue from "../components/Issue";
+import Bill from "../components/Bill";
 
 import { fetchActiveBills, fetchAllCurrencyes, selectCurrency } from "../store/slices/currencyReducer";
 import { navigate } from "../store/slices/stateReducer";
@@ -65,7 +65,7 @@ export default function Home() {
                                 return null
                             } else {
                                 return (
-                                    <Issue bill={bill} key={index}></Issue>
+                                    <Bill bill={bill} key={index}></Bill>
                                 )
                             }
                         })}

@@ -1,11 +1,13 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { billPayment } from '../store/slices/currencyReducer'
 import { navigate } from '../store/slices/stateReducer'
 
 export default function Issue({ bill }) {
     const { idUser } = useSelector(s => s.state.userData)
     const { currencyArray } = useSelector(s => s.currency)
+
 
     const dispatch = useDispatch()
 
