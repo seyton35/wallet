@@ -31,17 +31,30 @@ export default function Stack() {
             case 'service': return <ServicesScreen />
             case 'profile': return <ProfileScreen />
             case 'history': return <HistoryScreen />
-            
+
             case 'login': return <LoginScreen />
             case 'register': return <RegisterScreen />
-            
+
             case 'currencyСonversion': return <CurrencyСonversionScreen />
             case 'clientMoneyRequest': return <ClientMoneyRequestScreen />
             case 'billPayment': return <BillPaymentScreen />
             case 'activeBills': return <ActiveBillsScreen />
             case 'error': return <Error />
-            default:
-                break;
+        }
+    }
+
+    function showBottomTabs() {
+        if (currentScreen == 'home' ||
+            currentScreen == 'service' ||
+            currentScreen == 'profile' ||
+            currentScreen == 'history') {
+            return <View style={styles.tabsView}>
+                <BottomTab tabName='home'></BottomTab>
+                <BottomTab tabName='services'></BottomTab>
+                <BottomTab tabName='history'></BottomTab>
+                <BottomTab tabName='cards'></BottomTab>
+                <BottomTab tabName='profile'></BottomTab>
+            </View>
         }
     }
 
@@ -49,16 +62,7 @@ export default function Stack() {
     return (
         <View style={styles.container}>
             {stackNavigator()}
-            {isLogined
-                ? <View style={styles.tabsView}>
-                    <BottomTab tabName='home'></BottomTab>
-                    <BottomTab tabName='services'></BottomTab>
-                    <BottomTab tabName='history'></BottomTab>
-                    <BottomTab tabName='cards'></BottomTab>
-                    <BottomTab tabName='profile'></BottomTab>
-                </View>
-                : null
-            }
+            {showBottomTabs()}
         </View>
     )
 }

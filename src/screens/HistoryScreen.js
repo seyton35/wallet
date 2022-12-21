@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Header from '../components/Header'
+import { dayMonthRUS, getDayMonthYear } from '../middleWare/dataFormater'
 
 import { fetchClosedBills } from '../store/slices/currencyReducer'
 
@@ -10,14 +11,52 @@ export default function HistoryScreen() {
     const { closedBills } = useSelector(s => s.currency)
     const { idUser } = useSelector(s => s.state.userData)
 
-    const date = useRef()
+
+    const payDate = useRef(null)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(fetchClosedBills(idUser))
+        payDate.current = null
     }, [true])
 
+    function showDate(date) {
+        let isShowDate = false
+        const { day, month, year } = getDayMonthYear(date)
+        if (payDate.current == null) {
+            payDate.current = { day, month, year }
+            isShowDate = true
+        } else if (payDate.current.day !== day ||
+            payDate.current.month !== month ||
+            payDate.current.year !== year) {
+            isShowDate = true
+        }
+        payDate.current = { day, month, year }
+        if (isShowDate) {
+            return <Text style={styles.billDateTxt}>{dayMonthRUS(date)}</Text>
+        }
+    }
+
+    function showBalance(bill) {
+        if (bill.status !== 'rejected') {
+            return (
+                < View style={styles.balanceView}>
+                    <Text style={styles.billInfoSumTxt}>
+                        {bill.receiver.id == idUser
+                            ? '-'
+                            : '+'
+                        }
+                    </Text>
+                    <Text style={styles.billInfoSumTxt}>{bill.receiver.sum} {bill.receiver.currency}</Text>
+                </View>
+            )
+        } else {
+            return (
+                <Text style={styles.billInforejectTxt}>отменен</Text>
+            )
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -33,6 +72,7 @@ export default function HistoryScreen() {
                         <View style={styles.billView} key={index}>
                             <View style={styles.billInfoView}>
                                 <View >
+                                    {showDate(bill.paymentDate)}
                                     <Text style={styles.billInfoTypeTxt}>{bill.type}</Text>
                                     <Text style={styles.billInfoSenderTxt}>
                                         {bill.sender.id == idUser
@@ -41,15 +81,7 @@ export default function HistoryScreen() {
                                         }
                                     </Text>
                                 </View>
-                                < View style={{ alignItems: 'center', flexDirection: 'row' }}>
-                                    <Text style={styles.billInfoSumTxt}>
-                                        {bill.receiver.id == idUser
-                                            ? '-'
-                                            : '+'
-                                        }
-                                    </Text>
-                                    <Text style={styles.billInfoSumTxt}>{bill.receiver.sum} {bill.receiver.currency}</Text>
-                                </View>
+                                {showBalance(bill)}
                             </View>
                             {bill.comment
                                 ?
@@ -84,17 +116,28 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
+    billDateTxt: {
+        color: '#000',
+        fontSize: 14
+    },
     billInfoTypeTxt: {
         color: '#000',
         fontSize: 17
     },
     billInfoSenderTxt: {},
+    balanceView: {
+        alignItems: 'center',
+        flexDirection: 'row'
+    },
+    billInforejectTxt: {
+        color: '#ff4242'
+    },
     billInfoCommentView: {
         paddingVertical: 5,
         paddingHorizontal: 10,
         backgroundColor: '#ddd',
         borderRadius: 20,
-        alignSelf:'flex-start'
+        alignSelf: 'flex-start'
     },
     billInfoCommentTxt: {
     },
