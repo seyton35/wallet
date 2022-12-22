@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { Picker } from '@react-native-picker/picker'
 import { useDispatch, useSelector } from 'react-redux'
@@ -14,12 +14,11 @@ export default function ClientMoneyRequestScreen() {
   const [pickerCurrency, setPickerCurrency] = useState()
   const [phoneNumber, setPhoneNumber] = useState('+')
   const [sum, setSum] = useState()
-  const [MoneyRequestLimits, setMoneyRequestLimits] = useState()
+  const [moneyRequestLimits, setMoneyRequestLimits] = useState()
   const [errorMessage, setError] = useState()
 
   const [isPhoneOk, setIsPhoneOk] = useState(false)
   const [isSumOk, setIsSumOk] = useState(false)
-  const [dialogVisible, setDialogVisible] = useState(false)
 
   const currencyArray = useSelector(s => s.currency.awalableCurrency)
   const serverErrorMessage = useSelector(s => s.currency.error)
@@ -30,6 +29,11 @@ export default function ClientMoneyRequestScreen() {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    setMoneyRequestLimits({
+      limMax: currencyArray[0].limMax,
+      limMin: currencyArray[0].limMin
+    })
+    
     dispatch(resetMessage())
     dispatch(fetchAwalableCurrency())
   }, [])
@@ -64,7 +68,7 @@ export default function ClientMoneyRequestScreen() {
     const reg = /[^\d\.]/
     if (val.search(reg) === -1) {
       setSum(val)
-      const { limMax, limMin } = MoneyRequestLimits
+      const { limMax, limMin } = moneyRequestLimits
       if (val > limMax || val < limMin) {
         setIsSumOk(false)
         setError('сумма платежа не должна выходить за пределы лимитов.')
@@ -77,16 +81,24 @@ export default function ClientMoneyRequestScreen() {
 
   function MoneyRequestoBtnHandler() {
     if (isPhoneOk && isSumOk) {
-      setDialogVisible(true)
+      Alert.alert(
+        "выставить счет",
+        'вы действительно хотите выставить счет?',
+        [
+          {
+            text: 'отмена',
+            onPress: () => null
+          },
+          {
+            text: 'выставить',
+            onPress: () => makeRequest()
+          },
+        ]
+      )
     }
   }
 
-  function cancelDialog() {
-    setDialogVisible(false)
-  }
-
-  async function acceptDialog() {
-    setDialogVisible(false)
+  async function makeRequest() {
     dispatch(clientMoneyRequest({
       receiver: phoneNumber,
       sender,
@@ -114,20 +126,11 @@ export default function ClientMoneyRequestScreen() {
     }
   }
 
+
+
   return (
     <View style={styles.container}>
-      <Header headerText='выставить счет'/>
-
-      <Dialog.Container
-        visible={dialogVisible}
-        onBackdropPress={cancelDialog}
-      >
-        <Dialog.Description>
-          вы действительно хотите выставить счет?
-        </Dialog.Description>
-        <Dialog.Button label="нет" onPress={cancelDialog} />
-        <Dialog.Button label="да" onPress={acceptDialog} />
-      </Dialog.Container>
+      <Header headerText='выставить счет' />
 
       {errorShow()}
 
@@ -164,7 +167,7 @@ export default function ClientMoneyRequestScreen() {
           <Text style={styles.hint}>Валюта счета</Text>
           <Picker
             selectedValue={pickerCurrency}
-            onValueChange={val => pickerCurrencyHandler(val)}
+            onValueChange={pickerCurrencyHandler}
           >
             {
               currencyArray.map((cur, index) => {
@@ -185,8 +188,8 @@ export default function ClientMoneyRequestScreen() {
             keyboardType='decimal-pad'
             placeholder='сумма'>
           </TextInput>
-          {MoneyRequestLimits
-            ? <Text>от {MoneyRequestLimits.limMin} до {MoneyRequestLimits.limMax}</Text>
+          {moneyRequestLimits
+            ? <Text>от {moneyRequestLimits.limMin} до {moneyRequestLimits.limMax}</Text>
             : null
           }
         </View>

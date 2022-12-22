@@ -65,10 +65,10 @@ export const currencyСonversion = createAsyncThunk(
             console.log(data);
 
             if (res.status == 200) {
+                dispatch(setErrorMessage(null))
                 dispatch(popToTop('home'))
                 dispatch(setToastMessage(data.message))
                 dispatch(resetValueAfterRequest())
-                // dispatch(fetchAllCurrencyes()) TODO: 
             } else dispatch(setErrorMessage(data.message))
 
         } catch (e) {
@@ -89,7 +89,7 @@ export const fetchAwalableCurrency = createAsyncThunk(
                 { type: 'UAH', limMin: 1, limMax: 30000 },
                 { type: 'RUB', limMin: 1, limMax: 100000 },
                 { type: 'EUR', limMin: 1, limMax: 10000 },
-                { type: 'BTC', limMin: 0.0001, limMax: 1 },
+                { type: 'BTC', limMin: 0.00001, limMax: 1 },
                 { type: 'KZT', limMin: 100, limMax: 100000 },
                 { type: 'JPU', limMin: 100, limMax: 200000 },
             ]
@@ -116,6 +116,7 @@ export const clientMoneyRequest = createAsyncThunk(
             })
             const data = await res.json()
             if (res.status == 200) {
+                dispatch(setErrorMessage(null))
                 dispatch(setToastMessage(data.message))
                 dispatch(setRequestStatus(data.status))
                 dispatch(resetValueAfterRequest())

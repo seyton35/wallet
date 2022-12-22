@@ -8,8 +8,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import Stack from './navigation/Stack'
 
 
-import { backButtonPress, initialization, popToTop, removeUserData } from './store/slices/stateReducer'
+import { backButtonPress, initialization, popToTop, removeUserData, setToastAndroidMessage } from './store/slices/stateReducer'
 import { SocketReducer } from './middleWare/socket_routes'
+import { setToastMessage } from './store/slices/currencyReducer'
 
 export const SocketContext = createContext()
 
@@ -33,8 +34,18 @@ export default function Main() {
   }, [])
 
   useEffect(() => {
-    if (stateToastMessage) ToastAndroid.show(stateToastMessage, 0)
+    if (stateToastMessage) {
+      ToastAndroid.show(stateToastMessage, 0)
+      dispatch(setToastAndroidMessage(null))
+    }
   }, [stateToastMessage])
+
+  useEffect(() => {
+    if (currencyToastMessage) {
+      ToastAndroid.show(currencyToastMessage, 0)
+      dispatch(setToastMessage(null))
+    }
+  }, [currencyToastMessage])
 
   useEffect(() => {
     if (isLogined && socket.current != null) {
@@ -44,10 +55,6 @@ export default function Main() {
       })
     }
   }, [isLogined, socket.current])
-
-  useEffect(() => {
-    if (currencyToastMessage) ToastAndroid.show(currencyToastMessage, 0)
-  }, [currencyToastMessage])
 
   function backAction() {
     if (['home', 'register', 'login'].includes(currentScreen)) {

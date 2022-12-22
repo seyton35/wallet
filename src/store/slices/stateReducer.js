@@ -34,7 +34,7 @@ export const registerNewUser = createAsyncThunk(
             const data = await res.json()
             console.log(data);
             if (res.status === 200) {
-                console.log('registered');
+                dispatch(setServerErrorMessage(null))
                 dispatch(storeAndSetUserData({
                     id: data.id,
                     phoneNumber: data.phoneNumber
@@ -63,6 +63,7 @@ export const loginUser = createAsyncThunk(
             const data = await res.json()
             if (res.status === 200) {
                 console.log('logined');
+                dispatch(setServerErrorMessage(null))
                 dispatch(storeAndSetUserData({
                     id: data.id,
                     phoneNumber: data.phoneNumber
