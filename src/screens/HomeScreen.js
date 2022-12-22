@@ -81,6 +81,28 @@ export default function Home() {
                     </View>
                     : null
                 }
+
+                <View style={styles.usefullBlock}>
+                    <View style={styles.blockLabelBox}>
+                        <Text style={styles.blockLabelTxt}>Полезное</Text>
+                    </View>
+                    <TouchableOpacity style={styles.usefullitemBtn}>
+                        <View style={styles.usefullitemBox}>
+                            <Text style={styles.usefullitemIcon}>@</Text>
+                            <Text style={styles.usefullitemTxt}>счета к оплате</Text>
+                        </View>
+                        <Text style={styles.usefullitemIcon}>{'>'}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.usefullitemBtn}
+                    onPress={()=>dispatch(navigate('currencyRates'))}
+                    >
+                        <View style={styles.usefullitemBox}>
+                            <Text style={styles.usefullitemIcon}>@</Text>
+                            <Text style={styles.usefullitemTxt}>курсы валют</Text>
+                        </View>
+                        <Text style={styles.usefullitemIcon}>{'>'}</Text>
+                    </TouchableOpacity>
+                </View>
             </ScrollView >
         </View >
     )
@@ -97,12 +119,20 @@ const styles = StyleSheet.create({
     currencyScroll: {
         height: 150
     },
+    blockLabelBox: {
+        paddingHorizontal: 20,
+        paddingVertical: 10
+    },
+    blockLabelTxt: {
+        color: '#000',
+        fontSize: 23,
+        fontWeight: "bold"
+    },
+
     issuesScroll: {
         backgroundColor: '#fff',
         width: '90%',
         marginHorizontal: 20,
-        // minHeight: 40,
-        // maxHeight: 150,
         borderRadius: 10,
         padding: 20
     },
@@ -119,6 +149,28 @@ const styles = StyleSheet.create({
         borderRadius: 20
     },
     allIssuesBtnTxt: {
+        color: '#000',
+        fontSize: 17
+    },
+
+    usefullBlock: {
+    },
+    usefullitemBtn: {
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    usefullitemBox: {
+        flexDirection: 'row'
+    },
+    usefullitemIcon: {
+        color: '#000',
+        fontSize: 17,
+        fontWeight: 'bold',
+        paddingRight: 15
+    },
+    usefullitemTxt: {
         color: '#000',
         fontSize: 17
     },

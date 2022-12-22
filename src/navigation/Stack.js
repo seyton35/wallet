@@ -17,6 +17,7 @@ import BillPaymentScreen from "../screens/money_transfer/BillPaymentScreen";
 import ActiveBillsScreen from "../screens/ActiveBilsScreen";
 import HistoryScreen from "../screens/HistoryScreen";
 import CurrencyСonversionScreen from "../screens/money_transfer/CurrencyСonversionScreen";
+import CurrencyRatesScreen from "../screens/usefull/CurrencyRatesScreen";
 
 export default function Stack() {
 
@@ -35,6 +36,7 @@ export default function Stack() {
             case 'login': return <LoginScreen />
             case 'register': return <RegisterScreen />
 
+            case 'currencyRates': return <CurrencyRatesScreen />
             case 'currencyСonversion': return <CurrencyСonversionScreen />
             case 'clientMoneyRequest': return <ClientMoneyRequestScreen />
             case 'billPayment': return <BillPaymentScreen />
