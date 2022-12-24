@@ -79,7 +79,7 @@ export const currencyСonversion = createAsyncThunk(
 
 export const fetchAwalableCurrency = createAsyncThunk(
     'currency/fetchAwalableCurrency',
-    async (_, { rejectWithValue }) => {
+    async () => {
         try {
             //TODO: запрос на курсы доступных валют
             // const res = await fetch(`myApi/awalableCurencyArray.json`)
@@ -89,12 +89,10 @@ export const fetchAwalableCurrency = createAsyncThunk(
                 { type: 'UAH', limMin: 1, limMax: 30000 },
                 { type: 'RUB', limMin: 1, limMax: 100000 },
                 { type: 'EUR', limMin: 1, limMax: 10000 },
-                { type: 'BTC', limMin: 0.00001, limMax: 1 },
                 { type: 'KZT', limMin: 100, limMax: 100000 },
-                { type: 'JPU', limMin: 100, limMax: 200000 },
             ]
         } catch (e) {
-            return rejectWithValue(e.message)
+            return e.message
         }
     }
 )
