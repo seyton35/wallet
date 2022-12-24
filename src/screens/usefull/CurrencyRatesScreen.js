@@ -66,8 +66,8 @@ export default function CurrencyRatesScreen() {
                 return (
                     < View style={styles.rateBlock} key={index} >
                         <View style={styles.rateTitleBox}>
-                            <View style={styles.rateIcon}>
-                                <Text style={styles.rateIconTxt}>@</Text>
+                            <View style={styles.ratePic}>
+                                <Text style={styles.ratePicTxt}>@</Text>
                             </View>
                             <Text style={styles.rateCurTxt}>{type}</Text>
                         </View>
@@ -107,10 +107,10 @@ const styles = StyleSheet.create({
         alignItems:'center',
         flexDirection:'row'
     },
-    rateIcon: {
+    ratePic: {
         paddingRight: 10
     },
-    rateIconTxt:{
+    ratePicTxt:{
         color:'red',
         fontSize:40,
         fontWeight:'bold'
