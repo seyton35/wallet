@@ -86,7 +86,9 @@ export default function Home() {
                     <View style={styles.blockLabelBox}>
                         <Text style={styles.blockLabelTxt}>Полезное</Text>
                     </View>
-                    <TouchableOpacity style={styles.usefullitemBtn}>
+                    <TouchableOpacity style={styles.usefullitemBtn}
+                        onPress={() => dispatch(navigate('billCategories'))}
+                    >
                         <View style={styles.usefullitemBox}>
                             <Text style={styles.usefullitemIcon}>@</Text>
                             <Text style={styles.usefullitemTxt}>счета к оплате</Text>
@@ -94,7 +96,7 @@ export default function Home() {
                         <Text style={styles.usefullitemIcon}>{'>'}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.usefullitemBtn}
-                    onPress={()=>dispatch(navigate('currencyRates'))}
+                        onPress={() => dispatch(navigate('currencyRates'))}
                     >
                         <View style={styles.usefullitemBox}>
                             <Text style={styles.usefullitemIcon}>@</Text>
@@ -103,6 +105,7 @@ export default function Home() {
                         <Text style={styles.usefullitemIcon}>{'>'}</Text>
                     </TouchableOpacity>
                 </View>
+
             </ScrollView >
         </View >
     )

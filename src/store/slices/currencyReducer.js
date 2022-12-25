@@ -85,10 +85,10 @@ export const fetchAwalableCurrency = createAsyncThunk(
             // const res = await fetch(`myApi/awalableCurencyArray.json`)
             // const data = await res.json()
             return [
-                { type: 'USD', limMin: 1, limMax: 10000 },
-                { type: 'UAH', limMin: 1, limMax: 30000 },
                 { type: 'RUB', limMin: 1, limMax: 100000 },
+                { type: 'USD', limMin: 1, limMax: 10000 },
                 { type: 'EUR', limMin: 1, limMax: 10000 },
+                { type: 'UAH', limMin: 1, limMax: 30000 },
                 { type: 'KZT', limMin: 100, limMax: 100000 },
             ]
         } catch (e) {
@@ -183,13 +183,13 @@ export const billPayment = createAsyncThunk(
     }
 )
 
-export const rejectBillPayment = createAsyncThunk(
-    'currency/rejectBillPayment',
+export const rejectBill = createAsyncThunk(
+    'currency/rejectBill',
     async ({ idUser, idBill }, { dispatch }) => {
         try {
             console.log(idUser, idBill);
             const res = await fetch(
-                'http://192.168.31.254:8000/api/transaction/rejectBillPayment', {
+                'http://192.168.31.254:8000/api/transaction/rejectBill', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -234,6 +234,29 @@ export const fetchClosedBills = createAsyncThunk(
     }
 )
 
+export const fetchBillsByCategory = createAsyncThunk(
+    'currency/fetchBillsByCategory',
+    async ({idUser, category}, { dispatch }) => {
+        try {
+            const res = await fetch(
+                'http://192.168.31.254:8000/api/database/fetchBillsByCategory', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ idUser, category })
+            })
+            const data = await res.json()
+            if (res.status == 200) {
+                dispatch(setBillsByCategory(data.billsByCategory))
+            }
+
+        } catch (e) {
+            return e.message
+        }
+    }
+)
+
 const currencySlice = createSlice({
     name: 'currency',
     initialState: {
@@ -247,7 +270,8 @@ const currencySlice = createSlice({
         toastAndroidMessage: null,
         requestStatus: null,
         activeBills: [],
-        closedBills: []
+        closedBills: [],
+        billsByCategory: [],
     },
     reducers: {
         addCurrency(state, action) {// TODO: сохранение нового кошеля в базу в asyn
@@ -288,6 +312,9 @@ const currencySlice = createSlice({
         },
         setClosedBills(state, action) {
             state.closedBills = action.payload
+        },
+        setBillsByCategory(state, action) {
+            state.billsByCategory = action.payload
         },
     },
     extraReducers: (builder) => {
@@ -335,7 +362,8 @@ export const {
     resetValueAfterRequest,
     resetMessage,
     setActiveBills,
-    setClosedBills
+    setClosedBills,
+    setBillsByCategory
 } = currencySlice.actions
 
 export default currencySlice.reducer

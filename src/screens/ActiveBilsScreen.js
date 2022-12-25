@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import Header from '../components/Header'
 
-import { rejectBillPayment } from '../store/slices/currencyReducer'
+import { rejectBill } from '../store/slices/currencyReducer'
 import { navigate } from '../store/slices/stateReducer'
 import * as dataFormater from '../middleWare/dataFormater'
 
@@ -32,7 +32,7 @@ export default function ActiveBillsScreen() {
                 {
                     text: 'отклонить',
                     onPress: () => {
-                        dispatch(rejectBillPayment({
+                        dispatch(rejectBill({
                             idUser, idBill: bill._id
                         }))
                     }

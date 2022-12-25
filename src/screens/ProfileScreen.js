@@ -65,6 +65,28 @@ export default function ProfileScreen() {
                     const data = await res.json()
                     console.log(data.message);
                 }}></Button>
+                <Button title='deleteAllCurrencyes' onPress={async () => {
+                    const res = await fetch(
+                        'http://192.168.31.254:8000/api/admin/deleteAllCurrencyes', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/json'
+                        }
+                    })
+                    const data = await res.json()
+                    console.log(data.message);
+                }}></Button>
+                <Button title='deleteAllUsers' onPress={async () => {
+                    const res = await fetch(
+                        'http://192.168.31.254:8000/api/admin/deleteAllUsers', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/json'
+                        }
+                    })
+                    const data = await res.json()
+                    console.log(data.message);
+                }}></Button>
             </View>
 
         </View>

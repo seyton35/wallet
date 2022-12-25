@@ -2,11 +2,8 @@ import { useEffect, useState } from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { flag40x40Assets } from '../../../assets/flag40x40Assets'
-import { ImagesAssets } from '../../../assets/imageAssets'
 
 import Header from '../../components/Header'
-
-import { fetchAwalableCurrency } from '../../store/slices/currencyReducer'
 
 export default function CurrencyRatesScreen() {
     const { awalableCurrency } = useSelector(s => s.currency)
@@ -17,14 +14,10 @@ export default function CurrencyRatesScreen() {
 
     useEffect(() => {
         async function fetchRates() {
-            if (awalableCurrency.length == 0) {
-                console.log(awalableCurrency);
-                dispatch(fetchAwalableCurrency())
-            }
+            console.log(awalableCurrency);
             try {
                 const resRates = []
                 for (let i = 0; i < awalableCurrency.length; i++) {
-                    console.log(2);
                     const cur = awalableCurrency[i];
                     if (cur.type != 'RUB') {
                         const res = await fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${cur.type.toLowerCase()}/rub.json`)

@@ -1,11 +1,10 @@
-import { Alert, ScrollView, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { Picker } from '@react-native-picker/picker'
 import { useDispatch, useSelector } from 'react-redux'
-import Dialog from 'react-native-dialog'
 
 import { SocketContext } from '../../Main'
-import { clientMoneyRequest, fetchAwalableCurrency, resetMessage } from '../../store/slices/currencyReducer'
+import { clientMoneyRequest, resetMessage } from '../../store/slices/currencyReducer'
 import Header from '../../components/Header'
 
 export default function ClientMoneyRequestScreen() {
@@ -29,13 +28,13 @@ export default function ClientMoneyRequestScreen() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    setMoneyRequestLimits({
-      limMax: currencyArray[0].limMax,
-      limMin: currencyArray[0].limMin
-    })
-    
+
     dispatch(resetMessage())
-    dispatch(fetchAwalableCurrency())
+    setMoneyRequestLimits({
+      limMax: currencyArray[0]?.limMax,
+      limMin: currencyArray[0]?.limMin
+    })
+
   }, [])
 
   function phoneNumHandler(num) {

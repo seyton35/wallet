@@ -18,6 +18,8 @@ import ActiveBillsScreen from "../screens/ActiveBilsScreen";
 import HistoryScreen from "../screens/HistoryScreen";
 import CurrencyСonversionScreen from "../screens/money_transfer/CurrencyСonversionScreen";
 import CurrencyRatesScreen from "../screens/usefull/CurrencyRatesScreen";
+import BillCategoriesScreen from "../screens/billsManagement/BillCategoriesScreen";
+import BillsListScreen from "../screens/billsManagement/BillsListScreen";
 
 export default function Stack() {
 
@@ -36,6 +38,8 @@ export default function Stack() {
             case 'login': return <LoginScreen />
             case 'register': return <RegisterScreen />
 
+            case 'billsList': return <BillsListScreen />
+            case 'billCategories': return <BillCategoriesScreen />
             case 'currencyRates': return <CurrencyRatesScreen />
             case 'currencyСonversion': return <CurrencyСonversionScreen />
             case 'clientMoneyRequest': return <ClientMoneyRequestScreen />
@@ -50,13 +54,15 @@ export default function Stack() {
             currentScreen == 'service' ||
             currentScreen == 'profile' ||
             currentScreen == 'history') {
-            return <View style={styles.tabsView}>
-                <BottomTab tabName='home'></BottomTab>
-                <BottomTab tabName='services'></BottomTab>
-                <BottomTab tabName='history'></BottomTab>
-                <BottomTab tabName='cards'></BottomTab>
-                <BottomTab tabName='profile'></BottomTab>
-            </View>
+            return (
+                <View style={styles.tabsView}>
+                    <BottomTab tabName='home'></BottomTab>
+                    <BottomTab tabName='services'></BottomTab>
+                    <BottomTab tabName='history'></BottomTab>
+                    <BottomTab tabName='cards'></BottomTab>
+                    <BottomTab tabName='profile'></BottomTab>
+                </View>
+            )
         }
     }
 
