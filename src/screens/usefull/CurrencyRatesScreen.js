@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+import { flag40x40Assets } from '../../../assets/flag40x40Assets'
+import { ImagesAssets } from '../../../assets/imageAssets'
 
 import Header from '../../components/Header'
 
@@ -16,11 +18,13 @@ export default function CurrencyRatesScreen() {
     useEffect(() => {
         async function fetchRates() {
             if (awalableCurrency.length == 0) {
-                await dispatch(fetchAwalableCurrency())
+                console.log(awalableCurrency);
+                dispatch(fetchAwalableCurrency())
             }
             try {
                 const resRates = []
                 for (let i = 0; i < awalableCurrency.length; i++) {
+                    console.log(2);
                     const cur = awalableCurrency[i];
                     if (cur.type != 'RUB') {
                         const res = await fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${cur.type.toLowerCase()}/rub.json`)
@@ -32,6 +36,7 @@ export default function CurrencyRatesScreen() {
                     }
                 }
                 setRates(resRates)
+                console.log(rates);
             } catch (e) {
                 console.log(e.message)
             }
@@ -52,13 +57,14 @@ export default function CurrencyRatesScreen() {
                         <Text style={styles.rateTitleTxt}>Покупка</Text>
                     </View>
                     <View style={styles.rateBoxItem}>
-                        <Text style={styles.rateTitleTxt}>Покупка</Text>
+                        <Text style={styles.rateTitleTxt}>Продажа</Text>
                     </View>
                 </View>
             </View>
 
             {rates.map((rate, index) => {
                 let { type, val } = rate
+                const flag = type
                 if (type == 'KZT') {
                     type = "100 " + type
                     val = (val * 100).toFixed(2)
@@ -67,7 +73,10 @@ export default function CurrencyRatesScreen() {
                     < View style={styles.rateBlock} key={index} >
                         <View style={styles.rateTitleBox}>
                             <View style={styles.ratePic}>
-                                <Text style={styles.ratePicTxt}>@</Text>
+                                <Image
+                                    source={flag40x40Assets[flag]}
+                                    style={{ width: 40, height: 40, borderRadius:20, }}
+                                />
                             </View>
                             <Text style={styles.rateCurTxt}>{type}</Text>
                         </View>
@@ -101,19 +110,20 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 10,
         width: '100%',
-        alignItems:'center'
+        alignItems: 'center'
     },
     rateTitleBox: {
-        alignItems:'center',
-        flexDirection:'row'
+        alignItems: 'center',
+        flexDirection: 'row'
     },
     ratePic: {
-        paddingRight: 10
+        paddingRight: 10,
+        paddingVertical:5
     },
-    ratePicTxt:{
-        color:'red',
-        fontSize:40,
-        fontWeight:'bold'
+    ratePicTxt: {
+        color: 'red',
+        fontSize: 40,
+        fontWeight: 'bold'
     },
     rateCurTxt: {
         color: '#000',
