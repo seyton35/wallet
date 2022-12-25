@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { View, StyleSheet, Text, ScrollView, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import IconEntypo  from "react-native-vector-icons/Entypo";
+import IconIonicons  from "react-native-vector-icons/Ionicons";
 
 import Currency from "../components/Currency";
 import Header from "../components/Header";
@@ -90,19 +92,19 @@ export default function Home() {
                         onPress={() => dispatch(navigate('billCategories'))}
                     >
                         <View style={styles.usefullitemBox}>
-                            <Text style={styles.usefullitemIcon}>@</Text>
+                            <IconIonicons name="file-tray-full-outline" style={styles.usefullitemIcon}/>
                             <Text style={styles.usefullitemTxt}>счета к оплате</Text>
                         </View>
-                        <Text style={styles.usefullitemIcon}>{'>'}</Text>
+                        <IconEntypo name="chevron-right" style={styles.usefullitemIcon}/>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.usefullitemBtn}
                         onPress={() => dispatch(navigate('currencyRates'))}
                     >
                         <View style={styles.usefullitemBox}>
-                            <Text style={styles.usefullitemIcon}>@</Text>
+                            <IconIonicons name="bar-chart-outline" style={styles.usefullitemIcon}/>
                             <Text style={styles.usefullitemTxt}>курсы валют</Text>
                         </View>
-                        <Text style={styles.usefullitemIcon}>{'>'}</Text>
+                        <IconEntypo name="chevron-right" style={styles.usefullitemIcon}/>
                     </TouchableOpacity>
                 </View>
 
@@ -169,9 +171,8 @@ const styles = StyleSheet.create({
     },
     usefullitemIcon: {
         color: '#000',
-        fontSize: 17,
-        fontWeight: 'bold',
-        paddingRight: 15
+        fontSize: 20,
+        paddingRight: 10
     },
     usefullitemTxt: {
         color: '#000',

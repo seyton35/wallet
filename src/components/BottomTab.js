@@ -1,17 +1,32 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, } from 'react-native'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import Entypo from 'react-native-vector-icons/Entypo'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+
 import { useDispatch } from 'react-redux';
+
 import { popToTop } from '../store/slices/stateReducer';
 
 export default function BottomTab(prop) {
     const { tabName } = prop
 
-    function buttonFormater(key) {
+    function buttonTextFormater(key) {
         switch (key) {
             case 'home': return 'главная'
             case 'services': return 'услуги'
             case 'history': return 'история'
             case 'cards': return 'карты'
             case 'profile': return 'профиль'
+        }
+    }
+
+    function buttonIconFormater(key) {
+        switch (key) {
+            case 'home': return <Entypo name='wallet' style={styles.tabIcon} />
+            case 'services': return <MaterialCommunityIcons name='bank-transfer' style={styles.tabIcon} />
+            case 'history': return <MaterialCommunityIcons name='clock' style={styles.tabIcon} />
+            case 'cards': return <MaterialCommunityIcons name='credit-card' style={styles.tabIcon} />
+            case 'profile': return <Ionicons name='person-circle' style={styles.tabIcon} />
         }
     }
 
@@ -25,7 +40,8 @@ export default function BottomTab(prop) {
         <TouchableOpacity style={styles.container}
             onPress={tabBtnHandler}
         >
-            <Text style={styles.tabBtnTxt}>{buttonFormater(tabName)}</Text>
+            {buttonIconFormater(tabName)}
+            <Text style={styles.tabBtnTxt}>{buttonTextFormater(tabName)}</Text>
         </TouchableOpacity>
     )
 }
@@ -41,8 +57,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor:'#fff'
+        backgroundColor: '#fff'
     },
-    tabBtnTxt:{
+    tabBtnTxt: {
+    },
+    tabIcon: {
+        color: 'black',
+        fontSize: 20
     }
 })

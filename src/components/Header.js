@@ -1,4 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import Icon from 'react-native-vector-icons/AntDesign'
+
 import { useDispatch } from 'react-redux'
 
 import { backButtonPress } from '../store/slices/stateReducer'
@@ -21,7 +23,7 @@ export default function Header({ headerText ='Wallet', showHeaderButton = true }
         <TouchableOpacity style={styles.headerButton}
           onPress={navigate}
         >
-          <Text style={styles.headerButtonIcon}>{'<'}</Text>
+          <Icon name="arrowleft" style={styles.headerButtonIcon}/>
         </TouchableOpacity>
         : null
       }
@@ -40,7 +42,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   headerButton: {
-    backgroundColor: '#c0c0c0',
     borderRadius: 14,
     width: 35,
     height: 35,

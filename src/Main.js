@@ -1,14 +1,12 @@
-import { Alert, BackHandler, Button, StyleSheet, ToastAndroid, View } from 'react-native'
+import { Alert, BackHandler, Button, StyleSheet, Text, ToastAndroid, View } from 'react-native'
 import { createContext, useEffect, useMemo, useRef } from 'react'
 
 import { io } from 'socket.io-client'
 import { useDispatch, useSelector } from 'react-redux'
 
-
 import Stack from './navigation/Stack'
 
-
-import { backButtonPress, initialization, popToTop, removeUserData, setToastAndroidMessage } from './store/slices/stateReducer'
+import { backButtonPress, initialization, setToastAndroidMessage } from './store/slices/stateReducer'
 import { SocketReducer } from './middleWare/socket_routes'
 import { setToastMessage } from './store/slices/currencyReducer'
 

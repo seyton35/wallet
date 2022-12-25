@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View, Image } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+import Icon from 'react-native-vector-icons/AntDesign'
 
 import Header from '../components/Header'
-import { dayMonthRUS, getDayMonthYear } from '../middleWare/dataFormater'
 
+import { dayMonthRUS, getDayMonthYear } from '../middleWare/dataFormater'
 import { fetchClosedBills } from '../store/slices/currencyReducer'
 
 export default function HistoryScreen() {
@@ -39,23 +40,17 @@ export default function HistoryScreen() {
     }
 
     function showBalance(bill) {
-        if (bill.status !== 'rejected') {
-            return (
-                < View style={styles.balanceView}>
-                    <Text style={styles.billInfoSumTxt}>
-                        {bill.receiver.id == idUser
-                            ? '-'
-                            : '+'
-                        }
-                    </Text>
-                    <Text style={styles.billInfoSumTxt}>{bill.receiver.sum} {bill.receiver.currency}</Text>
-                </View>
-            )
-        } else {
-            return (
-                <Text style={styles.billInforejectTxt}>отменен</Text>
-            )
-        }
+        return (
+            < View style={styles.balanceView}>
+                <Text style={styles.billInfoSumTxt}>
+                    {bill.receiver.id == idUser
+                        ? '-'
+                        : '+'
+                    }
+                </Text>
+                <Text style={styles.billInfoSumTxt}>{bill.receiver.sum} {bill.receiver.currency}</Text>
+            </View>
+        )
     }
 
     return (
@@ -71,24 +66,34 @@ export default function HistoryScreen() {
                     return (
                         <View style={styles.billView} key={index}>
                             <View style={styles.billInfoView}>
-                                <View >
-                                    {showDate(bill.paymentDate)}
-                                    <Text style={styles.billInfoTypeTxt}>{bill.type}</Text>
-                                    <Text style={styles.billInfoSenderTxt}>
-                                        {bill.sender.id == idUser
-                                            ? bill.receiver.number
-                                            : bill.sender.number
+                                <View style={{ flexDirection: 'row', }}>
+                                    <View>
+                                        <Image source={{ uri: 'https://reactjs.org/logo-og.png' }} style={styles.billPic} />
+                                        {bill.status == 'rejected'
+                                            ? <Icon name='exclamationcircle' style={styles.billRejectedIcon} />
+                                            : null
                                         }
-                                    </Text>
+                                    </View>
+                                    <View >
+                                        {showDate(bill.paymentDate)}
+                                        <Text style={styles.billInfoTypeTxt}>{bill.type}</Text>
+                                        <Text style={styles.billInfoSenderTxt}>
+                                            {bill.sender.id == idUser
+                                                ? bill.receiver.number
+                                                : bill.sender.number
+                                            }
+                                        </Text>
+                                    </View>
                                 </View>
                                 {showBalance(bill)}
                             </View>
-                            {bill.comment
-                                ?
-                                <View style={styles.billInfoCommentView}>
-                                    <Text style={styles.billInfoCommentTxt}>{bill.comment}</Text>
-                                </View>
-                                : null
+                            {
+                                bill.comment
+                                    ?
+                                    <View style={styles.billInfoCommentView}>
+                                        <Text style={styles.billInfoCommentTxt}>{bill.comment}</Text>
+                                    </View>
+                                    : null
                             }
                         </View>
                     )
@@ -115,6 +120,24 @@ const styles = StyleSheet.create({
     billInfoView: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+    },
+    billPic: {
+        width: 50,
+        height: 50,
+        backgroundColor: 'gray',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        borderRadius: 100,
+
+    },
+
+    billRejectedIcon: {
+        color: 'red',
+        fontSize: 15,
+        position: 'absolute',
+        zIndex: 1,
+        top: '55%',
+        left: '55%',
     },
     billDateTxt: {
         color: '#000',

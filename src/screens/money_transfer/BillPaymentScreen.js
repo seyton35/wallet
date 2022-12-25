@@ -1,8 +1,10 @@
-import { useEffect } from 'react'
-import { useState } from 'react'
+import { useEffect,useState } from 'react'
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+import Icon from 'react-native-vector-icons/Entypo'
+
 import Header from '../../components/Header'
+
 import { billPayment, fetchExchangeRate } from '../../store/slices/currencyReducer'
 
 export default function BillPaymentScreen() {
@@ -118,6 +120,7 @@ export default function BillPaymentScreen() {
                         ? <TouchableOpacity style={styles.moreCurrencyBtn}
                             onPress={moreCurrencyBtnHandler}
                         >
+                            <Icon name='dots-three-horizontal' style={styles.moreCurrencyIcon}/>
                             <Text style={styles.currencyTxt}>Другие способы оплаты</Text>
                         </TouchableOpacity>
                         : null
@@ -212,6 +215,11 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         flexDirection: 'row',
 
+    },
+    moreCurrencyIcon:{
+        fontSize:17,
+        color:'#000',
+        alignSelf:'center'
     },
 
     costBlockView: {

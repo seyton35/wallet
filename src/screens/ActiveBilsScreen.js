@@ -1,5 +1,6 @@
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+import Icon from 'react-native-vector-icons/Entypo'
 
 import Header from '../components/Header'
 
@@ -58,7 +59,7 @@ export default function ActiveBillsScreen() {
                         <TouchableOpacity style={styles.rejectBillBtn}
                             onPress={() => rejectBillBtnHandler(bill)}
                         >
-                            <Text style={styles.rejectBillIcon}>X</Text>
+                            <Icon name='dots-three-vertical' style={styles.rejectBillIcon}/>
                         </TouchableOpacity>
                     </TouchableOpacity>
                 })}
@@ -94,8 +95,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     rejectBillIcon: {
-        color: 'black',
-        fontSize: 25,
-        fontWeight: "bold"
+        color: '#999',
+        fontSize: 20,
     }
 })
