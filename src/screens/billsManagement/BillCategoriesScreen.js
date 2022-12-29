@@ -26,7 +26,7 @@ export default function BillCategoriesScreen() {
                         onPress={() => dispatch(navigate({
                             screen: 'billsList', data: {
                                 category: 'sended',
-                                headerText:'Выставленные счета'
+                                headerText: 'Выставленные счета'
                             }
                         }))}
                     >
@@ -37,9 +37,9 @@ export default function BillCategoriesScreen() {
                     <TouchableOpacity style={styles.categoryBtn}
                         onPress={() => dispatch(navigate({
                             screen: 'billsList',
-                             data: {
+                            data: {
                                 category: 'received',
-                                headerText:'Входящие счета'
+                                headerText: 'Входящие счета'
                             }
                         }))}
                     >
@@ -49,7 +49,7 @@ export default function BillCategoriesScreen() {
             </ScrollView>
 
             <TouchableOpacity style={styles.makeBillBtn}
-            onPress={(()=> dispatch(navigate('clientMoneyRequest')))}
+                onPress={(() => dispatch(navigate('clientMoneyRequest')))}
             >
                 <Text style={styles.makeBillBtnTxt}>Выставить новый счет</Text>
             </TouchableOpacity>

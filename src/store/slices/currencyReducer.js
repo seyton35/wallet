@@ -236,7 +236,7 @@ export const fetchClosedBills = createAsyncThunk(
 
 export const fetchBillsByCategory = createAsyncThunk(
     'currency/fetchBillsByCategory',
-    async ({idUser, category}, { dispatch }) => {
+    async ({ idUser, category, timeRange }, { dispatch }) => {
         try {
             const res = await fetch(
                 'http://192.168.31.254:8000/api/database/fetchBillsByCategory', {
@@ -244,7 +244,7 @@ export const fetchBillsByCategory = createAsyncThunk(
                 headers: {
                     'Content-type': 'application/json'
                 },
-                body: JSON.stringify({ idUser, category })
+                body: JSON.stringify({ idUser, category, timeRange })
             })
             const data = await res.json()
             if (res.status == 200) {

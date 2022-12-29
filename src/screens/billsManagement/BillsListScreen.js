@@ -1,13 +1,18 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Header from '../../components/Header'
+import ModalRangeDatePicker from '../../components/ModalRangeDatePicker'
+
 import { allRus } from '../../middleWare/dataFormater'
 
 import { fetchBillsByCategory } from '../../store/slices/currencyReducer'
+import { backButtonPress } from '../../store/slices/stateReducer'
 
 export default function BillsListScreen() {
+    const [dateRange, setDateRange] = useState(null)
+    const [showCalendar, setShowCalendar] = useState(true)
 
     const { idUser } = useSelector(s => s.state.userData)
     const { category, headerText } = useSelector(s => s.state.navigationData)
@@ -16,16 +21,37 @@ export default function BillsListScreen() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(fetchBillsByCategory({
-            idUser,
-            category,
-        }))
+        if (dateRange) {
+            dispatch(fetchBillsByCategory({
+                idUser,
+                category,
+                timeRange: dateRange
+            }))
+        }
+    }, [dateRange])
+
+    useEffect(() => {
     }, [])
 
+    function dateHandler(date) {
+        setShowCalendar(false)
+        setDateRange(date)
+    }
+
+    function getDateRange() {
+        return (
+            <ModalRangeDatePicker setDate={dateHandler}
+                onCancelPress={() => {
+                    dispatch(backButtonPress())
+                }} />
+        )
+    }
 
     return (
         <View style={styles.container}>
             <Header headerText={headerText}></Header>
+            
+            {showCalendar ? getDateRange() : null}
 
             <ScrollView style={styles.screenScroll}>
 
