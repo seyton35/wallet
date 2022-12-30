@@ -97,6 +97,7 @@ const stateSlice = createSlice({
     initialState: {
         loading: false,
         currentScreen: 'greeting',
+        prevScreen: null,
         navigationData: null,
         currentScreenHeaderText: null,
         stack: [],
@@ -111,14 +112,14 @@ const stateSlice = createSlice({
     },
     reducers: {
         navigate(state, action) {
+            state.prevScreen =  state.currentScreen
             if (action.payload.data == null) {
                 state.stack.push(action.payload)
                 state.currentScreen = action.payload
             } else {
                 state.stack.push(action.payload.screen)
                 state.currentScreen = action.payload.screen
-                state.navigationData = action.payload.data
-
+                state.navigationData = action.payload.data                
             }
         },
         popToTop(state, action) {
@@ -127,7 +128,7 @@ const stateSlice = createSlice({
         },
         backButtonPress(state, action) {
             if (state.stack.length > 1) {
-                state.stack.pop()
+                state.prevScreen = state.stack.pop()
                 state.currentScreen = state.stack[state.stack.length - 1]
             }
         },

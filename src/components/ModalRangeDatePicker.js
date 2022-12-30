@@ -17,13 +17,13 @@ export default function ModalRangeDatePicker({ setDate, onCancelPress }) {
     function dateChange(date) {
         if (dateOnFocus == 'date1') {
             setDate1(date)
-            if (date > date2) setDate2(new Date(date.getTime() + DAY_MC))
+            if (date > date2) setDate2(date)
             if ((date.getTime() + MONTH_MC) < date2) setDate2(new Date(date.getTime() + MONTH_MC))
 
         } else {
             setDate2(date)
+            if (date < date1) setDate1(date)
             if ((date - date1) > MONTH_MC) setDate1(new Date(date.getTime() - MONTH_MC))
-            if (date < date1) setDate1(new Date(date.getTime() - DAY_MC))
         }
     }
 
@@ -48,54 +48,76 @@ export default function ModalRangeDatePicker({ setDate, onCancelPress }) {
 
     return (
         <View style={styles.container}>
-            <Modal
-                animationType="fade"
-                // transparent={true}
-                visible={true}
-            >
-                <View style={styles.modalView}>
+            <View style={styles.modalBox}>
 
-                    <Pressable onPress={() => setDateOnFocus('date1')} style={[styles.dateView, isFocusedDate('date1')]}>
-                        <Text style={styles.dateTxt}>{date1.toLocaleDateString()}</Text>
-                    </Pressable>
-                    <Pressable onPress={() => setDateOnFocus('date2')} style={[styles.dateView, isFocusedDate('date2')]}>
-                        <Text style={styles.dateTxt}>{date2.toLocaleDateString()}</Text>
-                    </Pressable>
+                <Modal
+                    animationType="fade"
+                    transparent={true}
 
-                    <View style={styles.datePickerView}>
-                        <DatePicker
-                            date={showFocusDate()}
-                            onDateChange={dateChange}
-                            // maximumDate={new Date(Date.now())}
-                            mode="date"
-                        />
-                    </View>
+                    visible={true}
+                >
+                    <View style={styles.modalView}>
 
-                    <View style={styles.modalBtnBox}>
-                        <Pressable style={styles.modalBtn} onPress={cancelBtnHandler}>
-                            <Text style={styles.modalBtnTxt}>отмена</Text>
+                        <Pressable onPress={() => setDateOnFocus('date1')} style={[styles.dateView, isFocusedDate('date1')]}>
+                            <Text style={styles.dateTxt}>{date1.toLocaleDateString()}</Text>
                         </Pressable>
-                        <Pressable style={styles.modalBtn} onPress={confirmBtnHandler}>
-                            <Text style={styles.modalBtnTxt}>готово</Text>
+                        <Pressable onPress={() => setDateOnFocus('date2')} style={[styles.dateView, isFocusedDate('date2')]}>
+                            <Text style={styles.dateTxt}>{date2.toLocaleDateString()}</Text>
                         </Pressable>
-                    </View>
 
-                </View>
-            </Modal>
+                        <View style={styles.datePickerView}>
+                            <DatePicker
+                                date={showFocusDate()}
+                                onDateChange={dateChange}
+                                // maximumDate={new Date(Date.now())}
+                                mode="date"
+                            />
+                        </View>
+
+                        <View style={styles.modalBtnBox}>
+                            <Pressable style={styles.modalBtn} onPress={cancelBtnHandler}>
+                                <Text style={styles.modalBtnTxt}>отмена</Text>
+                            </Pressable>
+                            <Pressable style={styles.modalBtn} onPress={confirmBtnHandler}>
+                                <Text style={styles.modalBtnTxt}>готово</Text>
+                            </Pressable>
+                        </View>
+
+                    </View>
+                </Modal>
+            </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        // position:"absolute",
-        // justifyContent: "center",
-        // alignItems: "center",
-        backgroundColor: 'black',
+        backgroundColor: '#0004',
         width: '100%',
         height: '100%',
-        flex: 1
+        flex: 1,
+        position: "absolute",
+        justifyContent: 'center'
     },
+
+    modalBox: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center'
+    },
+
+    modalView: {
+        backgroundColor: '#fff',
+        alignItems: "center",
+        justifyContent: 'center',
+        alignSelf: 'center',
+        elevation: 5,
+        width: '90%',
+        marginTop: 200,
+        padding: 10
+    },
+
     dateView: {
         margin: 2,
         padding: 5,
@@ -109,19 +131,10 @@ const styles = StyleSheet.create({
 
     datePickerView: {
         width: '50%',
-        alignItems: 'center'
+        alignItems: 'center',
         // height: '80%',
     },
 
-    modalView: {
-        alignItems: "center",
-        justifyContent: 'center',
-        alignSelf: 'center',
-        elevation: 5,
-        width: '90%',
-        // height: '0%',
-        // backgroundColor:'gray'
-    },
     modalText: {
         marginBottom: 15,
         textAlign: "center"

@@ -8,17 +8,27 @@ import ModalRangeDatePicker from '../../components/ModalRangeDatePicker'
 import { allRus } from '../../middleWare/dataFormater'
 
 import { fetchBillsByCategory } from '../../store/slices/currencyReducer'
-import { backButtonPress } from '../../store/slices/stateReducer'
+import { backButtonPress, navigate } from '../../store/slices/stateReducer'
 
 export default function BillsListScreen() {
     const [dateRange, setDateRange] = useState(null)
-    const [showCalendar, setShowCalendar] = useState(true)
+    const [showCalendar, setShowCalendar] = useState(false)
 
+    const { prevScreen } = useSelector(s => s.state)
     const { idUser } = useSelector(s => s.state.userData)
     const { category, headerText } = useSelector(s => s.state.navigationData)
     const { billsByCategory } = useSelector(s => s.currency)
 
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (prevScreen == 'billCategories') {
+            setTimeout(() => {
+                setShowCalendar(true)
+            }, 100);
+        }
+    }, [])
+
 
     useEffect(() => {
         if (dateRange) {
@@ -29,9 +39,6 @@ export default function BillsListScreen() {
             }))
         }
     }, [dateRange])
-
-    useEffect(() => {
-    }, [])
 
     function dateHandler(date) {
         setShowCalendar(false)
@@ -47,35 +54,55 @@ export default function BillsListScreen() {
         )
     }
 
+    function goToBillInfo(bill) {
+        setDateRange(null)
+        dispatch(navigate({
+            screen: 'billInfo',
+            data: {
+                bill,
+                headerText,
+                category
+            }
+        }))
+    }
+
     return (
         <View style={styles.container}>
             <Header headerText={headerText}></Header>
-            
-            {showCalendar ? getDateRange() : null}
 
-            <ScrollView style={styles.screenScroll}>
+            {showCalendar
+                ? getDateRange()
+                :
+                <ScrollView style={styles.screenScroll}>
 
-                {billsByCategory.map((bill, index) =>
-                    <TouchableOpacity style={styles.billBtn} key={index}>
-                        <View style={styles.billView}>
+                    {billsByCategory.map((bill, index) =>
+                        <TouchableOpacity style={styles.billBtn} key={index}
+                            onPress={() => goToBillInfo(bill)}
+                        >
+                            <View style={styles.billView}>
 
-                            <View style={styles.billBox}>
-                                <Text style={styles.billReceiverTxt}>{bill.receiver.number}</Text>
-                                <Text>{bill.receiver.sum} {bill.receiver.currency}</Text>
+                                <View style={styles.billBox}>
+                                    <Text style={styles.billReceiverTxt}>{bill.receiver.number}</Text>
+                                    <Text>{bill.status == 'success'
+                                        ? bill.receiver.sum + ' ' + bill.receiver.currency
+                                        : bill.sender.sum + ' ' + bill.sender.currency
+                                    }
+                                    </Text>
+                                </View>
+                                <View style={styles.billBox}>
+                                    <Text>{bill.sender.number}</Text>
+                                </View>
+                                <View style={styles.billBox}>
+                                    <Text>{allRus(bill.registerDate)}</Text>
+                                    <Text>{bill.status}</Text>
+                                </View>
+
                             </View>
-                            <View style={styles.billBox}>
-                                <Text>{bill.sender.number}</Text>
-                            </View>
-                            <View style={styles.billBox}>
-                                <Text>{allRus(bill.registerDate)}</Text>
-                                <Text>{bill.status}</Text>
-                            </View>
+                        </TouchableOpacity>
+                    )}
 
-                        </View>
-                    </TouchableOpacity>
-                )}
-
-            </ScrollView>
+                </ScrollView>
+            }
         </View>
     )
 }
