@@ -1,17 +1,20 @@
-import { useEffect, useRef } from 'react'
-import { ScrollView, StyleSheet, Text, View, Image } from 'react-native'
+import { useEffect, useRef, useState } from 'react'
+import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import Icon from 'react-native-vector-icons/AntDesign'
+import { SwipeablePanel } from 'rn-swipeable-panel'
 
 import Header from '../components/Header'
 
-import { dayMonthRUS, getDayMonthYear } from '../middleWare/dataFormater'
+import { allRus, dayMonthRUS, getDayMonthYear } from '../middleWare/dataFormater'
 import { fetchClosedBills } from '../store/slices/currencyReducer'
 
 export default function HistoryScreen() {
+    const [isPanelActive, setIsPanelActive] = useState(false);
+    const [billOnFocus, setBillOnFocus] = useState(null);
+
     const { closedBills } = useSelector(s => s.currency)
     const { idUser } = useSelector(s => s.state.userData)
-
 
     const payDate = useRef(null)
 
@@ -39,6 +42,23 @@ export default function HistoryScreen() {
         }
     }
 
+    const openInfoBillPanel = (bill) => {
+        setBillOnFocus(bill)
+        setIsPanelActive(true);
+    };
+
+    const closeInfoBillPanel = () => {
+        setIsPanelActive(false);
+    };
+
+    function showStatusRUS(status) {
+        switch (status) {
+            case 'rejected':return 'Отменен'                
+            case 'active':return 'Выставлен'                
+            case 'success':return 'Оплачен'                
+        }
+    }
+
     function showBalance(bill) {
         return (
             < View style={styles.balanceView}>
@@ -47,8 +67,64 @@ export default function HistoryScreen() {
                         ? '-'
                         : '+'
                     }
+                    {bill.sender.sum} {bill.sender.currency}
                 </Text>
-                <Text style={styles.billInfoSumTxt}>{bill.receiver.sum} {bill.receiver.currency}</Text>
+            </View>
+        )
+    }
+
+    function showBillInfo(bill) {
+        let balance = ''
+        let profitStyle = {}
+
+        if (bill.receiver.id == idUser) {
+            balance += '-'
+        } else {
+            balance += '+'
+            profitStyle.color = 'green'
+        }
+        balance += bill.sender.sum + ' ' + bill.sender.currency
+
+        return (
+            <View style={styles.billPanelContainer}>
+                <View style={styles.billPanelBasicInfoView}>
+                    <Image source={{ uri: 'https://reactjs.org/logo-og.png' }} style={styles.billPanelBasicInfoPic} />
+                    <Text style={styles.billPanelBasicInfoTypeTxt}>{bill.type}</Text>
+                    <Text style={styles.billPanelBasicInfoNumberTxt}>{bill.sender.number}</Text>
+                    <Text style={[styles.billPanelBasicInfoSumTxt, profitStyle]}>{balance}</Text>
+                </View>
+
+                {bill.comment
+                    ? <View style={styles.billPanelInfoCommentView}>
+                        <Text style={styles.billPanelInfoCommentLabel}>Комментарий</Text>
+                        <Text style={styles.billPanelInfoCommentTxt}>{bill.comment}</Text>
+                    </View>
+                    : null
+                }
+
+                <View style={styles.billPanelInfoView}>
+                    <Text style={styles.billPanelInfoLargeLabel}>Детали платежа</Text>
+                </View>
+                <View style={styles.billPanelInfoView}>
+                    <Text style={styles.billPanelInfoLabel}>Статус</Text>
+                    <Text style={styles.billPanelInfoTxt}>{showStatusRUS(bill.status)}</Text>
+                </View>
+                <View style={styles.billPanelInfoView}>
+                    <Text style={styles.billPanelInfoLabel}>Дата и время</Text>
+                    <Text style={styles.billPanelInfoTxt}>{allRus(bill.registerDate)}</Text>
+                </View>
+                <View style={styles.billPanelInfoView}>
+                    <Text style={styles.billPanelInfoLabel}>Сумма</Text>
+                    <Text style={styles.billPanelInfoTxt}>{bill.sender.sum} {bill.sender.currency}</Text>
+                </View>
+                <View style={styles.billPanelInfoView}>
+                    <Text style={styles.billPanelInfoLabel}>Поставщик услуг</Text>
+                    <Text style={styles.billPanelInfoTxt}>{bill.type}</Text>
+                </View>
+                <View style={styles.billPanelInfoView}>
+                    <Text style={styles.billPanelInfoLabel}>Номер счета</Text>
+                    <Text style={styles.billPanelInfoTxt}>{bill.sender.number}</Text>
+                </View>
             </View>
         )
     }
@@ -57,6 +133,16 @@ export default function HistoryScreen() {
         <View style={styles.container}>
             <Header headerText='История' showHeaderButton={false} />
 
+            <SwipeablePanel style={styles.panel}
+                isActive={isPanelActive}
+                closeOnTouchOutside={true}
+                fullWidth={true}
+                onlyLarge={true}
+                onClose={closeInfoBillPanel}
+            >
+                {billOnFocus ? showBillInfo(billOnFocus) : null}
+            </SwipeablePanel>
+
             <ScrollView style={styles.screenScroll}>
                 {closedBills.length > 0
                     ? null
@@ -64,7 +150,9 @@ export default function HistoryScreen() {
                 }
                 {closedBills.map((bill, index) => {
                     return (
-                        <View style={styles.billView} key={index}>
+                        <TouchableOpacity style={styles.billView} key={index}
+                            onPress={() => openInfoBillPanel(bill)}
+                        >
                             <View style={styles.billInfoView}>
                                 <View style={{ flexDirection: 'row', }}>
                                     <View>
@@ -95,7 +183,7 @@ export default function HistoryScreen() {
                                     </View>
                                     : null
                             }
-                        </View>
+                        </TouchableOpacity>
                     )
                 })}
             </ScrollView >
@@ -109,6 +197,61 @@ const styles = StyleSheet.create({
         backgroundColor: '#ddd',
         height: '100%'
     },
+
+    billPanelBasicInfoView: {
+        alignItems: 'center',
+        padding: 10
+    },
+    billPanelBasicInfoPic: {
+        width: 80,
+        height: 80,
+        backgroundColor: 'gray',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        borderRadius: 100,
+
+    },
+    billPanelBasicInfoTypeTxt: {
+        color: '#000',
+        fontSize: 20,
+    },
+    billPanelBasicInfoNumberTxt: {},
+    billPanelBasicInfoSumTxt: {
+        color: '#000',
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+
+    billPanelContainer: {},
+    billPanelInfoCommentView: {
+        paddingVertical: 15,
+        paddingHorizontal: 10,
+        marginHorizontal: 5,
+        backgroundColor: '#eee',
+        borderRadius: 10
+    },
+    billPanelInfoCommentLabel: {
+        color: '#000',
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+
+
+    billPanelInfoLargeLabel: {
+        color: '#000',
+        fontSize: 25,
+        fontWeight: 'bold'
+    },
+    billPanelInfoCommentTxt: {},
+    billPanelInfoView: {
+        padding: 10
+    },
+    billPanelInfoLabel: {},
+    billPanelInfoTxt: {
+        color: '#000',
+        fontSize: 17,
+    },
+
     screenScroll: {
     },
     billView: {
@@ -149,8 +292,7 @@ const styles = StyleSheet.create({
     },
     billInfoSenderTxt: {},
     balanceView: {
-        alignItems: 'center',
-        flexDirection: 'row'
+        justifyContent: 'center',
     },
     billInforejectTxt: {
         color: '#ff4242'
