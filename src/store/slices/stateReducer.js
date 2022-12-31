@@ -36,7 +36,7 @@ export const registerNewUser = createAsyncThunk(
             const data = await res.json()
             console.log(data);
             if (res.status === 200) {
-                dispatch(setServerErrorMessage(null))
+                dispatch(setErrorMessage(null))
                 dispatch(storeAndSetUserData({
                     id: data.id,
                     phoneNumber: data.phoneNumber
@@ -44,7 +44,7 @@ export const registerNewUser = createAsyncThunk(
                 dispatch(setIsLogined(true))
                 dispatch(popToTop('home'))
                 dispatch(setToastAndroidMessage(data.message))
-            } else dispatch(setServerErrorMessage(data.error))
+            } else dispatch(setErrorMessage(data.error))
         } catch (e) {
             return e.message
         }
@@ -65,7 +65,7 @@ export const loginUser = createAsyncThunk(
             const data = await res.json()
             if (res.status === 200) {
                 console.log('logined');
-                dispatch(setServerErrorMessage(null))
+                dispatch(setErrorMessage(null))
                 dispatch(storeAndSetUserData({
                     id: data.id,
                     phoneNumber: data.phoneNumber
@@ -73,7 +73,7 @@ export const loginUser = createAsyncThunk(
                 dispatch(setIsLogined(true))
                 dispatch(popToTop('home'))
                 dispatch(setToastAndroidMessage(data.message))
-            } else dispatch(setServerErrorMessage(data.error))
+            } else dispatch(setErrorMessage(data.error))
         } catch (e) {
             return e.message
         }
@@ -108,7 +108,7 @@ const stateSlice = createSlice({
             phoneNumber: null,
         },
         toastAndroidMessage: null,
-        serverErrorMessage: null,
+        errorMessage: null,
     },
     reducers: {
         navigate(state, action) {
@@ -135,8 +135,8 @@ const stateSlice = createSlice({
         setLogin(state, action) {
             state.userData.login = action.payload
         },
-        setServerErrorMessage(state, action) {
-            state.serverErrorMessage = action.payload
+        setErrorMessage(state, action) {
+            state.errorMessage = action.payload
         },
         setIdUser(state, action) {
             state.userData.idUser = action.payload
@@ -205,7 +205,7 @@ export const {
     storeAndSetUserData,
     setUserDataWithoutStore,
     removeUserData,
-    setServerErrorMessage,
+    setErrorMessage,
     setIsLogined,
     setToastAndroidMessage,
 

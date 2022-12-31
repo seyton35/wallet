@@ -3,18 +3,17 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-nativ
 import { useDispatch, useSelector } from 'react-redux'
 import Header from '../../components/Header'
 
-import { popToTop, registerNewUser } from '../../store/slices/stateReducer'
+import { popToTop, registerNewUser, setErrorMessage } from '../../store/slices/stateReducer'
 
 export default function RegisterScreen() {
     const [phoneNumber, setPhoneNumber] = useState('+')
     const [password, setPassword] = useState()
     const [repeatPassword, setRepeatPassword] = useState()
-    const [error, setError] = useState()
 
     const [isPhoneOk, setIsPhoneOk] = useState(false)
     const [isPasswordOk, setIsPasswordOk] = useState(false)
 
-    const serverErrorMessage = useSelector(s => s.state.serverErrorMessage)
+    const { errorMessage } = useSelector(s => s.state)
 
     const dispatch = useDispatch()
 
@@ -28,12 +27,12 @@ export default function RegisterScreen() {
             setPhoneNumber('+' + num)
             if (num.length === 11) {
                 setIsPhoneOk(true)
-                setError()
+                dispatch(setErrorMessage())
             } else {
                 setIsPhoneOk(false)
                 if (num.length > 11) {
-                    setError('слишком длинный номер')
-                } else setError()
+                    dispatch(setErrorMessage('слишком длинный номер'))
+                } else dispatch(setErrorMessage())
             }
         }
     }
@@ -48,18 +47,18 @@ export default function RegisterScreen() {
     function repeatPasswordHandler(val) {
         setRepeatPassword(val)
         if (val !== password) {
-            setError('повторный пароль не совпадает')
+            dispatch(setErrorMessage('повторный пароль не совпадает'))
         } else {
-            setError()
+            dispatch(setErrorMessage())
         }
     }
 
     function checkRepeatPassword() {
         if (repeatPassword === password) {
-            setError()
+            dispatch(setErrorMessage())
             return true
         } else {
-            setError('повторный пароль не совпадает')
+            dispatch(setErrorMessage('повторный пароль не совпадает'))
             return false
         }
     }
@@ -70,34 +69,23 @@ export default function RegisterScreen() {
             dispatch(registerNewUser({
                 phoneNumber, password
             }))
-        } else setError('некорректный логин или пароль')
-    }
-
-    function errorShow() {
-        if (serverErrorMessage) {
-            return (
-                < View style={styles.errorView}>
-                    <Text style={styles.errorText}>{serverErrorMessage}</Text>
-                </View>
-            )
-        } else if (error) {
-
-            return (
-                < View style={styles.errorView}>
-                    <Text style={styles.errorText}>{error}</Text>
-                </View>
-            )
-        }
+        } else dispatch(setErrorMessage('некорректный логин или пароль'))
     }
 
     function changeAuth() {
+        dispatch(setErrorMessage())
         dispatch(popToTop('login'))
     }
 
     return (
         <View style={styles.container}>
             <Header showHeaderButton={false} />
-            {errorShow()}
+            {errorMessage
+                ? < View style={styles.errorView}>
+                    <Text style={styles.errorText}>{errorMessage}</Text>
+                </View>
+                : null
+            }
 
             <View style={styles.changeAuthBox}>
                 <Text style={styles.changeAuthTxt}>уже есть кошелек?</Text>

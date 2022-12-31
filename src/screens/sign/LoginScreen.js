@@ -3,18 +3,17 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-nativ
 import { useDispatch, useSelector } from 'react-redux'
 import Header from '../../components/Header'
 
-import { loginUser, popToTop } from '../../store/slices/stateReducer'
+import { loginUser, popToTop, setErrorMessage } from '../../store/slices/stateReducer'
 
 
 export default function LoginScreen() {
     const [phoneNumber, setPhoneNumber] = useState('+')
     const [password, setPassword] = useState()
-    const [error, setError] = useState()
 
     const [isPhoneOk, setIsPhoneOk] = useState(false)
     const [isPasswordOk, setIsPasswordOk] = useState(false)
 
-    const serverErrorMessage = useSelector(s => s.state.serverErrorMessage)
+    const {errorMessage} = useSelector(s => s.state)
 
     const dispatch = useDispatch()
 
@@ -28,12 +27,12 @@ export default function LoginScreen() {
             setPhoneNumber('+' + num)
             if (num.length === 11) {
                 setIsPhoneOk(true)
-                setError()
+                dispatch(setErrorMessage())
             } else {
                 setIsPhoneOk(false)
                 if (num.length > 11) {
-                    setError('слишком длинный номер')
-                } else setError()
+                    dispatch(setErrorMessage('слишком длинный номер'))
+                } else dispatch(setErrorMessage())
             }
         }
     }
@@ -50,35 +49,24 @@ export default function LoginScreen() {
             dispatch(loginUser({
                 phoneNumber, password
             }))
-        } else setError('некорректный логин или пароль')
-    }
-
-    function errorShow() {
-        if (serverErrorMessage) {
-            return (
-                < View style={styles.errorView}>
-                    <Text style={styles.errorText}>{serverErrorMessage}</Text>
-                </View>
-            )
-        } else if (error) {
-
-            return (
-                < View style={styles.errorView}>
-                    <Text style={styles.errorText}>{error}</Text>
-                </View>
-            )
-        }
+        } else dispatch(setErrorMessage('некорректный логин или пароль'))
     }
 
     function changeAuth() {
+        dispatch(setErrorMessage())
         dispatch(popToTop('register'))
     }
 
     return (
         <View style={styles.container}>
-            <Header showHeaderButton={false}/>
+            <Header showHeaderButton={false} />
 
-            {errorShow()}
+            {errorMessage
+                ? < View style={styles.errorView}>
+                    <Text style={styles.errorText}>{errorMessage}</Text>
+                </View>
+                : null
+            }
 
             <View style={styles.changeAuthBox}>
                 <Text style={styles.changeAuthTxt}>еще нет кошелека?</Text>

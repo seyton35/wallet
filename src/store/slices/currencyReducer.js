@@ -263,7 +263,7 @@ const currencySlice = createSlice({
         currencyArray: [],
         selectedCurrency: null,
         rateStatus: null,
-        error: null,
+        errormessage: null,
         rate: null,
         transferStatus: null,
         awalableCurrency: [],
@@ -293,19 +293,19 @@ const currencySlice = createSlice({
             state.toastAndroidMessage = action.payload
         },
         setErrorMessage(state, action) {
-            state.error = action.payload
+            state.errormessage = action.payload
         },
         resetValueAfterRequest(state, action) {
             state.selectedCurrency = null
             state.rateStatus = null
-            state.error = null
+            state.errormessage = null
             state.rate = null
             state.transferStatus = null
             state.toastAndroidMessage = null
             state.requestStatus = null
         },
         resetMessage(state, action) {
-            state.error = null
+            state.errormessage = null
         },
         setActiveBills(state, action) {
             state.activeBills = action.payload
@@ -328,7 +328,7 @@ const currencySlice = createSlice({
             })
             .addCase(fetchExchangeRate.rejected, (state, action) => {
                 state.rateStatus = 'rejected',
-                    state.error = action.payload
+                    state.errormessage = action.payload
             })
 
         builder
@@ -338,7 +338,7 @@ const currencySlice = createSlice({
             })
             .addCase(currencyСonversion.rejected, (state, action) => {
                 state.transferStatus = 'rejected',
-                    state.error = action.payload
+                    state.errormessage = action.payload
             })
 
         builder
@@ -346,7 +346,7 @@ const currencySlice = createSlice({
                 state.awalableCurrency = action.payload
             })
             .addCase(fetchAwalableCurrency.rejected, (state, action) => {
-                state.error = action.payload
+                state.errormessage = action.payload
             })
     }
 

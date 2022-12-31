@@ -4,7 +4,8 @@ import { Picker } from '@react-native-picker/picker'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { SocketContext } from '../../Main'
-import { clientMoneyRequest, resetMessage } from '../../store/slices/currencyReducer'
+import { clientMoneyRequest, resetMessage, setErrorMessage } from '../../store/slices/currencyReducer'
+
 import Header from '../../components/Header'
 
 export default function ClientMoneyRequestScreen() {
@@ -14,13 +15,12 @@ export default function ClientMoneyRequestScreen() {
   const [phoneNumber, setPhoneNumber] = useState('+')
   const [sum, setSum] = useState()
   const [moneyRequestLimits, setMoneyRequestLimits] = useState()
-  const [errorMessage, setError] = useState()
 
   const [isPhoneOk, setIsPhoneOk] = useState(false)
   const [isSumOk, setIsSumOk] = useState(false)
 
   const currencyArray = useSelector(s => s.currency.awalableCurrency)
-  const serverErrorMessage = useSelector(s => s.currency.error)
+  const { errorMessage } = useSelector(s => s.currency)
 
   const sender = useSelector(s => s.state.userData.phoneNumber)
   const socket = useContext(SocketContext)
@@ -70,10 +70,10 @@ export default function ClientMoneyRequestScreen() {
       const { limMax, limMin } = moneyRequestLimits
       if (val > limMax || val < limMin) {
         setIsSumOk(false)
-        setError('сумма платежа не должна выходить за пределы лимитов.')
+        dispatch(setErrorMessage('сумма платежа не должна выходить за пределы лимитов.'))
       } else {
         setIsSumOk(true)
-        setError()
+        dispatch(setErrorMessage())
       }
     }
   }
@@ -108,30 +108,16 @@ export default function ClientMoneyRequestScreen() {
     }))
   }
 
-  function errorShow() {
-    if (serverErrorMessage) {
-      return (
-        < View style={styles.errorView}>
-          <Text style={styles.errorText}>{serverErrorMessage}</Text>
-        </View>
-      )
-    } else if (errorMessage) {
-
-      return (
-        < View style={styles.errorView}>
-          <Text style={styles.errorText}>{errorMessage}</Text>
-        </View>
-      )
-    }
-  }
-
-
-
   return (
     <View style={styles.container}>
       <Header headerText='выставить счет' />
 
-      {errorShow()}
+      {errorMessage
+        ? < View style={styles.errorView}>
+          <Text style={styles.errorText}>{errorMessage}</Text>
+        </View>
+        : null
+      }
 
       <ScrollView>
         <View style={styles.form}>
