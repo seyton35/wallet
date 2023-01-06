@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 //components
 import BottomTab from '../components/BottomTab'
 //screens
-import Greeting from "../screens/noStack/Greeting";
+import GreetingScreen from "../screens/noStack/GreetingScreen";
 import Error from "../screens/ErrorScreen";
 import Home from "../screens/HomeScreen";
 import RegisterScreen from "../screens/sign/RegisterScreen";
@@ -24,12 +24,11 @@ import BillInfoScreen from "../screens/billsManagement/BillInfoScreen";
 
 export default function Stack() {
 
-    const isLogined = useSelector(s => s.state.isLogined)
     const currentScreen = useSelector(s => s.state.currentScreen)
 
     function stackNavigator() {
         switch (currentScreen) {
-            case 'greeting': return <Greeting />
+            case 'greeting': return <GreetingScreen />
 
             case 'home': return <Home />
             case 'service': return <ServicesScreen />

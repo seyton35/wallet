@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { View, StyleSheet, Text, ScrollView, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import IconEntypo  from "react-native-vector-icons/Entypo";
-import IconIonicons  from "react-native-vector-icons/Ionicons";
+import IconEntypo from "react-native-vector-icons/Entypo";
+import IconIonicons from "react-native-vector-icons/Ionicons";
 
 import Currency from "../components/Currency";
 import Header from "../components/Header";
@@ -92,19 +92,19 @@ export default function Home() {
                         onPress={() => dispatch(navigate('billCategories'))}
                     >
                         <View style={styles.usefullitemBox}>
-                            <IconIonicons name="file-tray-full-outline" style={styles.usefullitemIcon}/>
+                            <IconIonicons name="file-tray-full-outline" style={styles.usefullitemIcon} />
                             <Text style={styles.usefullitemTxt}>счета к оплате</Text>
                         </View>
-                        <IconEntypo name="chevron-right" style={styles.usefullitemIcon}/>
+                        <IconEntypo name="chevron-right" style={styles.usefullitemIcon} />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.usefullitemBtn}
                         onPress={() => dispatch(navigate('currencyRates'))}
                     >
                         <View style={styles.usefullitemBox}>
-                            <IconIonicons name="bar-chart-outline" style={styles.usefullitemIcon}/>
+                            <IconIonicons name="bar-chart-outline" style={styles.usefullitemIcon} />
                             <Text style={styles.usefullitemTxt}>курсы валют</Text>
                         </View>
-                        <IconEntypo name="chevron-right" style={styles.usefullitemIcon}/>
+                        <IconEntypo name="chevron-right" style={styles.usefullitemIcon} />
                     </TouchableOpacity>
                 </View>
 

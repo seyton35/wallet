@@ -7,8 +7,7 @@ import { useDispatch } from 'react-redux';
 
 import { popToTop } from '../store/slices/stateReducer';
 
-export default function BottomTab(prop) {
-    const { tabName } = prop
+export default function BottomTab({tabName}) {
 
     function buttonTextFormater(key) {
         switch (key) {

@@ -8,12 +8,15 @@ import Header from '../components/Header'
 
 import { allRus, dayMonthRUS, getDayMonthYear } from '../middleWare/dataFormater'
 import { fetchClosedBills } from '../store/slices/currencyReducer'
+import LoadingSpiner from '../components/animated/LoadingSpiner'
+import Loading from '../components/Loading'
 
 export default function HistoryScreen() {
     const [isPanelActive, setIsPanelActive] = useState(false);
     const [billOnFocus, setBillOnFocus] = useState(null);
 
     const { closedBills } = useSelector(s => s.currency)
+    const { pending } = useSelector(s => s.currency)
     const { idUser } = useSelector(s => s.state.userData)
 
     const payDate = useRef(null)
@@ -51,11 +54,23 @@ export default function HistoryScreen() {
         setIsPanelActive(false);
     };
 
+    function showListLoading() {
+        if (closedBills.length == 0 && pending == false) {
+            return (
+                <View style={styles.billListStatusView}>
+                    <Text style={styles.billListStatusText}> здесь пока ничего нет</Text >
+                </View>)
+        }
+        else if (closedBills.length == 0 && pending) {
+            return <Loading/>
+        }
+    }
+
     function showStatusRUS(status) {
         switch (status) {
-            case 'rejected':return 'Отменен'                
-            case 'active':return 'Выставлен'                
-            case 'success':return 'Оплачен'                
+            case 'rejected': return 'Отменен'
+            case 'active': return 'Выставлен'
+            case 'success': return 'Оплачен'
         }
     }
 
@@ -144,10 +159,7 @@ export default function HistoryScreen() {
             </SwipeablePanel>
 
             <ScrollView style={styles.screenScroll}>
-                {closedBills.length > 0
-                    ? null
-                    : <Text>здесь пока ничего нет</Text>
-                }
+                {showListLoading()}
                 {closedBills.map((bill, index) => {
                     return (
                         <TouchableOpacity style={styles.billView} key={index}
@@ -155,14 +167,14 @@ export default function HistoryScreen() {
                         >
                             <View style={styles.billInfoView}>
                                 <View style={{ flexDirection: 'row', }}>
-                                    <View>
+                                    <View style={styles.bilPicBox}>
                                         <Image source={{ uri: 'https://reactjs.org/logo-og.png' }} style={styles.billPic} />
                                         {bill.status == 'rejected'
                                             ? <Icon name='exclamationcircle' style={styles.billRejectedIcon} />
                                             : null
                                         }
                                     </View>
-                                    <View >
+                                    <View style={styles.billInfoBox}>
                                         {showDate(bill.paymentDate)}
                                         <Text style={styles.billInfoTypeTxt}>{bill.type}</Text>
                                         <Text style={styles.billInfoSenderTxt}>
@@ -196,6 +208,19 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#ddd',
         height: '100%'
+    },
+
+    billListStatusView: {
+        marginTop: 10,
+        padding: 10,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        alignSelf: 'center',
+        flexDirection: 'row'
+    },
+    billListStatusText: {
+        fontSize: 17,
+        color: '#000'
     },
 
     billPanelBasicInfoView: {
@@ -264,6 +289,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
+    bilPicBox: {
+        paddingRight: 10
+
+    },
     billPic: {
         width: 50,
         height: 50,
@@ -271,9 +300,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         justifyContent: 'center',
         borderRadius: 100,
-
     },
-
     billRejectedIcon: {
         color: 'red',
         fontSize: 15,
@@ -282,6 +309,8 @@ const styles = StyleSheet.create({
         top: '55%',
         left: '55%',
     },
+
+    billInfoBox: {},
     billDateTxt: {
         color: '#000',
         fontSize: 14

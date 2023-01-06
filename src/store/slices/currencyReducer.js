@@ -257,6 +257,30 @@ export const fetchBillsByCategory = createAsyncThunk(
     }
 )
 
+export const fetchAvailableCurrencyRates = createAsyncThunk(
+    'currency/fetchAvailableCurrencyRates',
+    async (_, { getState, dispatch }) => {
+        const awalableCurrency = getState().currency.awalableCurrency
+        try {
+            const resRates = []
+            for (let i = 0; i < awalableCurrency.length; i++) {
+                const cur = awalableCurrency[i];
+                if (cur.type != 'RUB') {
+                    const res = await fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${cur.type.toLowerCase()}/rub.json`)
+                    const data = await res.json()
+                    resRates.push({
+                        val: data.rub,
+                        type: cur.type
+                    })
+                }
+            }
+            dispatch(setAvailableCurrencyRates(resRates))
+        } catch (e) {
+            console.log(e.message)
+        }
+    }
+)
+
 const currencySlice = createSlice({
     name: 'currency',
     initialState: {
@@ -264,9 +288,11 @@ const currencySlice = createSlice({
         selectedCurrency: null,
         rateStatus: null,
         errormessage: null,
+        pending: false,
         rate: null,
         transferStatus: null,
         awalableCurrency: [],
+        availableCurrencyRates: [],
         toastAndroidMessage: null,
         requestStatus: null,
         activeBills: [],
@@ -274,12 +300,6 @@ const currencySlice = createSlice({
         billsByCategory: [],
     },
     reducers: {
-        addCurrency(state, action) {// TODO: сохранение нового кошеля в базу в asyn
-            state.currencyArray.push({
-                type: action.payload.currency,
-                value: 0
-            })
-        },
         setCurrencyArray(state, action) {
             state.currencyArray = action.payload
         },
@@ -307,6 +327,9 @@ const currencySlice = createSlice({
         resetMessage(state, action) {
             state.errormessage = null
         },
+        setAavailableCurrencyRates(state, action) {
+            state.availableCurrencyRates = action.payload
+        },
         setActiveBills(state, action) {
             state.activeBills = action.payload
         },
@@ -323,31 +346,27 @@ const currencySlice = createSlice({
                 state.rateStatus = 'complete'
                 state.rate = action.payload
             })
-            .addCase(fetchExchangeRate.pending, (state, action) => {
-                state.rateStatus = 'loading'
-            })
+            .addCase(fetchExchangeRate.pending, (state, action) => { state.rateStatus = 'loading' })
             .addCase(fetchExchangeRate.rejected, (state, action) => {
                 state.rateStatus = 'rejected',
                     state.errormessage = action.payload
             })
 
         builder
-
-            .addCase(currencyСonversion.pending, (state, action) => {
-                state.transferStatus = 'loading'
-            })
+            .addCase(currencyСonversion.pending, (state, action) => { state.transferStatus = 'loading' })
             .addCase(currencyСonversion.rejected, (state, action) => {
                 state.transferStatus = 'rejected',
                     state.errormessage = action.payload
             })
-
         builder
-            .addCase(fetchAwalableCurrency.fulfilled, (state, action) => {
-                state.awalableCurrency = action.payload
-            })
-            .addCase(fetchAwalableCurrency.rejected, (state, action) => {
-                state.errormessage = action.payload
-            })
+            .addCase(fetchAwalableCurrency.fulfilled, (state, action) => { state.awalableCurrency = action.payload })
+            .addCase(fetchAwalableCurrency.rejected, (state, action) => { state.errormessage = action.payload })
+        builder
+            .addCase(fetchClosedBills.fulfilled, (state, action) => { state.pending = false })
+            .addCase(fetchClosedBills.pending, (state, action) => { state.pending = true })
+        builder
+            .addCase(fetchAvailableCurrencyRates.fulfilled, (state, action) => { state.pending = false })
+            .addCase(fetchAvailableCurrencyRates.pending, (state, action) => { state.pending = true })
     }
 
 })
@@ -361,6 +380,7 @@ export const {
     setErrorMessage,
     resetValueAfterRequest,
     resetMessage,
+    setAavailableCurrencyRates: setAvailableCurrencyRates,
     setActiveBills,
     setClosedBills,
     setBillsByCategory

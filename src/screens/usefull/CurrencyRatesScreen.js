@@ -4,87 +4,72 @@ import { useDispatch, useSelector } from 'react-redux'
 import { flag40x40Assets } from '../../../assets/flag40x40Assets'
 
 import Header from '../../components/Header'
+import Loading from '../../components/Loading'
+import { fetchAvailableCurrencyRates } from '../../store/slices/currencyReducer'
 
 export default function CurrencyRatesScreen() {
-    const { awalableCurrency } = useSelector(s => s.currency)
+    const { availableCurrencyRates } = useSelector(s => s.currency)
+    const { pending } = useSelector(s => s.currency)
 
     const dispatch = useDispatch()
 
-    const [rates, setRates] = useState([])
-
     useEffect(() => {
-        async function fetchRates() {
-            console.log(awalableCurrency);
-            try {
-                const resRates = []
-                for (let i = 0; i < awalableCurrency.length; i++) {
-                    const cur = awalableCurrency[i];
-                    if (cur.type != 'RUB') {
-                        const res = await fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${cur.type.toLowerCase()}/rub.json`)
-                        const data = await res.json()
-                        resRates.push({
-                            val: data.rub,
-                            type: cur.type
-                        })
-                    }
-                }
-                setRates(resRates)
-                console.log(rates);
-            } catch (e) {
-                console.log(e.message)
-            }
+        if (availableCurrencyRates.length == 0) {
+            dispatch(fetchAvailableCurrencyRates())
         }
-        fetchRates()
     }, [])
-
-
 
     return (
         <View style={styles.container}>
-            <Header headerText='Курсы валют'></Header>
+            <Header headerText='Курсы валют' />
 
-            <View style={[styles.rateBlock, { paddingVertical: 0, paddingTop: 10 }]} >
-                <Text style={styles.rateTitleTxt}>Валюта</Text>
-                <View style={styles.rateValBox}>
-                    <View style={styles.rateBoxItem}>
-                        <Text style={styles.rateTitleTxt}>Покупка</Text>
-                    </View>
-                    <View style={styles.rateBoxItem}>
-                        <Text style={styles.rateTitleTxt}>Продажа</Text>
-                    </View>
-                </View>
-            </View>
-
-            {rates.map((rate, index) => {
-                let { type, val } = rate
-                const flag = type
-                if (type == 'KZT') {
-                    type = "100 " + type
-                    val = (val * 100).toFixed(2)
-                } else val = val.toFixed(2)
-                return (
-                    < View style={styles.rateBlock} key={index} >
-                        <View style={styles.rateTitleBox}>
-                            <View style={styles.ratePic}>
-                                <Image
-                                    source={flag40x40Assets[flag]}
-                                    style={{ width: 40, height: 40, borderRadius:20, }}
-                                />
-                            </View>
-                            <Text style={styles.rateCurTxt}>{type}</Text>
-                        </View>
+            {pending
+                ?
+                <Loading />
+                : <>
+                    <View style={[styles.rateBlock, { paddingVertical: 0, paddingTop: 10 }]} >
+                        <Text style={styles.rateTitleTxt}>Валюта</Text>
                         <View style={styles.rateValBox}>
                             <View style={styles.rateBoxItem}>
-                                <Text style={styles.rateValTxt}>{val}</Text>
+                                <Text style={styles.rateTitleTxt}>Покупка</Text>
                             </View>
                             <View style={styles.rateBoxItem}>
-                                <Text style={styles.rateValTxt}>{val}</Text>
+                                <Text style={styles.rateTitleTxt}>Продажа</Text>
                             </View>
                         </View>
-                    </View>)
-            })}
+                    </View>
 
-        </View >
+                    {availableCurrencyRates.map((rate, index) => {
+                        let { type, val } = rate
+                        const flag = type
+                        if (type == 'KZT') {
+                            type = "100 " + type
+                            val = (val * 100).toFixed(2)
+                        } else val = val.toFixed(2)
+                        return (
+                            < View style={styles.rateBlock} key={index} >
+                                <View style={styles.rateTitleBox}>
+                                    <View style={styles.ratePic}>
+                                        <Image
+                                            source={flag40x40Assets[flag]}
+                                            style={{ width: 40, height: 40, borderRadius: 20, }}
+                                        />
+                                    </View>
+                                    <Text style={styles.rateCurTxt}>{type}</Text>
+                                </View>
+                                <View style={styles.rateValBox}>
+                                    <View style={styles.rateBoxItem}>
+                                        <Text style={styles.rateValTxt}>{val}</Text>
+                                    </View>
+                                    <View style={styles.rateBoxItem}>
+                                        <Text style={styles.rateValTxt}>{val}</Text>
+                                    </View>
+                                </View>
+                            </View>)
+                    })}
+                </>
+            }
+        </View>
     )
 }
 
@@ -94,6 +79,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#d3d3d3',
         height: '100%'
+    },
+
+    availableCurrencyListStatusView: {
+        marginTop: 10,
+        padding: 10,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        alignSelf: 'center',
+        flexDirection: 'row'
+    },
+    availableCurrencyListStatusText: {
+        fontSize: 17,
+        color: '#000'
     },
 
     rateTitleTxt: {},
@@ -111,7 +109,7 @@ const styles = StyleSheet.create({
     },
     ratePic: {
         paddingRight: 10,
-        paddingVertical:5
+        paddingVertical: 5
     },
     ratePicTxt: {
         color: 'red',

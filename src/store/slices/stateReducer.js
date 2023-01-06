@@ -12,7 +12,9 @@ export const initialization = createAsyncThunk(
             if (data !== null) {
                 dispatch(setUserDataWithoutStore(data))
                 dispatch(setIsLogined(true))
-                dispatch(popToTop('home'))
+                setTimeout(() => {
+                    dispatch(popToTop('home'))
+                }, 1500);
                 dispatch(fetchAwalableCurrency())
             } else dispatch(popToTop('login'))
         } catch (e) {

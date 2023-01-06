@@ -1,5 +1,7 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+
+import { LogoAssets } from '../../assets/logoAssets'
 
 import { billPayment } from '../store/slices/currencyReducer'
 import { navigate } from '../store/slices/stateReducer'
@@ -67,7 +69,10 @@ export default function Issue({ bill }) {
         >
             <View style={{ flexDirection: 'row' }}>
                 <View>{/*TODO: заменить на icon для счета */}
-                    <Text style={{ color: 'black', fontSize: 25 }}>@</Text>
+                    <Image
+                        source={LogoAssets['Wallet']}
+                        style={{ width: 35, height: 35, borderRadius: 20, margin: 5 }}
+                    />
                 </View>
                 <View>
                     <Text style={styles.billType}>{bill.type}</Text>

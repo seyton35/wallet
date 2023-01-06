@@ -1,9 +1,11 @@
-import { useEffect,useState } from 'react'
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useEffect, useState } from 'react'
+import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import Icon from 'react-native-vector-icons/Entypo'
 
 import Header from '../../components/Header'
+
+import { LogoAssets } from '../../../assets/logoAssets'
 
 import { billPayment, fetchExchangeRate } from '../../store/slices/currencyReducer'
 
@@ -106,21 +108,23 @@ export default function BillPaymentScreen() {
                                 return <TouchableOpacity style={styles.currencyView} key={index}
                                     onPress={() => selectCurrencyBtnHandler(currency)}
                                 >
-                                    <Text style={{ color: 'orange' }}>@</Text>
+                                    <Image
+                                        source={LogoAssets['Wallet']}
+                                        style={styles.currencyLogoPic}
+                                    />
                                     <Text style={styles.currencyTxt}>{currency.count} {currency.type}</Text>
                                     {currency.type == selectedCurrency.type
-                                        ? <Text style={{ fontSize: 17, color: '#000' }}>{'<'}</Text>
-                                        : null
+                                        ? <Icon name='chevron-left' style={styles.moreCurrencyIcon} /> : null
                                     }
                                 </TouchableOpacity>
-                            } else return null
+                            }
                         })}
                     </View>
                     {currencyArray.length > shownCurrencyLimit && !showAllCurrency
                         ? <TouchableOpacity style={styles.moreCurrencyBtn}
                             onPress={moreCurrencyBtnHandler}
                         >
-                            <Icon name='dots-three-horizontal' style={styles.moreCurrencyIcon}/>
+                            <Icon name='dots-three-horizontal' style={styles.moreCurrencyIcon} />
                             <Text style={styles.currencyTxt}>Другие способы оплаты</Text>
                         </TouchableOpacity>
                         : null
@@ -200,10 +204,13 @@ const styles = StyleSheet.create({
     },
     currencyView: {
         flexDirection: 'row',
-        paddingTop: 10
+        paddingTop: 10,
+        alignItems:'center'
     },
-    icon: {
-        color: 'orange'
+    currencyLogoPic: {
+        width: 30,
+        height: 30,
+        borderRadius: 20,
     },
     currencyTxt: {
         fontSize: 17,
@@ -216,10 +223,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
 
     },
-    moreCurrencyIcon:{
-        fontSize:17,
-        color:'#000',
-        alignSelf:'center'
+    moreCurrencyIcon: {
+        fontSize: 17,
+        color: '#000',
+        alignSelf: 'center'
     },
 
     costBlockView: {
