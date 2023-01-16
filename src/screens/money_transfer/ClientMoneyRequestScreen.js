@@ -1,9 +1,8 @@
 import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Picker } from '@react-native-picker/picker'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { SocketContext } from '../../Main'
 import { clientMoneyRequest, resetMessage, setErrorMessage } from '../../store/slices/currencyReducer'
 
 import Header from '../../components/Header'
@@ -23,7 +22,6 @@ export default function ClientMoneyRequestScreen() {
   const { errorMessage } = useSelector(s => s.currency)
 
   const sender = useSelector(s => s.state.userData.phoneNumber)
-  const socket = useContext(SocketContext)
 
   const dispatch = useDispatch()
 
@@ -104,7 +102,6 @@ export default function ClientMoneyRequestScreen() {
       currency: pickerCurrency,
       sum,
       comment: commentText,
-      socket
     }))
   }
 

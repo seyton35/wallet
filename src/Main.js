@@ -1,5 +1,6 @@
 import { Alert, BackHandler, Button, StyleSheet, Text, ToastAndroid, View } from 'react-native'
 import { createContext, useEffect, useMemo, useRef } from 'react'
+import messaging from '@react-native-firebase/messaging'
 
 import { io } from 'socket.io-client'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,6 +10,7 @@ import Stack from './navigation/Stack'
 import { backButtonPress, initialization, setToastAndroidMessage } from './store/slices/stateReducer'
 import { SocketReducer } from './middleWare/socket_routes'
 import { setToastMessage } from './store/slices/currencyReducer'
+import PushNotification from 'react-native-push-notification'
 
 export const SocketContext = createContext()
 
@@ -22,6 +24,37 @@ export default function Main() {
   const socket = useRef(null)
 
   const dispatch = useDispatch()
+
+  const getMessage = async (message) => {
+    // console.log(message);
+    const { body, title } = message.notification
+    PushNotification.localNotification({
+      channelId: 'chanel_1',
+      title,
+      message: body,
+      playSound:true,
+      soundName:'coins'
+    })
+  }
+
+  const getToken = async () => {
+    const token = await messaging().getToken()
+    console.log('token', token)
+  }
+
+  useEffect(() => {
+    PushNotification.createChannel({
+      channelId: 'chanel_1',
+      channelName: 'chanel 1',
+      playSound:true,
+      soundName:'coins'
+    })
+
+    messaging().onMessage(getMessage)
+    messaging().setBackgroundMessageHandler(getMessage)
+    getToken()
+  }, [])
+
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(

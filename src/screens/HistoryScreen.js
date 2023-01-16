@@ -8,7 +8,6 @@ import Header from '../components/Header'
 
 import { allRus, dayMonthRUS, getDayMonthYear } from '../middleWare/dataFormater'
 import { fetchClosedBills } from '../store/slices/currencyReducer'
-import LoadingSpiner from '../components/animated/LoadingSpiner'
 import Loading from '../components/Loading'
 
 export default function HistoryScreen() {

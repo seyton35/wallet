@@ -99,7 +99,7 @@ export const fetchAwalableCurrency = createAsyncThunk(
 
 export const clientMoneyRequest = createAsyncThunk(
     'currency/clientMoneyRequest',
-    async ({ receiver, sender, currency, sum, comment, socket }, { dispatch }) => {
+    async ({ receiver, sender, currency, sum, comment }, { dispatch }) => {
         try {
             const res = await fetch(
                 'http://192.168.31.254:8000/api/transaction/clientMoneyRequest', {
@@ -119,10 +119,6 @@ export const clientMoneyRequest = createAsyncThunk(
                 dispatch(setRequestStatus(data.status))
                 dispatch(resetValueAfterRequest())
                 dispatch(popToTop('home'))
-                socket.emit("/", {
-                    way: 'CHECK_YOUR_ISSUES',
-                    id: data.receiverId
-                });
             } else dispatch(setErrorMessage(data.message))
         } catch (e) {
             return e.message
