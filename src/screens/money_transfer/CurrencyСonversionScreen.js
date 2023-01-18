@@ -76,7 +76,6 @@ export default function CurrencyСonversionScreen() {
         }
         if (!message) {
             dispatch(currencyСonversion({
-                id: idUser,
                 sum: Number(sum),
                 rate,
                 recipient: currency.type,

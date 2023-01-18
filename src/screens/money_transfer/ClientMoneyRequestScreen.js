@@ -153,13 +153,14 @@ export default function ClientMoneyRequestScreen() {
           >
             {
               currencyArray.map((cur, index) => {
-                return (
-                  <Picker.Item
-                    key={index}
-                    label={cur.type}
-                    value={cur.type}
-                  />
-                )
+                if (cur.requestAllowed)
+                  return (
+                    <Picker.Item
+                      key={index}
+                      label={cur.type}
+                      value={cur.type}
+                    />
+                  )
               })
             }
           </Picker>

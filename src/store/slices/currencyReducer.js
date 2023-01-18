@@ -45,8 +45,9 @@ export const fetchExchangeRate = createAsyncThunk(
 
 export const currencyСonversion = createAsyncThunk(
     'currency/currencyСonversion',
-    async ({ id, sum, rate, recipient, donor }, { dispatch }) => {
+    async ({ sum, rate, recipient, donor }, { dispatch, getState }) => {
         try {
+            const { idUser, phoneNumber } = getState().state.userData
             const res = await fetch(
                 'http://192.168.31.254:8000/api/transaction/currencyConversion', {
                 method: 'POST',
@@ -54,7 +55,8 @@ export const currencyСonversion = createAsyncThunk(
                     'Content-type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id,
+                    idUser,
+                    phoneNumber,
                     sum,
                     rate,
                     recipient,
@@ -85,11 +87,11 @@ export const fetchAwalableCurrency = createAsyncThunk(
             // const res = await fetch(`myApi/awalableCurencyArray.json`)
             // const data = await res.json()
             return [
-                { type: 'RUB', limMin: 1, limMax: 100000 },
-                { type: 'USD', limMin: 1, limMax: 10000 },
-                { type: 'EUR', limMin: 1, limMax: 10000 },
-                { type: 'UAH', limMin: 1, limMax: 30000 },
-                { type: 'KZT', limMin: 100, limMax: 100000 },
+                { type: 'RUB', limMin: 1, limMax: 100000 , requestAllowed :true},
+                { type: 'USD', limMin: 1, limMax: 10000 , requestAllowed :false},
+                { type: 'EUR', limMin: 1, limMax: 10000 , requestAllowed :false},
+                { type: 'UAH', limMin: 1, limMax: 30000 , requestAllowed :false},
+                { type: 'KZT', limMin: 100, limMax: 100000 , requestAllowed :true},
             ]
         } catch (e) {
             return e.message
@@ -155,7 +157,6 @@ export const billPayment = createAsyncThunk(
     'currency/billPayment',
     async ({ idUser, idBill, currencyType, rate }, { dispatch }) => {
         try {
-            console.log(idUser, idBill, currencyType);
             const res = await fetch(
                 'http://192.168.31.254:8000/api/transaction/billPayment', {
                 method: 'POST',
