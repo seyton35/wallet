@@ -1,6 +1,6 @@
 import { Alert, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { popToTop, removeUserData } from '../store/slices/stateReducer'
+import { logOutUser, popToTop } from '../store/slices/stateReducer'
 
 export default function ProfileScreen() {
 
@@ -20,7 +20,7 @@ export default function ProfileScreen() {
                 {
                     text: 'выйти',
                     onPress: () => {
-                        dispatch(removeUserData())
+                        dispatch(logOutUser())
                         dispatch(popToTop('login'))
                     }
                 }

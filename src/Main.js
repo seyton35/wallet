@@ -1,59 +1,98 @@
-import { Alert, BackHandler, Button, StyleSheet, Text, ToastAndroid, View } from 'react-native'
-import { createContext, useEffect, useMemo, useRef } from 'react'
+import { Alert, BackHandler, StyleSheet, Text, ToastAndroid, View } from 'react-native'
+import { useEffect } from 'react'
 import messaging from '@react-native-firebase/messaging'
 
-import { io } from 'socket.io-client'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Stack from './navigation/Stack'
 
-import { backButtonPress, initialization, setToastAndroidMessage } from './store/slices/stateReducer'
-import { SocketReducer } from './middleWare/socket_routes'
+import {
+  backButtonPress,
+  navigate,
+  initialization,
+  setToastAndroidMessage,
+  saveNotificationToken
+} from './store/slices/stateReducer'
 import { setToastMessage } from './store/slices/currencyReducer'
 import PushNotification from 'react-native-push-notification'
-
-export const SocketContext = createContext()
 
 export default function Main() {
   const stateToastMessage = useSelector(s => s.state.toastAndroidMessage)
   const currencyToastMessage = useSelector(s => s.currency.toastAndroidMessage)
-  const isLogined = useSelector(s => s.state.isLogined)
   const currentScreen = useSelector(s => s.state.currentScreen)
   const { idUser } = useSelector(s => s.state.userData)
 
-  const socket = useRef(null)
-
   const dispatch = useDispatch()
 
+  async function init() {
+    dispatch(initialization())
+  }
+
+  const navigationMessageHandler = notification => {
+    const data = JSON.parse(notification?.data?.data)
+    const { screen } = notification.data
+    console.log(screen, data);
+    dispatch(navigate({ screen, data }))
+  }
+
+  const messageHandler = notification => {
+    console.log('just notification');
+  }
+
+  function messagingChanel() {
+    PushNotification.configure({
+      onRegister: token => {
+        console.log("TOKEN:", token);
+      },
+
+      onNotification: notification => {
+        const navigation = notification?.data?.navigation
+        if (navigation) {
+          navigationMessageHandler(notification)
+        } else {
+          messageHandler(notification)
+        }
+      },
+    })
+    PushNotification.createChannel({
+      channelId: 'chanel_1',
+      channelName: 'chanel 1',
+      playSound: true,
+      soundName: 'coins',
+    })
+
+    messaging().onMessage(getMessage)
+    messaging().setBackgroundMessageHandler(getMessage)
+  }
+
   const getMessage = async (message) => {
-    // console.log(message);
-    const { body, title } = message.notification
+    const { title, body } = message.notification
+    const data = message.data
     PushNotification.localNotification({
       channelId: 'chanel_1',
       title,
       message: body,
-      playSound:true,
-      soundName:'coins'
+      playSound: true,
+      soundName: 'coins',
+      userInfo: data
     })
   }
 
   const getToken = async () => {
     const token = await messaging().getToken()
-    console.log('token', token)
+    dispatch(saveNotificationToken({ token, idUser }))
   }
 
   useEffect(() => {
-    PushNotification.createChannel({
-      channelId: 'chanel_1',
-      channelName: 'chanel 1',
-      playSound:true,
-      soundName:'coins'
-    })
-
-    messaging().onMessage(getMessage)
-    messaging().setBackgroundMessageHandler(getMessage)
-    getToken()
+    init()
+    messagingChanel()
   }, [])
+
+  useEffect(() => {
+    if (idUser) {
+      getToken()
+    }
+  }, [idUser])
 
 
   useEffect(() => {
@@ -78,14 +117,6 @@ export default function Main() {
     }
   }, [currencyToastMessage])
 
-  useEffect(() => {
-    if (isLogined && socket.current != null) {
-      socket.current.emit('/', {
-        way: 'SUBSCRIBE_BY_ID',
-        id: idUser
-      })
-    }
-  }, [isLogined, socket.current])
 
   function backAction() {
     if (['home', 'register', 'login'].includes(currentScreen)) {
@@ -101,28 +132,9 @@ export default function Main() {
     } else dispatch(backButtonPress())
   }
 
-  async function init() {
-    const data = await dispatch(initialization())
-    if (socket.current) {
-      socket.current.on('/', (data, cb) => {
-        const sock = socket.current
-        SocketReducer(sock, data, cb, dispatch)
-      })
-    }
-  }
-
-  useMemo(async () => {
-    socket.current = await io('http://192.168.31.254:8000', { transports: ['websocket'] })
-    init()
-  }, [true])
-
-
   return (
     <View style={styles.container}>
-      <SocketContext.Provider
-        value={socket.current}>
-        <Stack></Stack>
-      </SocketContext.Provider>
+      <Stack></Stack>
     </View>
   )
 }

@@ -19,14 +19,13 @@ export default function ClientMoneyRequestScreen() {
   const [isSumOk, setIsSumOk] = useState(false)
 
   const currencyArray = useSelector(s => s.currency.awalableCurrency)
-  const { errorMessage } = useSelector(s => s.currency)
+  const { errormessage } = useSelector(s => s.currency)
 
   const sender = useSelector(s => s.state.userData.phoneNumber)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-
     dispatch(resetMessage())
     setMoneyRequestLimits({
       limMax: currencyArray[0]?.limMax,
@@ -109,9 +108,9 @@ export default function ClientMoneyRequestScreen() {
     <View style={styles.container}>
       <Header headerText='выставить счет' />
 
-      {errorMessage
+      {errormessage
         ? < View style={styles.errorView}>
-          <Text style={styles.errorText}>{errorMessage}</Text>
+          <Text style={styles.errorText}>{errormessage}</Text>
         </View>
         : null
       }

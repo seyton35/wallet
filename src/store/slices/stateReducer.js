@@ -8,7 +8,6 @@ export const initialization = createAsyncThunk(
     async (_, { dispatch }) => {
         try {
             const data = await getData('userData')
-            console.log(data);
             if (data !== null) {
                 dispatch(setUserDataWithoutStore(data))
                 dispatch(setIsLogined(true))
@@ -17,6 +16,49 @@ export const initialization = createAsyncThunk(
                 }, 1500);
                 dispatch(fetchAwalableCurrency())
             } else dispatch(popToTop('login'))
+        } catch (e) {
+            console.log(e.message);
+        }
+    }
+)
+
+export const saveNotificationToken = createAsyncThunk(
+    'state/saveNotificationToken',
+    async ({ token, idUser }, { dispatch }) => {
+        try {
+            const res = await fetch(
+                'http://192.168.31.254:8000/api/auth/saveNotificationToken', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ idUser, token })
+            })
+            if (res.status == 200) {
+                dispatch(setToken(token))
+            }
+        } catch (e) {
+            console.log(e.message);
+        }
+    }
+)
+
+export const logOutUser = createAsyncThunk(
+    'state/logOutUser',
+    async (_, { dispatch, getState }) => {
+        try {
+            console.log("logOutUser");
+            const { idUser } = getState().state.userData
+            const { token } = getState().state
+            dispatch(removeUserData())
+            const res = await fetch(
+                'http://192.168.31.254:8000/api/auth/deleteNotificationToken', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ idUser, token })
+            })
         } catch (e) {
             console.log(e.message);
         }
@@ -82,18 +124,6 @@ export const loginUser = createAsyncThunk(
     }
 )
 
-function headerFormater(screen) {
-    switch (screen) {
-        case 'clientMoneyRequest': return 'выставить счет'
-        case 'transferBetweenCurrencyes': return 'перевод между счетами'
-        case 'login': return 'Вход'
-        case 'register': return 'Регистрация'
-        case 'error': return 'Error'
-
-        default: return 'Wallet'
-    }
-}
-
 const stateSlice = createSlice({
     name: 'state',
     initialState: {
@@ -109,19 +139,20 @@ const stateSlice = createSlice({
             login: null,
             phoneNumber: null,
         },
+        token: null,
         toastAndroidMessage: null,
         errorMessage: null,
     },
     reducers: {
         navigate(state, action) {
-            state.prevScreen =  state.currentScreen
+            state.prevScreen = state.currentScreen
             if (action.payload.data == null) {
                 state.stack.push(action.payload)
                 state.currentScreen = action.payload
             } else {
                 state.stack.push(action.payload.screen)
                 state.currentScreen = action.payload.screen
-                state.navigationData = action.payload.data                
+                state.navigationData = action.payload.data
             }
         },
         popToTop(state, action) {
@@ -140,6 +171,9 @@ const stateSlice = createSlice({
         setErrorMessage(state, action) {
             state.errorMessage = action.payload
         },
+        setToken(state, action) {
+            state.token = action.payload
+        },
         setIdUser(state, action) {
             state.userData.idUser = action.payload
         },
@@ -155,6 +189,7 @@ const stateSlice = createSlice({
                 login: null,
                 phoneNumber: null,
             }
+            state.token = null
             removeData('userData')
         },
         setUserDataWithoutStore(state, action) {
@@ -201,6 +236,7 @@ export const {
     navigate,
     popToTop,
     backButtonPress,
+    setToken,
     setIdUser,
     setLogin,
     setPhoneNumber,
