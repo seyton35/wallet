@@ -8,6 +8,14 @@ export function allRus(date) {
     return day + ' ' + month + ' ' + year + ' г. ' + time
 }
 
+export function dayMonthYearRUS(date) {
+    const d = new Date(new Date(date).getTime())
+    const month = longMonthRUS(d.getMonth())
+    const day = d.getDate()
+    const year = d.getFullYear()
+
+    return day + ' ' + month + ' ' + year
+}
 export function dayMonthRUS(date) {
     const d = new Date(new Date(date).getTime())
     const month = longMonthRUS(d.getMonth())

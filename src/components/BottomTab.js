@@ -12,7 +12,7 @@ export default function BottomTab({tabName}) {
     function buttonTextFormater(key) {
         switch (key) {
             case 'home': return 'главная'
-            case 'services': return 'услуги'
+            case 'allServices': return 'услуги'
             case 'history': return 'история'
             case 'cards': return 'карты'
             case 'profile': return 'профиль'
@@ -22,7 +22,7 @@ export default function BottomTab({tabName}) {
     function buttonIconFormater(key) {
         switch (key) {
             case 'home': return <Entypo name='wallet' style={styles.tabIcon} />
-            case 'services': return <MaterialCommunityIcons name='bank-transfer' style={styles.tabIcon} />
+            case 'allServices': return <MaterialCommunityIcons name='bank-transfer' style={styles.tabIcon} />
             case 'history': return <MaterialCommunityIcons name='clock' style={styles.tabIcon} />
             case 'cards': return <MaterialCommunityIcons name='credit-card' style={styles.tabIcon} />
             case 'profile': return <Ionicons name='person-circle' style={styles.tabIcon} />

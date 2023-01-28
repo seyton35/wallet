@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import Icon from 'react-native-vector-icons/AntDesign'
 import { SwipeablePanel } from 'rn-swipeable-panel'
 
-import Header from '../components/Header'
+import Header from '../../components/Header'
 
-import { allRus, dayMonthRUS, getDayMonthYear } from '../middleWare/dataFormater'
-import { fetchClosedBills } from '../store/slices/currencyReducer'
-import Loading from '../components/Loading'
+import { allRus, dayMonthRUS, dayMonthYearRUS, getDayMonthYear } from '../../middleWare/dataFormater'
+import { fetchClosedBills } from '../../store/slices/currencyReducer'
+import Loading from '../../components/Loading'
 
 export default function HistoryScreen() {
     const [isPanelActive, setIsPanelActive] = useState(false);
@@ -17,7 +17,6 @@ export default function HistoryScreen() {
     const { closedBills } = useSelector(s => s.currency)
     const { pending } = useSelector(s => s.currency)
     const { idUser } = useSelector(s => s.state.userData)
-
     const payDate = useRef(null)
 
     const dispatch = useDispatch()
@@ -29,18 +28,25 @@ export default function HistoryScreen() {
 
     function showDate(date) {
         let isShowDate = false
+        let dateString
         const { day, month, year } = getDayMonthYear(date)
         if (payDate.current == null) {
             payDate.current = { day, month, year }
+            dateString = dayMonthYearRUS(date)
             isShowDate = true
         } else if (payDate.current.day !== day ||
-            payDate.current.month !== month ||
-            payDate.current.year !== year) {
+            payDate.current.month !== month) {
+            if (payDate.current.year !== year) {
+                dateString = dayMonthYearRUS(date)
+            }
+            else {
+                dateString = dayMonthRUS(date)
+            }
             isShowDate = true
         }
         payDate.current = { day, month, year }
         if (isShowDate) {
-            return <Text style={styles.billDateTxt}>{dayMonthRUS(date)}</Text>
+            return <Text style={styles.billDateTxt}>{dateString}</Text>
         }
     }
 
@@ -61,7 +67,7 @@ export default function HistoryScreen() {
                 </View>)
         }
         else if (closedBills.length == 0 && pending) {
-            return <Loading/>
+            return <Loading />
         }
     }
 
@@ -174,7 +180,7 @@ export default function HistoryScreen() {
                                         }
                                     </View>
                                     <View style={styles.billInfoBox}>
-                                        {showDate(bill.paymentDate)}
+                                        {showDate(bill.registerDate)}
                                         <Text style={styles.billInfoTypeTxt}>{bill.type}</Text>
                                         <Text style={styles.billInfoSenderTxt}>
                                             {bill.sender.id == idUser

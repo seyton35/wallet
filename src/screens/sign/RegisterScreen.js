@@ -156,7 +156,6 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#d3d3d3',
     },
     changeAuthBox: {
         flexDirection: 'row',

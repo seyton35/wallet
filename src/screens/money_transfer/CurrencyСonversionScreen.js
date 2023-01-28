@@ -147,7 +147,6 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 40,
         width: '100%',
-        backgroundColor: '#d3d3d3',
     },
     screenScroll: {
         paddingHorizontal: 10

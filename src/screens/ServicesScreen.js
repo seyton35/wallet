@@ -4,16 +4,14 @@ import Service from "../components/Service"
 
 export default function ServicesScreen() {
     const servicesArray = [
-        {title:'перевести со своего счета Wallet', screen:'currencyСonversion'},
-        {title:'запросить у другого клиента Wallet', screen:'clientMoneyRequest'},
-        {title:'запросить у клиента другого банка', screen:''},
-        
+        { title: 'перевести со своего счета Wallet', screen: 'currencyСonversion' },
+        { title: 'запросить у другого клиента Wallet', screen: 'clientMoneyRequest' },
     ]
     return (
         <View style={styles.container}>
-            <Header headerText="пополнить счет"/>
+            <Header headerText="пополнить счет" />
             <ScrollView
-            style={styles.serviceScroll}
+                style={styles.serviceScroll}
             >
                 {
                     servicesArray.map((service, index) => {
@@ -31,8 +29,7 @@ export default function ServicesScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#d3d3d3',
     },
-    serviceItem:{
+    serviceItem: {
     }
 })

@@ -4,12 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import IconEntypo from "react-native-vector-icons/Entypo";
 import IconIonicons from "react-native-vector-icons/Ionicons";
 
-import Currency from "../components/Currency";
-import Header from "../components/Header";
-import Bill from "../components/Bill";
+import Currency from "../../components/Currency";
+import Header from "../../components/Header";
+import Bill from "../../components/Bill";
 
-import { fetchActiveBills, fetchAllCurrencyes, selectCurrency } from "../store/slices/currencyReducer";
-import { navigate } from "../store/slices/stateReducer";
+import { fetchActiveBills, fetchAllCurrencyes, selectCurrency } from "../../store/slices/currencyReducer";
+import { navigate } from "../../store/slices/stateReducer";
+import CurrencyScrollView from "../../components/CurrencyScrollView";
 
 export default function Home() {
     const { currencyArray } = useSelector(s => s.currency)
@@ -23,11 +24,6 @@ export default function Home() {
         dispatch(fetchActiveBills(idUser))
     }, [true])
 
-    function goToCurrencyScreen(cur) {
-        dispatch(selectCurrency(cur))
-        dispatch(navigate('service'))
-    }
-
     function allBillsBtnHandler() {
         dispatch(navigate('activeBills'))
     }
@@ -38,19 +34,9 @@ export default function Home() {
             <Header showHeaderButton={false} />
 
             <ScrollView style={styles.screenScroll}>
-                <ScrollView style={styles.currencyScroll}
-                    horizontal
-                >
-                    {currencyArray.map((cur, index) => {
-                        return (
-                            <Currency
-                                cur={cur}
-                                key={index}
-                                navigate={() => goToCurrencyScreen(cur)}
-                            />
-                        )
-                    })}
-                </ScrollView>
+                <CurrencyScrollView
+                    currencyArray={currencyArray}
+                />
                 {activeBills.length > 0
                     ?
                     <View style={styles.issuesScroll}>
@@ -117,13 +103,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#d3d3d3',
         height: '100%'
     },
     screenScroll: {},
-    currencyScroll: {
-        height: 150
-    },
     blockLabelBox: {
         paddingHorizontal: 20,
         paddingVertical: 10

@@ -60,7 +60,6 @@ export default function BillCategoriesScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#d3d3d3',
     },
 
     screnScroll: {

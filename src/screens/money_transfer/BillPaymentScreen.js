@@ -173,7 +173,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#d3d3d3',
         height: '100%'
     },
     screenScroll: {
