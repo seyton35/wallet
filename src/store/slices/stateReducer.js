@@ -27,7 +27,7 @@ export const saveNotificationToken = createAsyncThunk(
     async ({ token, idUser }, { dispatch }) => {
         try {
             const res = await fetch(
-                'http://192.168.31.254:8000/api/auth/saveNotificationToken', {
+                'http://1220295-cj30407.tw1.ru/api/auth/saveNotificationToken', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -52,7 +52,7 @@ export const logOutUser = createAsyncThunk(
             const { token } = getState().state
             dispatch(removeUserData())
             const res = await fetch(
-                'http://192.168.31.254:8000/api/auth/deleteNotificationToken', {
+                'http://1220295-cj30407.tw1.ru/api/auth/deleteNotificationToken', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -70,7 +70,7 @@ export const registerNewUser = createAsyncThunk(
     async ({ phoneNumber, password }, { dispatch }) => {
         try {
             const res = await fetch(
-                'http://192.168.31.254:8000/api/auth/registerNewUser', {
+                'http://1220295-cj30407.tw1.ru/api/auth/registerNewUser', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -99,7 +99,7 @@ export const loginUser = createAsyncThunk(
     'state/loginUser',
     async ({ phoneNumber, password }, { dispatch }) => {
         try {
-            const res = await fetch('http://192.168.31.254:8000/api/auth/loginUser', {
+            const res = await fetch('http://1220295-cj30407.tw1.ru/api/auth/loginUser', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'

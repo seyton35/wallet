@@ -7,7 +7,7 @@ export const fetchAllCurrencyes = createAsyncThunk(
     async (idUser, { dispatch }) => {
         try {
             const res = await fetch(
-                'http://192.168.31.254:8000/api/database/fetchAllCurrencyes', {
+                'http://1220295-cj30407.tw1.ru/api/database/fetchAllCurrencyes', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -49,7 +49,7 @@ export const currencyСonversion = createAsyncThunk(
         try {
             const { idUser, phoneNumber } = getState().state.userData
             const res = await fetch(
-                'http://192.168.31.254:8000/api/transaction/currencyConversion', {
+                'http://1220295-cj30407.tw1.ru/api/transaction/currencyConversion', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -104,7 +104,7 @@ export const clientMoneyRequest = createAsyncThunk(
     async ({ receiver, sender, currency, sum, comment }, { dispatch }) => {
         try {
             const res = await fetch(
-                'http://192.168.31.254:8000/api/transaction/clientMoneyRequest', {
+                'http://1220295-cj30407.tw1.ru/api/transaction/clientMoneyRequest', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -134,7 +134,7 @@ export const fetchActiveBills = createAsyncThunk(
         try {
             console.log("fetchActiveBills whith :", idUser);
             const res = await fetch(
-                'http://192.168.31.254:8000/api/dataBase/fetchActiveBills', {
+                'http://1220295-cj30407.tw1.ru/api/dataBase/fetchActiveBills', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -158,7 +158,7 @@ export const billPayment = createAsyncThunk(
     async ({ idUser, idBill, currencyType, rate }, { dispatch }) => {
         try {
             const res = await fetch(
-                'http://192.168.31.254:8000/api/transaction/billPayment', {
+                'http://1220295-cj30407.tw1.ru/api/transaction/billPayment', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -186,7 +186,7 @@ export const rejectBill = createAsyncThunk(
         try {
             console.log(idUser, idBill);
             const res = await fetch(
-                'http://192.168.31.254:8000/api/transaction/rejectBill', {
+                'http://1220295-cj30407.tw1.ru/api/transaction/rejectBill', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -211,7 +211,7 @@ export const fetchClosedBills = createAsyncThunk(
     async (idUser, { dispatch }) => {
         try {
             const res = await fetch(
-                'http://192.168.31.254:8000/api/database/fetchClosedBills', {
+                'http://1220295-cj30407.tw1.ru/api/database/fetchClosedBills', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -236,7 +236,7 @@ export const fetchBillsByCategory = createAsyncThunk(
     async ({ idUser, category, timeRange }, { dispatch }) => {
         try {
             const res = await fetch(
-                'http://192.168.31.254:8000/api/database/fetchBillsByCategory', {
+                'http://1220295-cj30407.tw1.ru/api/database/fetchBillsByCategory', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
