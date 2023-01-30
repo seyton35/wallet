@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import Icon from 'react-native-vector-icons/AntDesign'
 import { SwipeablePanel } from 'rn-swipeable-panel'
@@ -13,6 +13,7 @@ import Loading from '../../components/Loading'
 export default function HistoryScreen() {
     const [isPanelActive, setIsPanelActive] = useState(false);
     const [billOnFocus, setBillOnFocus] = useState(null);
+    const [refreshing, setRefreshing] = useState(false)
 
     const { closedBills } = useSelector(s => s.currency)
     const { pending } = useSelector(s => s.currency)
@@ -77,6 +78,12 @@ export default function HistoryScreen() {
             case 'active': return 'Выставлен'
             case 'success': return 'Оплачен'
         }
+    }
+
+    function onRefresh() {
+        setRefreshing(true)
+        dispatch(fetchClosedBills(idUser))
+        setRefreshing(false)
     }
 
     function showBalance(bill) {
@@ -149,6 +156,45 @@ export default function HistoryScreen() {
         )
     }
 
+    function renderItem({ index, item: bill }) {
+        return (
+            <TouchableOpacity style={styles.billView} key={index}
+                onPress={() => openInfoBillPanel(bill)}
+            >
+                <View style={styles.billInfoView}>
+                    <View style={{ flexDirection: 'row', }}>
+                        <View style={styles.bilPicBox}>
+                            <Image source={{ uri: 'https://reactjs.org/logo-og.png' }} style={styles.billPic} />
+                            {bill.status == 'rejected'
+                                ? <Icon name='exclamationcircle' style={styles.billRejectedIcon} />
+                                : null
+                            }
+                        </View>
+                        <View style={styles.billInfoBox}>
+                            {showDate(bill.registerDate)}
+                            <Text style={styles.billInfoTypeTxt}>{bill.type}</Text>
+                            <Text style={styles.billInfoSenderTxt}>
+                                {bill.sender.id == idUser
+                                    ? bill.receiver.number
+                                    : bill.sender.number
+                                }
+                            </Text>
+                        </View>
+                    </View>
+                    {showBalance(bill)}
+                </View>
+                {
+                    bill.comment
+                        ?
+                        <View style={styles.billInfoCommentView}>
+                            <Text style={styles.billInfoCommentTxt}>{bill.comment}</Text>
+                        </View>
+                        : null
+                }
+            </TouchableOpacity>
+        )
+    }
+
     return (
         <View style={styles.container}>
             <Header headerText='История' showHeaderButton={false} />
@@ -163,47 +209,14 @@ export default function HistoryScreen() {
                 {billOnFocus ? showBillInfo(billOnFocus) : null}
             </SwipeablePanel>
 
-            <ScrollView style={styles.screenScroll}>
-                {showListLoading()}
-                {closedBills.map((bill, index) => {
-                    return (
-                        <TouchableOpacity style={styles.billView} key={index}
-                            onPress={() => openInfoBillPanel(bill)}
-                        >
-                            <View style={styles.billInfoView}>
-                                <View style={{ flexDirection: 'row', }}>
-                                    <View style={styles.bilPicBox}>
-                                        <Image source={{ uri: 'https://reactjs.org/logo-og.png' }} style={styles.billPic} />
-                                        {bill.status == 'rejected'
-                                            ? <Icon name='exclamationcircle' style={styles.billRejectedIcon} />
-                                            : null
-                                        }
-                                    </View>
-                                    <View style={styles.billInfoBox}>
-                                        {showDate(bill.registerDate)}
-                                        <Text style={styles.billInfoTypeTxt}>{bill.type}</Text>
-                                        <Text style={styles.billInfoSenderTxt}>
-                                            {bill.sender.id == idUser
-                                                ? bill.receiver.number
-                                                : bill.sender.number
-                                            }
-                                        </Text>
-                                    </View>
-                                </View>
-                                {showBalance(bill)}
-                            </View>
-                            {
-                                bill.comment
-                                    ?
-                                    <View style={styles.billInfoCommentView}>
-                                        <Text style={styles.billInfoCommentTxt}>{bill.comment}</Text>
-                                    </View>
-                                    : null
-                            }
-                        </TouchableOpacity>
-                    )
-                })}
-            </ScrollView >
+            {showListLoading()}
+            <FlatList
+                data={closedBills}
+                renderItem={renderItem}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+            />
+
         </View >
     )
 }
