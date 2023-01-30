@@ -1,5 +1,6 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+import ListArrowButton from '../../components/ListArrowButton'
 import { logOutUser, popToTop } from '../../store/slices/stateReducer'
 
 export default function ProfileScreen() {
@@ -35,6 +36,8 @@ export default function ProfileScreen() {
                 <Text style={styles.phoneNumberTitleTxt}>номер кошелька</Text>
                 <Text style={styles.phoneNumberTxt}>+{phoneNumber}</Text>
             </View>
+
+            <ListArrowButton screen='setDefaultCurrency' title='счет по умолчанию'/>
 
             <TouchableOpacity style={styles.signOutBtn}
                 onPress={signOutBtnHandler}

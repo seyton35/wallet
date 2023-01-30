@@ -12,14 +12,19 @@ export const storeData = async (key, value) => {
 
 export const getData = async (key) => {
     try {
-        const jsonValue = await AsyncStorage.getItem(key)
-        return jsonValue != null ? JSON.parse(jsonValue) : null;
+        let value = await AsyncStorage.getItem(key)
+        try {
+            value = JSON.parse(value)
+        } catch (e) {
+            return value
+        }
+        return value
     } catch (e) {
         console.log(e.message);
     }
 }
 
-export const removeData = async(key)=>{
+export const removeData = async (key) => {
     try {
         await AsyncStorage.removeItem(key)
     } catch (e) {

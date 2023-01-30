@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { storeData, getData, removeData } from "../../middleWare/asyncStorage";
-import { fetchAwalableCurrency } from "./currencyReducer";
+import { fetchAwalableCurrency, setAndStoreDefaultCurrencyAccount, setDefaultCurrencyAccount } from "./currencyReducer";
 
 export const initialization = createAsyncThunk(
     'state/initialization',
@@ -11,6 +11,11 @@ export const initialization = createAsyncThunk(
             if (data !== null) {
                 dispatch(setUserDataWithoutStore(data))
                 dispatch(setIsLogined(true))
+                const defaultCurrencyAccount = await getData('defaultCurrencyAccount')
+                console.log(defaultCurrencyAccount);
+                if (defaultCurrencyAccount !== null) {
+                    dispatch(setDefaultCurrencyAccount(defaultCurrencyAccount))
+                }
                 setTimeout(() => {
                     dispatch(popToTop('home'))
                 }, 1500);
@@ -85,6 +90,7 @@ export const registerNewUser = createAsyncThunk(
                     id: data.id,
                     phoneNumber: data.phoneNumber
                 }))
+                dispatch(setAndStoreDefaultCurrencyAccount(data.defaultCurrencyAccount))
                 dispatch(setIsLogined(true))
                 dispatch(popToTop('home'))
                 dispatch(setToastAndroidMessage(data.message))
@@ -191,6 +197,7 @@ const stateSlice = createSlice({
             }
             state.token = null
             removeData('userData')
+            removeData('defaultCurrencyAccount')
         },
         setUserDataWithoutStore(state, action) {
             state.userData = action.payload

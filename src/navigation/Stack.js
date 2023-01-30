@@ -2,33 +2,35 @@ import { StyleSheet, View } from "react-native";
 
 import { useSelector } from "react-redux";
 
-//components
+// components
 import BottomTab from '../components/BottomTab'
-//screens
+// screens
 import GreetingScreen from "../screens/noStack/GreetingScreen";
 import Error from "../screens/ErrorScreen";
-//mainScreens
+// mainScreens
 import Home from "../screens/mainScreens/HomeScreen";
 import AllServices from "../screens/mainScreens/AllServicesScreen";
 import HistoryScreen from "../screens/mainScreens/HistoryScreen";
 import Cards from "../screens/mainScreens/CardsScreen";
 import ProfileScreen from "../screens/mainScreens/ProfileScreen";
-//auth
+// auth
 import RegisterScreen from "../screens/sign/RegisterScreen";
 import LoginScreen from "../screens/sign/LoginScreen";
-//transaction
+// transaction
 import BillPaymentScreen from "../screens/money_transfer/BillPaymentScreen";
 import ClientMoneyRequestScreen from "../screens/money_transfer/ClientMoneyRequestScreen";
 import CurrencyСonversionScreen from "../screens/money_transfer/CurrencyСonversionScreen";
-
+// currency
 import ServicesScreen from "../screens/ServicesScreen";
 import CurrencyRatesScreen from "../screens/usefull/CurrencyRatesScreen";
 
 import BillInfoScreen from "../screens/billsManagement/BillInfoScreen";
-//bill lists
+// bill lists
 import ActiveBillsScreen from "../screens/ActiveBilsScreen";
 import BillCategoriesScreen from "../screens/billsManagement/BillCategoriesScreen";
 import BillsListScreen from "../screens/billsManagement/BillsListScreen";
+// settings
+import DefaultCurrencyAccount from "../screens/settings/DefaultCurrencyAccountScreen";
 
 export default function Stack() {
 
@@ -58,6 +60,8 @@ export default function Stack() {
             case 'billPayment': return <BillPaymentScreen />
             case 'activeBills': return <ActiveBillsScreen />
             case 'error': return <Error />
+
+            case 'setDefaultCurrency': return <DefaultCurrencyAccount />
         }
     }
 

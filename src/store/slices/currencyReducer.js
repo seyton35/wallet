@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { storeData } from "../../middleWare/asyncStorage";
 import { popToTop } from "./stateReducer";
 
 
@@ -87,11 +88,11 @@ export const fetchAwalableCurrency = createAsyncThunk(
             // const res = await fetch(`myApi/awalableCurencyArray.json`)
             // const data = await res.json()
             return [
-                { type: 'RUB', limMin: 1, limMax: 100000 , requestAllowed :true},
-                { type: 'USD', limMin: 1, limMax: 10000 , requestAllowed :false},
-                { type: 'EUR', limMin: 1, limMax: 10000 , requestAllowed :false},
-                { type: 'UAH', limMin: 1, limMax: 30000 , requestAllowed :false},
-                { type: 'KZT', limMin: 100, limMax: 100000 , requestAllowed :true},
+                { type: 'RUB', limMin: 1, limMax: 100000, requestAllowed: true },
+                { type: 'USD', limMin: 1, limMax: 10000, requestAllowed: false },
+                { type: 'EUR', limMin: 1, limMax: 10000, requestAllowed: false },
+                { type: 'UAH', limMin: 1, limMax: 30000, requestAllowed: false },
+                { type: 'KZT', limMin: 100, limMax: 100000, requestAllowed: true },
             ]
         } catch (e) {
             return e.message
@@ -282,6 +283,7 @@ const currencySlice = createSlice({
     name: 'currency',
     initialState: {
         currencyArray: [],
+        defaultCurrencyAccount: null,
         selectedCurrency: null,
         rateStatus: null,
         errormessage: null,
@@ -299,6 +301,13 @@ const currencySlice = createSlice({
     reducers: {
         setCurrencyArray(state, action) {
             state.currencyArray = action.payload
+        },
+        setDefaultCurrencyAccount(state, action) {
+            state.defaultCurrencyAccount = action.payload
+        },
+        setAndStoreDefaultCurrencyAccount(state, action) {
+            state.defaultCurrencyAccount = action.payload
+            storeData('defaultCurrencyAccount', action.payload)
         },
         selectCurrency(state, action) {
             state.selectedCurrency = action.payload
@@ -370,6 +379,8 @@ const currencySlice = createSlice({
 
 export const {
     addCurrency,
+    setDefaultCurrencyAccount,
+    setAndStoreDefaultCurrencyAccount,
     setCurrencyArray,
     selectCurrency,
     setRequestStatus,
