@@ -1,5 +1,5 @@
 import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Picker } from '@react-native-picker/picker'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -18,7 +18,7 @@ export default function ClientMoneyRequestScreen() {
   const [isPhoneOk, setIsPhoneOk] = useState(false)
   const [isSumOk, setIsSumOk] = useState(false)
 
-  const currencyArray = useSelector(s => s.currency.awalableCurrency)
+  const { availableCurrencies } = useSelector(s => s.currency)
   const { errormessage } = useSelector(s => s.currency)
 
   const sender = useSelector(s => s.state.userData.phoneNumber)
@@ -28,8 +28,8 @@ export default function ClientMoneyRequestScreen() {
   useEffect(() => {
     dispatch(resetMessage())
     setMoneyRequestLimits({
-      limMax: currencyArray[0]?.limMax,
-      limMin: currencyArray[0]?.limMin
+      limMax: availableCurrencies[0]?.limMax,
+      limMin: availableCurrencies[0]?.limMin
     })
 
   }, [])
@@ -49,8 +49,8 @@ export default function ClientMoneyRequestScreen() {
 
   function pickerCurrencyHandler(cur) {
     setPickerCurrency(cur)
-    for (let i = 0; i < currencyArray.length; i++) {
-      const el = currencyArray[i];
+    for (let i = 0; i < availableCurrencies.length; i++) {
+      const el = availableCurrencies[i];
       if (el.type == cur) {
         return setMoneyRequestLimits({
           limMax: el.limMax,
@@ -151,7 +151,7 @@ export default function ClientMoneyRequestScreen() {
             onValueChange={pickerCurrencyHandler}
           >
             {
-              currencyArray.map((cur, index) => {
+              availableCurrencies.map((cur, index) => {
                 if (cur.requestAllowed)
                   return (
                     <Picker.Item

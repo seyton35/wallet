@@ -29,12 +29,39 @@ export const fetchAllCurrencyes = createAsyncThunk(
     }
 )
 
+export const postDefaultCurrencyAccount = createAsyncThunk(
+    'currency/postDefaultCurrencyAccount',
+    async ({ currency }, { dispatch, getState }) => {
+        try {
+            const { idUser } = getState().state.userData
+            const res = await fetch(
+                'http://1220295-cj30407.tw1.ru/api/operationsOnUserConfig/postDefaultCurrencyAccount', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    currency, idUser
+                })
+            })
+            const data = await res.json()
+            if (res.status == 200) {
+                dispatch(setDefaultCurrencyAccount(currency))
+            } else {
+                dispatch(setToastMessage(data.message))
+            }
+        } catch (e) {
+            return e.message
+        }
+    }
+)
+
 export const fetchExchangeRate = createAsyncThunk(
     'currency/fetchExchangeRate',
     async ({ cur, goal },) => {
-        cur = cur.toLowerCase()
-        goal = goal.toLowerCase()
         try {
+            cur = cur.toLowerCase()
+            goal = goal.toLowerCase()
             const res = await fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${cur}/${goal}.json`)
             const data = await res.json()
             return data[`${goal}`]
@@ -80,20 +107,21 @@ export const currencyСonversion = createAsyncThunk(
     }
 )
 
-export const fetchAwalableCurrency = createAsyncThunk(
-    'currency/fetchAwalableCurrency',
+export const fetchAvailableCurrencies = createAsyncThunk(
+    'currency/fetchAvailableCurrencies',
     async () => {
         try {
-            //TODO: запрос на курсы доступных валют
-            // const res = await fetch(`myApi/awalableCurencyArray.json`)
-            // const data = await res.json()
-            return [
-                { type: 'RUB', limMin: 1, limMax: 100000, requestAllowed: true },
-                { type: 'USD', limMin: 1, limMax: 10000, requestAllowed: false },
-                { type: 'EUR', limMin: 1, limMax: 10000, requestAllowed: false },
-                { type: 'UAH', limMin: 1, limMax: 30000, requestAllowed: false },
-                { type: 'KZT', limMin: 100, limMax: 100000, requestAllowed: true },
-            ]
+            const res = await fetch(
+                'http://1220295-cj30407.tw1.ru/api/database/fetchAvailableCurrencies', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+            })
+            if (res.status == 200) {
+                const data = await res.json()
+                return data.availableCurrencies
+            } else return []
         } catch (e) {
             return e.message
         }
@@ -258,11 +286,11 @@ export const fetchBillsByCategory = createAsyncThunk(
 export const fetchAvailableCurrencyRates = createAsyncThunk(
     'currency/fetchAvailableCurrencyRates',
     async (_, { getState, dispatch }) => {
-        const awalableCurrency = getState().currency.awalableCurrency
+        const availableCurrencies = getState().currency.availableCurrencies
         try {
             const resRates = []
-            for (let i = 0; i < awalableCurrency.length; i++) {
-                const cur = awalableCurrency[i];
+            for (let i = 0; i < availableCurrencies.length; i++) {
+                const cur = availableCurrencies[i];
                 if (cur.type != 'RUB') {
                     const res = await fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${cur.type.toLowerCase()}/rub.json`)
                     const data = await res.json()
@@ -290,7 +318,7 @@ const currencySlice = createSlice({
         pending: false,
         rate: null,
         transferStatus: null,
-        awalableCurrency: [],
+        availableCurrencies: [],
         availableCurrencyRates: [],
         toastAndroidMessage: null,
         requestStatus: null,
@@ -365,8 +393,8 @@ const currencySlice = createSlice({
                     state.errormessage = action.payload
             })
         builder
-            .addCase(fetchAwalableCurrency.fulfilled, (state, action) => { state.awalableCurrency = action.payload })
-            .addCase(fetchAwalableCurrency.rejected, (state, action) => { state.errormessage = action.payload })
+            .addCase(fetchAvailableCurrencies.fulfilled, (state, action) => { state.availableCurrencies = action.payload })
+            .addCase(fetchAvailableCurrencies.rejected, (state, action) => { state.errormessage = action.payload })
         builder
             .addCase(fetchClosedBills.fulfilled, (state, action) => { state.pending = false })
             .addCase(fetchClosedBills.pending, (state, action) => { state.pending = true })

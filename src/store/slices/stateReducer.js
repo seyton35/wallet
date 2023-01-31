@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { storeData, getData, removeData } from "../../middleWare/asyncStorage";
-import { fetchAwalableCurrency, setAndStoreDefaultCurrencyAccount, setDefaultCurrencyAccount } from "./currencyReducer";
+import { fetchAvailableCurrencies, setAndStoreDefaultCurrencyAccount, setDefaultCurrencyAccount } from "./currencyReducer";
 
 export const initialization = createAsyncThunk(
     'state/initialization',
@@ -19,7 +19,7 @@ export const initialization = createAsyncThunk(
                 setTimeout(() => {
                     dispatch(popToTop('home'))
                 }, 1500);
-                dispatch(fetchAwalableCurrency())
+                dispatch(fetchAvailableCurrencies())
             } else dispatch(popToTop('login'))
         } catch (e) {
             console.log(e.message);
