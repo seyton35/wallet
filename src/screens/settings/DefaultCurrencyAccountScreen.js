@@ -1,48 +1,89 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { Picker } from '@react-native-picker/picker'
 import { useState } from 'react'
 
+import { openCurrencyAccount, postDefaultCurrencyAccount, setToastMessage } from '../../store/slices/currencyReducer'
 import CurrencyAccount from '../../components/CurrencyAccount'
 import Header from '../../components/Header'
-import { postDefaultCurrencyAccount } from '../../store/slices/currencyReducer'
+import ModalButtonList from '../../components/ModalButtonList'
 
 export default function DefaultCurrencyAccount() {
     const currencyAccountsArr = useSelector(s => s.currency.currencyArray)
     const { availableCurrencies } = useSelector(s => s.currency)
-    const [pickerCurrency, setPickerCurrency] = useState()
+    const [visible, setVisible] = useState(false)
+    const [openCurrencyAccountBtnDisabled, setOpenCurrencyAccountBtnDisabled] = useState(false)
 
     const { defaultCurrencyAccount } = useSelector(s => s.currency)
 
     const dispatch = useDispatch()
 
+    const openAccount = (currency, index) => {
+        setVisible(false)
+        dispatch(openCurrencyAccount(currency))
+    }
+    const closeModal = () => {
+        setVisible(false)
+    }
+
+    const getTypes = () => {
+        const types = []
+        availableCurrencies.map(cur => {
+            let flag = true
+            for (let i = 0; i < currencyAccountsArr.length; i++) {
+                const { type } = currencyAccountsArr[i];
+                if (type == cur.type) {
+                    flag = false
+                }
+            }
+            if (flag) {
+                types.push(cur.type)
+            }
+        })
+        return types
+    }
+
+    const openCurrencyBtnHandler = () => {
+        let flag = false
+        for (let i = 0; i < availableCurrencies.length; i++) {
+            let iFlag = false
+            const el1 = availableCurrencies[i];
+            for (let j = 0; j < currencyAccountsArr.length; j++) {
+                const el2 = currencyAccountsArr[j];
+                if (el1.type == el2.type) {
+                    iFlag = true
+                    j = currencyAccountsArr.length
+                    continue
+                }
+            }
+            if (iFlag) {
+                continue
+            }
+            flag = true
+        }
+        if (flag) setVisible(true)
+        else {
+            dispatch(setToastMessage('нет доступных валют'))
+            setOpenCurrencyAccountBtnDisabled(true)
+        }
+    }
+
     const chooseAccount = (acc) => {
-        console.log(acc);
-        if (acc.type !== defaultCurrencyAccount) {   
+        if (acc.type !== defaultCurrencyAccount) {
             dispatch(postDefaultCurrencyAccount({ currency: acc.type }))
         }
     }
 
     return (
         <View style={styles.container}>
+            <ModalButtonList
+                data={getTypes()}
+                visible={visible}
+                onPress={openAccount}
+                onClose={closeModal}
+            />
+
             <Header headerText='счет по умолчанию' />
-            {/* <Picker
-                selectedValue={pickerCurrency}
-                onValueChange={setPickerCurrency}
-            >
-                {
-                    availableCurrencies.map((cur, index) => {
-                        return (
-                            <Picker.Item
-                                key={index}
-                                label={cur.type}
-                                value={cur.type}
-                            />
-                        )
-                    })
-                }
-            </Picker> */}
             <ScrollView style={styles.scrollView}>
                 {currencyAccountsArr.map((acc, index) =>
                     <CurrencyAccount
@@ -52,23 +93,31 @@ export default function DefaultCurrencyAccount() {
                         onPress={chooseAccount}
                     />
                 )}
-                <View style={styles.currencyItem}>
-                    <TouchableOpacity style={styles.currencyBtn}>
+                <View style={styles.openCurrency}>
+                    <TouchableOpacity style={styles.openCurrencyBtn}
+                        disabled={openCurrencyAccountBtnDisabled}
+                        onPress={openCurrencyBtnHandler}
+                    >
                         <View style={styles.currencyIconBox} >
                             <Icon name='circle' size={40} style={[{ color: '#d3d3d3' }, styles.icon]} />
                             <Icon name='circle' size={35} style={[{ color: '#fff' }, styles.icon]} />
                             <Icon name='plus' size={25} style={[{ color: 'black', }, styles.icon]} />
                         </View>
-                        <View style={styles.currencyInfoBox} >
-                            <Text style={styles.currencyLabel}>Открыть счет</Text>
+                        <View style={styles.openCurrencyBox} >
+                            <Text style={styles.openCurrencyLabel}>Открыть счет</Text>
                         </View>
                     </TouchableOpacity>
+                    {openCurrencyAccountBtnDisabled
+                        ? <View style={styles.plug}></View>
+                        : null
+                    }
                 </View>
 
             </ScrollView>
         </View>
     )
 }
+
 
 const styles = StyleSheet.create({
     container: {
@@ -77,10 +126,10 @@ const styles = StyleSheet.create({
     },
     scrollView: {
     },
-    currencyItem: {
-        paddingTop: 20
+    openCurrency: {
+        marginTop: 20
     },
-    currencyBtn: {
+    openCurrencyBtn: {
         paddingVertical: 10,
         backgroundColor: '#fff',
         borderRadius: 10,
@@ -96,14 +145,23 @@ const styles = StyleSheet.create({
     icon: {
         position: 'absolute',
     },
-    currencyInfoBox: {
+    openCurrencyBox: {
         justifyContent: 'center',
         marginLeft: 20,
     },
-    currencyLabel: {
+    openCurrencyLabel: {
         color: '#000',
         fontSize: 17,
         fontWeight: '700'
+    },
+    plug: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#fffa',
+        // opacity:.3,
+
+        borderRadius: 10
     },
     currencyText: {},
 })

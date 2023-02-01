@@ -56,6 +56,33 @@ export const postDefaultCurrencyAccount = createAsyncThunk(
     }
 )
 
+export const openCurrencyAccount = createAsyncThunk(
+    'currency/openCurrencyAccount',
+    async ( currency , { dispatch, getState }) => {
+        try {
+            const { idUser } = getState().state.userData
+            const res = await fetch(
+                'http://1220295-cj30407.tw1.ru/api/operationsOnCurrencyAccounts/openCurrencyAccount', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    currency, idUser
+                })
+            })
+            const data = await res.json()
+            if (res.status == 200) {
+                dispatch(fetchAllCurrencyes(idUser))
+            } else {
+                dispatch(setToastMessage(data.message))
+            }
+        } catch (e) {
+            return e.message
+        }
+    }
+)
+
 export const fetchExchangeRate = createAsyncThunk(
     'currency/fetchExchangeRate',
     async ({ cur, goal },) => {

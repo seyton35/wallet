@@ -53,7 +53,6 @@ export default function ModalRangeDatePicker({ setDate, onCancelPress }) {
                 <Modal
                     animationType="fade"
                     transparent={true}
-
                     visible={true}
                 >
                     <View style={styles.modalView}>
