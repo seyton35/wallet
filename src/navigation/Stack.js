@@ -31,6 +31,8 @@ import BillCategoriesScreen from "../screens/billsManagement/BillCategoriesScree
 import BillsListScreen from "../screens/billsManagement/BillsListScreen";
 // settings
 import DefaultCurrencyAccount from "../screens/settings/DefaultCurrencyAccountScreen";
+import HelpScreen from "../screens/HelpScreen";
+import SettingsScreen from "../screens/settings/SettingsScreen";
 
 export default function Stack() {
 
@@ -62,6 +64,8 @@ export default function Stack() {
             case 'error': return <Error />
 
             case 'setDefaultCurrency': return <DefaultCurrencyAccount />
+            case 'settings': return <SettingsScreen />
+            case 'help': return <HelpScreen />
         }
     }
 

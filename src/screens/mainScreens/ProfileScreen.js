@@ -33,11 +33,13 @@ export default function ProfileScreen() {
         <View style={styles.container}>
 
             <View style={styles.phoneNumberView}>
-                <Text style={styles.phoneNumberTitleTxt}>номер кошелька</Text>
-                <Text style={styles.phoneNumberTxt}>+{phoneNumber}</Text>
+                <Text style={styles.phoneNumberTitleTxt}>номер Wallet кошелька</Text>
+                <Text style={styles.phoneNumberTxt}>+{phoneNumber}</Text> 
+                {/* TODO: сделать маску для номера */}
             </View>
 
-            <ListArrowButton screen='setDefaultCurrency' title='счет по умолчанию'/>
+            <ListArrowButton screen='settings' title='Настройки' />
+            <ListArrowButton screen='help' title='Помощь' />
 
             <TouchableOpacity style={styles.signOutBtn}
                 onPress={signOutBtnHandler}
@@ -66,9 +68,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     signOutBtn: {
+        top: 20,
         padding: 5,
-        width: 200,
-        alignItems: 'center',
+        paddingHorizontal: 10,
         alignSelf: 'center',
         borderRadius: 20,
         backgroundColor: '#b1b1b1'

@@ -7,7 +7,7 @@ import IconIonicons from "react-native-vector-icons/Ionicons";
 import Header from "../../components/Header";
 import Bill from "../../components/Bill";
 
-import { fetchActiveBills, fetchAllCurrencyes, selectCurrency } from "../../store/slices/currencyReducer";
+import { fetchActiveBills, fetchAllCurrencyes } from "../../store/slices/currencyReducer";
 import { navigate } from "../../store/slices/stateReducer";
 import CurrencyScrollView from "../../components/CurrencyScrollView";
 import { useState } from "react";

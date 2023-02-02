@@ -46,7 +46,7 @@ export const postDefaultCurrencyAccount = createAsyncThunk(
             })
             const data = await res.json()
             if (res.status == 200) {
-                dispatch(setDefaultCurrencyAccount(currency))
+                dispatch(setAndStoreDefaultCurrencyAccount(currency))
             } else {
                 dispatch(setToastMessage(data.message))
             }

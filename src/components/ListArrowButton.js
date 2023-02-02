@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     },
     btnTxt: {
         color: '#000',
-        fontSize: 17
+        fontSize: 17,
+        fontWeight:'600'
     },
 })
