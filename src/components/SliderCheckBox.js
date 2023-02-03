@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Animated, Pressable, StyleSheet, View } from 'react-native'
 
 export default function SliderCheckBox({ check, onPress }) {
@@ -7,8 +7,12 @@ export default function SliderCheckBox({ check, onPress }) {
         if (check) return new Animated.Value(20)
         else return new Animated.Value(0)
     }
-
     const posX = useRef(initPosX()).current
+
+    useEffect(() => {
+        if (check) slide(20)
+        else slide(0)
+    }, [check])
 
     const slide = (newPosX) => {
         Animated.timing(
@@ -19,23 +23,13 @@ export default function SliderCheckBox({ check, onPress }) {
         }).start()
     }
 
-    const checkHandler = () => {
-        if (check) {
-            slide(0, 0)
-        } else {
-            slide(20, 1)
-        }
-        onPress(!check)
-    }
-
     const getCheckboxBackgroundColor = () => {
-        if (check == true) {
-            return { backgroundColor: '#00abfd' }
-        }
+        if (check == true) return { backgroundColor: '#00abfd' }
+        else return { backgroundColor: '#888' }
     }
 
     return (
-        <Pressable onPress={checkHandler}>
+        <Pressable onPress={onPress}>
             <View style={[styles.checkBox, getCheckboxBackgroundColor()]}>
                 <Animated.View style={[
                     styles.dot,
@@ -45,13 +39,12 @@ export default function SliderCheckBox({ check, onPress }) {
                         }]
                     }]} />
             </View>
-        </Pressable >
+        </Pressable>
     )
 }
 
 const styles = StyleSheet.create({
     checkBox: {
-        backgroundColor: 'gray',
         width: 50,
         height: 30,
         borderRadius: 15,

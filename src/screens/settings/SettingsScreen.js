@@ -12,6 +12,7 @@ export default function SettingsScreen() {
     const dispatch = useDispatch()
 
     const checkBoxTapHandler = (flag, title) => {
+        console.log('title', flag)
         dispatch(postPushNotificationSettings({
             field: title,
             flag
@@ -30,23 +31,27 @@ export default function SettingsScreen() {
                 </View>
                 <View style={styles.blockItemBox}>
                     <Text style={styles.blockItemTxt}>Пополнение</Text>
-                    <SliderCheckBox check={refill} onPress={(flag) =>
-                        checkBoxTapHandler(flag, 'refill')} />
+                    <SliderCheckBox check={refill}
+                        onPress={() => checkBoxTapHandler(!refill, 'refill')}
+                    />
                 </View>
                 <View style={styles.blockItemBox}>
                     <Text style={styles.blockItemTxt}>Списание</Text>
-                    <SliderCheckBox check={writeOff} onPress={(flag) =>
-                        checkBoxTapHandler(flag, 'writeOff')} />
+                    <SliderCheckBox check={writeOff}
+                        onPress={() => checkBoxTapHandler(!writeOff, 'writeOff')}
+                    />
                 </View>
                 <View style={styles.blockItemBox}>
                     <Text style={styles.blockItemTxt}>Входящий счет</Text>
-                    <SliderCheckBox check={incomingBill} onPress={(flag) =>
-                        checkBoxTapHandler(flag, 'incomingBill')} />
+                    <SliderCheckBox check={incomingBill}
+                        onPress={() => checkBoxTapHandler(!incomingBill, 'incomingBill')}
+                    />
                 </View>
                 <View style={styles.blockItemBox}>
                     <Text style={styles.blockItemTxt}>Новости и акции</Text>
-                    <SliderCheckBox check={promotions} onPress={(flag) =>
-                        checkBoxTapHandler(flag, 'promotions')} />
+                    <SliderCheckBox check={promotions}
+                        onPress={() => checkBoxTapHandler(!promotions, 'promotions')}
+                    />
                 </View>
             </View>
 
