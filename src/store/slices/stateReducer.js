@@ -11,10 +11,7 @@ export const initialization = createAsyncThunk(
             if (data !== null) {
                 dispatch(setUserDataWithoutStore(data))
                 dispatch(setIsLogined(true))
-                const defaultCurrencyAccount = await getData('defaultCurrencyAccount')
-                if (defaultCurrencyAccount !== null) dispatch(setDefaultCurrencyAccount(defaultCurrencyAccount))
-                const pushNotificationSettings = await getData('pushNotificationSettings')
-                if (pushNotificationSettings !== null) dispatch(setPushNotificationSettings(pushNotificationSettings))
+                dispatch(fetchUserConfig())
                 setTimeout(() => {
                     dispatch(popToTop('home'))
                 }, 1500);
@@ -26,11 +23,42 @@ export const initialization = createAsyncThunk(
     }
 )
 
+export const fetchUserConfig = createAsyncThunk(
+    'state/fetchUserConfig',
+    async (_, { dispatch, getState }) => {
+        try {
+            const { idUser } = getState().state.userData
+            const res = await fetch(
+                'http://1220295-cj30407.tw1.ru/api/database/fetchUserConfig', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ idUser })
+            })
+            if (res.status == 200) {
+                const data = await res.json()
+                console.log(data.config);
+                dispatch(storeAndSetAllPushNotificationSettings(data.config.pushNotificationSettings))
+                dispatch(setDefaultCurrencyAccount(data.config.defaultCurrencyAccount))
+            }
+            else {
+                const defaultCurrencyAccount = await getData('defaultCurrencyAccount')
+                if (defaultCurrencyAccount !== null) dispatch(setDefaultCurrencyAccount(defaultCurrencyAccount))
+                const pushNotificationSettings = await getData('pushNotificationSettings')
+                if (pushNotificationSettings !== null) dispatch(setAllPushNotificationSettings(pushNotificationSettings))
+            }
+        } catch (e) {
+            console.log(e.message);
+        }
+    }
+)
+
 export const postPushNotificationSettings = createAsyncThunk(
     'state/postPushNotificationSettings',
     async ({ flag, field }, { dispatch, getState }) => {
         try {
-            dispatch(setAndStorePushNotificationSettings({ flag, field }))
+            dispatch(storeAndSetPushNotificationSettings({ flag, field }))
             const { pushNotificationSettings } = getState().state
             const { idUser } = getState().state.userData
             const res = await fetch(
@@ -42,7 +70,7 @@ export const postPushNotificationSettings = createAsyncThunk(
                 body: JSON.stringify({ idUser, pushNotificationSettings })
             })
             if (res.status !== 200) {
-                dispatch(setAndStorePushNotificationSettings({ flag: !flag, field }))
+                dispatch(storeAndSetPushNotificationSettings({ flag: !flag, field }))
                 dispatch(setToastAndroidMessage('попробуйте позже'))
             }
         } catch (e) {
@@ -242,11 +270,15 @@ const stateSlice = createSlice({
         setToastAndroidMessage(state, action) {
             state.toastAndroidMessage = action.payload
         },
-        setAndStorePushNotificationSettings(state, action) {
+        storeAndSetPushNotificationSettings(state, action) {
             state.pushNotificationSettings[action.payload.field] = action.payload.flag
             storeData('pushNotificationSettings', state.pushNotificationSettings)
         },
-        setPushNotificationSettings(state, action) {
+        storeAndSetAllPushNotificationSettings(state, action) {
+            state.pushNotificationSettings = action.payload
+            storeData('pushNotificationSettings', state.pushNotificationSettings)
+        },
+        setAllPushNotificationSettings(state, action) {
             state.pushNotificationSettings = action.payload
         },
     },
@@ -286,8 +318,9 @@ export const {
     setErrorMessage,
     setIsLogined,
     setToastAndroidMessage,
-    setAndStorePushNotificationSettings,
-    setPushNotificationSettings,
+    storeAndSetPushNotificationSettings,
+    storeAndSetAllPushNotificationSettings,
+    setAllPushNotificationSettings,
 } = stateSlice.actions
 
 

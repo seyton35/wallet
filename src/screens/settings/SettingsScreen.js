@@ -12,7 +12,6 @@ export default function SettingsScreen() {
     const dispatch = useDispatch()
 
     const checkBoxTapHandler = (flag, title) => {
-        console.log('title', flag)
         dispatch(postPushNotificationSettings({
             field: title,
             flag
