@@ -58,7 +58,7 @@ export const postDefaultCurrencyAccount = createAsyncThunk(
 
 export const openCurrencyAccount = createAsyncThunk(
     'currency/openCurrencyAccount',
-    async ( currency , { dispatch, getState }) => {
+    async (currency, { dispatch, getState }) => {
         try {
             const { idUser } = getState().state.userData
             const res = await fetch(
@@ -201,7 +201,6 @@ export const fetchActiveBills = createAsyncThunk(
             if (res.status == 200) {
                 dispatch(setActiveBills(data.activeBills))
             }
-            if (res.status == 204) return
 
         } catch (e) {
             return e.message
@@ -225,6 +224,7 @@ export const billPayment = createAsyncThunk(
             dispatch(setToastMessage(data.message))
             if (res.status == 200 || res.status == 202) {
                 dispatch(fetchActiveBills(idUser))
+                dispatch(fetchAllCurrencyes(idUser))
                 dispatch(popToTop('home'))
             } else {
             }

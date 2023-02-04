@@ -68,7 +68,7 @@ export default function Issue({ bill }) {
             onPress={billPressHandler}
         >
             <View style={{ flexDirection: 'row' }}>
-                <View>{/*TODO: заменить на icon для счета */}
+                <View>
                     <Image
                         source={LogoAssets['Wallet']}
                         style={{ width: 35, height: 35, borderRadius: 20, margin: 5 }}
