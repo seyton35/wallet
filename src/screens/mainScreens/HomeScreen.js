@@ -11,6 +11,7 @@ import { fetchActiveBills, fetchAllCurrencyes } from "../../store/slices/currenc
 import { navigate } from "../../store/slices/stateReducer";
 import CurrencyScrollView from "../../components/CurrencyScrollView";
 import { useState } from "react";
+import BottomTabsPanel from "../../components/BottomTabsPanel";
 
 export default function Home() {
     const [refreshing, setRefreshing] = useState(false)
@@ -115,6 +116,7 @@ export default function Home() {
                 onRefresh={onRefresh}
             />
 
+            <BottomTabsPanel />
 
         </View >
     )

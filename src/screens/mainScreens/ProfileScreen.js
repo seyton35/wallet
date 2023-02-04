@@ -1,5 +1,6 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+import BottomTabsPanel from '../../components/BottomTabsPanel'
 import ListArrowButton from '../../components/ListArrowButton'
 import { logOutUser, popToTop } from '../../store/slices/stateReducer'
 
@@ -32,20 +33,24 @@ export default function ProfileScreen() {
     return (
         <View style={styles.container}>
 
-            <View style={styles.phoneNumberView}>
-                <Text style={styles.phoneNumberTitleTxt}>номер Wallet кошелька</Text>
-                <Text style={styles.phoneNumberTxt}>+{phoneNumber}</Text> 
-                {/* TODO: сделать маску для номера */}
-            </View>
+            <ScrollView>
+                <View style={styles.phoneNumberView}>
+                    <Text style={styles.phoneNumberTitleTxt}>номер Wallet кошелька</Text>
+                    <Text style={styles.phoneNumberTxt}>+{phoneNumber}</Text>
+                    {/* TODO: сделать маску для номера */}
+                </View>
 
-            <ListArrowButton screen='settings' title='Настройки' />
-            <ListArrowButton screen='help' title='Помощь' />
+                <ListArrowButton screen='settings' title='Настройки' />
+                <ListArrowButton screen='help' title='Помощь' />
 
-            <TouchableOpacity style={styles.signOutBtn}
-                onPress={signOutBtnHandler}
-            >
-                <Text style={styles.signOutBtnTxt}>выйти из приложения</Text>
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.signOutBtn}
+                    onPress={signOutBtnHandler}
+                >
+                    <Text style={styles.signOutBtnTxt}>выйти из приложения</Text>
+                </TouchableOpacity>
+            </ScrollView>
+
+            <BottomTabsPanel />
 
         </View>
     )
@@ -53,7 +58,7 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        height: '100%'
     },
     phoneNumberView: {
         alignItems: 'center',
@@ -68,7 +73,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     signOutBtn: {
-        top: 20,
+        marginTop: 20,
         padding: 5,
         paddingHorizontal: 10,
         alignSelf: 'center',

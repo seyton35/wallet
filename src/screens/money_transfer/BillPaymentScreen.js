@@ -16,7 +16,8 @@ export default function BillPaymentScreen() {
 
     const [showAllCurrency, setShowAllCurrency] = useState(false)
     const [shownCurrencyLimit, setShownCurrencyLimit] = useState(3)
-    const [selectedCurrency, setSelectedCurrency] = useState(currencyArray[0])
+    const { defaultCurrencyAccount } = useSelector(s => s.currency)
+    const [selectedCurrency, setSelectedCurrency] = useState(getDefaultCurrencyAccount())
 
     const dispatch = useDispatch()
 
@@ -31,6 +32,13 @@ export default function BillPaymentScreen() {
 
         }
     }, [selectedCurrency])
+
+    function getDefaultCurrencyAccount() {
+        for (let i = 0; i < currencyArray.length; i++) {
+            const acc = currencyArray[i];
+            if (acc.type == defaultCurrencyAccount) return acc
+        }
+    }
 
     function calculateCost() {
         if (selectedCurrency.type == bill.sender.currency) {
@@ -204,7 +212,7 @@ const styles = StyleSheet.create({
     currencyView: {
         flexDirection: 'row',
         paddingTop: 10,
-        alignItems:'center'
+        alignItems: 'center'
     },
     currencyLogoPic: {
         width: 30,

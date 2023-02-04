@@ -10,7 +10,8 @@ import Header from '../../components/Header'
 export default function ClientMoneyRequestScreen() {
   const [commentView, setCommentView] = useState(false)
   const [commentText, setCommentText] = useState()
-  const [pickerCurrency, setPickerCurrency] = useState()
+  const { defaultCurrencyAccount } = useSelector(s => s.currency)
+  const [pickerCurrency, setPickerCurrency] = useState(defaultCurrencyAccount)
   const [phoneNumber, setPhoneNumber] = useState('+')
   const [sum, setSum] = useState()
   const [moneyRequestLimits, setMoneyRequestLimits] = useState()

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react-native'
+import { StyleSheet, Text, View, Image, FlatList, Pressable } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import Icon from 'react-native-vector-icons/AntDesign'
 import { SwipeablePanel } from 'rn-swipeable-panel'
@@ -9,6 +9,7 @@ import Header from '../../components/Header'
 import { allRus, dayMonthRUS, dayMonthYearRUS, getDayMonthYear } from '../../middleWare/dataFormater'
 import { fetchClosedBills } from '../../store/slices/currencyReducer'
 import Loading from '../../components/Loading'
+import BottomTabsPanel from '../../components/BottomTabsPanel'
 
 export default function HistoryScreen() {
     const [isPanelActive, setIsPanelActive] = useState(false);
@@ -158,7 +159,7 @@ export default function HistoryScreen() {
 
     function renderItem({ index, item: bill }) {
         return (
-            <TouchableOpacity style={styles.billView} key={index}
+            <Pressable style={styles.billView} key={index}
                 onPress={() => openInfoBillPanel(bill)}
             >
                 <View style={styles.billInfoView}>
@@ -191,7 +192,7 @@ export default function HistoryScreen() {
                         </View>
                         : null
                 }
-            </TouchableOpacity>
+            </Pressable>
         )
     }
 
@@ -216,6 +217,8 @@ export default function HistoryScreen() {
                 refreshing={refreshing}
                 onRefresh={onRefresh}
             />
+
+            <BottomTabsPanel />
 
         </View >
     )

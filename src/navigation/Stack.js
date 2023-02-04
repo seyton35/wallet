@@ -69,29 +69,9 @@ export default function Stack() {
         }
     }
 
-    function showBottomTabs() {
-        if (currentScreen == 'home' ||
-            currentScreen == 'allServices' ||
-            currentScreen == 'profile' ||
-            currentScreen == 'cards' ||
-            currentScreen == 'history') {
-            return (
-                <View style={styles.tabsView}>
-                    <BottomTab tabName='home'></BottomTab>
-                    <BottomTab tabName='allServices'></BottomTab>
-                    <BottomTab tabName='history'></BottomTab>
-                    <BottomTab tabName='cards'></BottomTab>
-                    <BottomTab tabName='profile'></BottomTab>
-                </View>
-            )
-        }
-    }
-
-
     return (
         <View style={styles.container}>
             {stackNavigator()}
-            {showBottomTabs()}
         </View>
     )
 }
@@ -101,12 +81,4 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%'
     },
-    tabsView: {
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-        justifyContent: 'center',
-        alignItems: 'flex-end',
-        flexDirection: 'row'
-    }
 })
