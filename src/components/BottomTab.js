@@ -3,11 +3,24 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Entypo from 'react-native-vector-icons/Entypo'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { popToTop } from '../store/slices/stateReducer';
 
-export default function BottomTab({tabName}) {
+export default function BottomTab({ tabName }) {
+    const { currentScreen } = useSelector(s => s.state)
+
+    function isActiveText() {
+        if (currentScreen == tabName) {
+            return { color: '#000' }
+        }
+    }
+
+    function isActiveIcon() {
+        if (currentScreen == tabName) {
+            return { color: '#00abfd' }
+        }
+    }
 
     function buttonTextFormater(key) {
         switch (key) {
@@ -21,11 +34,11 @@ export default function BottomTab({tabName}) {
 
     function buttonIconFormater(key) {
         switch (key) {
-            case 'home': return <Entypo name='wallet' style={styles.tabIcon} />
-            case 'allServices': return <MaterialCommunityIcons name='bank-transfer' style={styles.tabIcon} />
-            case 'history': return <MaterialCommunityIcons name='clock' style={styles.tabIcon} />
-            case 'cards': return <MaterialCommunityIcons name='credit-card' style={styles.tabIcon} />
-            case 'profile': return <Ionicons name='person-circle' style={styles.tabIcon} />
+            case 'home': return <Entypo name='wallet' style={[styles.tabIcon, isActiveIcon()]} />
+            case 'allServices': return <MaterialCommunityIcons name='bank-transfer' style={[styles.tabIcon, isActiveIcon()]} />
+            case 'history': return <MaterialCommunityIcons name='clock' style={[styles.tabIcon, isActiveIcon()]} />
+            case 'cards': return <MaterialCommunityIcons name='credit-card' style={[styles.tabIcon, isActiveIcon()]} />
+            case 'profile': return <Ionicons name='person-circle' style={[styles.tabIcon, isActiveIcon()]} />
         }
     }
 
@@ -40,7 +53,7 @@ export default function BottomTab({tabName}) {
             onPress={tabBtnHandler}
         >
             {buttonIconFormater(tabName)}
-            <Text style={styles.tabBtnTxt}>{buttonTextFormater(tabName)}</Text>
+            <Text style={[styles.tabBtnTxt,isActiveText()]}>{buttonTextFormater(tabName)}</Text>
         </TouchableOpacity>
     )
 }
@@ -59,9 +72,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     tabBtnTxt: {
+        color: '#555',
+        fontSize:14
     },
     tabIcon: {
-        color: 'black',
+        color: '#555',
         fontSize: 20
     }
 })

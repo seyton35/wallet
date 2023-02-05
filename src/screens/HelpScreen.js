@@ -3,13 +3,22 @@ import Header from '../components/Header'
 
 export default function HelpScreen() {
     return (
-        <View>
+        <View >
             <Header headerText='Помощь' />
-            <Text>Вы остаетесь без помощи</Text>
+            <View style={styles.container}>
+                <Text style={styles.text}>Вы остаетесь без помощи</Text>
+            </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {},
+    container: {
+        padding: 10
+    },
+    text: {
+        color: '#000',
+        fontSize: 20,
+        fontWeight:'600'
+    },
 })
