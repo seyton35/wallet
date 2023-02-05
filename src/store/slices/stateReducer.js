@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { storeData, getData, removeData } from "../../middleWare/asyncStorage";
-import { fetchAvailableCurrencies, setAndStoreDefaultCurrencyAccount, setDefaultCurrencyAccount } from "./currencyReducer";
+import { fetchAllCurrencyes, fetchAvailableCurrencies, setAndStoreDefaultCurrencyAccount, setDefaultCurrencyAccount } from "./currencyReducer";
 
 export const initialization = createAsyncThunk(
     'state/initialization',
@@ -11,7 +11,7 @@ export const initialization = createAsyncThunk(
             if (data !== null) {
                 dispatch(setUserDataWithoutStore(data))
                 dispatch(setIsLogined(true))
-                dispatch(fetchUserConfig())
+                dispatch(fetchUserConfig(data.idUser))
                 setTimeout(() => {
                     dispatch(popToTop('home'))
                 }, 1500);
@@ -25,9 +25,8 @@ export const initialization = createAsyncThunk(
 
 export const fetchUserConfig = createAsyncThunk(
     'state/fetchUserConfig',
-    async (_, { dispatch, getState }) => {
+    async (idUser, { dispatch, getState }) => {
         try {
-            const { idUser } = getState().state.userData
             const res = await fetch(
                 'http://1220295-cj30407.tw1.ru/api/database/fetchUserConfig', {
                 method: 'POST',
@@ -100,6 +99,31 @@ export const saveNotificationToken = createAsyncThunk(
     }
 )
 
+export const deleteAccount = createAsyncThunk(
+    'state/deleteAccount',
+    async (_, { dispatch, getState }) => {
+        try {
+            console.log("deleteAccount");
+            const { idUser } = getState().state.userData
+            const res = await fetch(
+                'http://1220295-cj30407.tw1.ru/api/auth/deleteAccount', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ idUser })
+            })
+            const data = await res.json()
+            if (res.status == 200) {
+                dispatch(popToTop('login'))
+                dispatch(removeUserData())
+            }
+        } catch (e) {
+            console.log(e.message);
+        }
+    }
+)
+
 export const logOutUser = createAsyncThunk(
     'state/logOutUser',
     async (_, { dispatch, getState }) => {
@@ -165,8 +189,10 @@ export const loginUser = createAsyncThunk(
                 body: JSON.stringify({ phoneNumber, password })
             })
             const data = await res.json()
+            console.log(data);
             if (res.status === 200) {
                 console.log('logined');
+                dispatch(fetchUserConfig(data.id))
                 dispatch(setErrorMessage(null))
                 dispatch(storeAndSetUserData({
                     id: data.id,
@@ -254,6 +280,7 @@ const stateSlice = createSlice({
                 phoneNumber: null,
             }
             state.token = null
+            state.pushNotificationSettings = null
             removeData('userData')
             removeData('defaultCurrencyAccount')
             removeData('pushNotificationSettings')
