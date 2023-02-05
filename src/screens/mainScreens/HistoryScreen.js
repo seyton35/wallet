@@ -10,6 +10,7 @@ import { allRus, dayMonthRUS, dayMonthYearRUS, getDayMonthYear } from '../../mid
 import { fetchClosedBills } from '../../store/slices/currencyReducer'
 import Loading from '../../components/Loading'
 import BottomTabsPanel from '../../components/BottomTabsPanel'
+import { getCurrencySymbol } from '../../middleWare/currencyFormater'
 
 export default function HistoryScreen() {
     const [isPanelActive, setIsPanelActive] = useState(false);
@@ -95,7 +96,7 @@ export default function HistoryScreen() {
                         ? '-'
                         : '+'
                     }
-                    {bill.sender.sum} {bill.sender.currency}
+                    {bill.sender.sum} {getCurrencySymbol(bill.sender.currency)}
                 </Text>
             </View>
         )
@@ -111,7 +112,7 @@ export default function HistoryScreen() {
             balance += '+'
             profitStyle.color = 'green'
         }
-        balance += bill.sender.sum + ' ' + bill.sender.currency
+        balance += bill.sender.sum + ' ' + getCurrencySymbol(bill.sender.currency)
 
         return (
             <View style={styles.billPanelContainer}>
@@ -143,7 +144,7 @@ export default function HistoryScreen() {
                 </View>
                 <View style={styles.billPanelInfoView}>
                     <Text style={styles.billPanelInfoLabel}>Сумма</Text>
-                    <Text style={styles.billPanelInfoTxt}>{bill.sender.sum} {bill.sender.currency}</Text>
+                    <Text style={styles.billPanelInfoTxt}>{bill.sender.sum} {getCurrencySymbol(bill.sender.currency)}</Text>
                 </View>
                 <View style={styles.billPanelInfoView}>
                     <Text style={styles.billPanelInfoLabel}>Поставщик услуг</Text>

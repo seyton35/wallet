@@ -11,3 +11,10 @@ export function getCurrencySymbol(currency) {
     }
     return symbol
 }
+
+export function countCut(count) {
+    count *= 100
+    count = Math.floor(count)
+    count /= 100
+    return count
+}

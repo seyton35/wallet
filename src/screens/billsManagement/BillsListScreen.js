@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import Header from '../../components/Header'
 import ModalRangeDatePicker from '../../components/ModalRangeDatePicker'
+import { getCurrencySymbol } from '../../middleWare/currencyFormater'
 
 import { allRus } from '../../middleWare/dataFormater'
 
@@ -84,8 +85,8 @@ export default function BillsListScreen() {
                                 <View style={styles.billBox}>
                                     <Text style={styles.billReceiverTxt}>{bill.receiver.number}</Text>
                                     <Text>{bill.status == 'success'
-                                        ? bill.receiver.sum + ' ' + bill.receiver.currency
-                                        : bill.sender.sum + ' ' + bill.sender.currency
+                                        ? bill.receiver.sum + ' ' + getCurrencySymbol(bill.receiver.currency)
+                                        : bill.sender.sum + ' ' + getCurrencySymbol(bill.sender.currency)
                                     }
                                     </Text>
                                 </View>

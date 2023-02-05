@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchExchangeRate, resetMessage, currencyСonversion, setErrorMessage } from '../../store/slices/currencyReducer'
 
 import Header from '../../components/Header'
+import { countCut } from '../../middleWare/currencyFormater'
 
 export default function CurrencyСonversionScreen() {
     const [pickerCurrency, setPickerCurrency] = useState()
@@ -70,9 +71,9 @@ export default function CurrencyСonversionScreen() {
     }
 
     function conversion() {
-        if (sum <=0) {
+        if (sum <= 0) {
             setMessage('введите сумму')
-            return 
+            return
         }
         if (!message) {
             dispatch(currencyСonversion({
@@ -107,7 +108,7 @@ export default function CurrencyСonversionScreen() {
                                 return (
                                     <Picker.Item
                                         key={index}
-                                        label={`${cur.type}   ${cur.count.toFixed(3)}...`}
+                                        label={`${cur.type}   ${countCut(cur.count)}...`}
                                         value={cur.type}
                                     />
                                 )
@@ -164,7 +165,7 @@ const styles = StyleSheet.create({
     },
     message: {
         color: '#ff0000',
-        paddingLeft:10
+        paddingLeft: 10
     },
     text: {
         color: '#000',

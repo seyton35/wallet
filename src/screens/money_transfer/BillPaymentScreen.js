@@ -8,6 +8,7 @@ import Header from '../../components/Header'
 import { LogoAssets } from '../../../assets/logoAssets'
 
 import { billPayment, fetchExchangeRate } from '../../store/slices/currencyReducer'
+import { countCut } from '../../middleWare/currencyFormater'
 
 export default function BillPaymentScreen() {
     const { bill } = useSelector(s => s.state.navigationData)
@@ -44,7 +45,7 @@ export default function BillPaymentScreen() {
         if (selectedCurrency.type == bill.sender.currency) {
             return `${bill.sender.sum} ${selectedCurrency.type}`
         } else {
-            return `${(bill.sender.sum * rate).toFixed(2)} ${selectedCurrency.type}`
+            return `${countCut(bill.sender.sum * rate)} ${selectedCurrency.type}`
         }
     }
 
@@ -120,7 +121,7 @@ export default function BillPaymentScreen() {
                                         source={LogoAssets['Wallet']}
                                         style={styles.currencyLogoPic}
                                     />
-                                    <Text style={styles.currencyTxt}>{currency.count} {currency.type}</Text>
+                                    <Text style={styles.currencyTxt}>{countCut(currency.count)} {currency.type}</Text>
                                     {currency.type == selectedCurrency.type
                                         ? <Icon name='chevron-left' style={styles.moreCurrencyIcon} /> : null
                                     }
@@ -153,10 +154,10 @@ export default function BillPaymentScreen() {
                             <Text style={styles.commissionTxt}>коммисия</Text>
                             <Text style={styles.commissionTxt}>0,00 {bill.sender.currency}</Text>
                         </View>
-                        {selectedCurrency.type != bill.sender.currency
+                        {selectedCurrency.type != bill.sender.currency // TODO: 1большей валюты = ххх меньшей
                             ? <View style={styles.costItem}>
                                 <Text style={styles.costDataTxt}>курс конвертации</Text>
-                                <Text style={styles.costDataTxt}>1 {bill.sender.currency} = {(1 * rate).toFixed(2)} {selectedCurrency.type}</Text>
+                                <Text style={styles.costDataTxt}>1 {bill.sender.currency} = {1 * rate} {selectedCurrency.type}</Text>
                             </View>
                             : null
                         }

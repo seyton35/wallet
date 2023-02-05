@@ -37,15 +37,17 @@ export default function CurrencyScrollView({ currencyArray }) {
                     )
                 })}
             </Animated.ScrollView>
-            <ScalingDot
-                data={currencyArray}
-                scrollX={scrollX}
-                dotStyle={styles.dot}
-                inActiveDotOpacity={0.3}
-                activeDotColor={'#fdbf57'}
-                containerStyle={styles.dotContainer}
-                wormDot
-            />
+            {/* <View style={styles.}> */}
+                <ScalingDot
+                    data={currencyArray}
+                    scrollX={scrollX}
+                    dotStyle={styles.dot}
+                    inActiveDotOpacity={0.3}
+                    activeDotColor={'#fdbf57'}
+                    containerStyle={styles.dotContainer}
+                    wormDot
+                />
+            {/* </View> */}
         </View>
     )
 }
@@ -56,12 +58,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flex: 1,
-        height: 175
+        marginBottom:10
     },
     scrollItem: {
     },
     dotContainer: {
-
+        bottom:0
     },
     dot: {
         backgroundColor: 'gray',

@@ -1,5 +1,6 @@
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useDispatch } from "react-redux";
+import { countCut, getCurrencySymbol } from "../middleWare/currencyFormater";
 import { selectCurrency } from "../store/slices/currencyReducer";
 import { navigate } from "../store/slices/stateReducer";
 
@@ -17,14 +18,15 @@ export default function Currency({ cur }) {
     return (
         <View style={styles.container}>
             <View style={styles.currencyBox}>
-                <Text style={styles.walet}>{type}</Text>
-                <Text style={styles.walet}>{count.toFixed(3)}</Text>
+                <View style={styles.walletBox}>
+                    <Text style={styles.waletTxt}>{countCut(count)} {getCurrencySymbol(type)}</Text>
+                </View>
 
                 <TouchableOpacity
                     style={styles.btn}
                     onPress={goToCurrencyScreen}
                 >
-                    <Text style={styles.btnTxt}>поополнить</Text>
+                    <Text style={styles.btnTxt}>Поополнить кошелек</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -40,25 +42,29 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         borderRadius: 10,
         backgroundColor: "#fdbf57",
-        padding: 10
+        paddingHorizontal: 10,
+        alignItems: 'center',
     },
-    walet: {
-        color: 'black',
+    walletBox: {
+        marginVertical: 30
+    },
+    waletTxt: {
+        color: '#fff',
         fontSize: 25,
-        fontWeight: 'bold',
+        fontWeight: "900",
     },
     btn: {
-        borderRadius: 10,
+        borderRadius: 30,
         backgroundColor: '#fff',
         alignItems: 'center',
-        padding: 5,
-        marginLeft: 30,
-        marginRight: 30,
-        margin: 5
+        paddingVertical: 7,
+        paddingHorizontal: 20,
+        marginHorizontal: 30,
+        marginBottom: 20
 
     },
     btnTxt: {
         color: '#000',
-        fontSize: 17
+        fontSize: 17,
     }
 })

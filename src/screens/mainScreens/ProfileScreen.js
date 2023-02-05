@@ -2,6 +2,7 @@ import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import { useDispatch, useSelector } from 'react-redux'
 import BottomTabsPanel from '../../components/BottomTabsPanel'
 import ListArrowButton from '../../components/ListArrowButton'
+import { phoneNumberMask1 } from '../../middleWare/phoneNumberFormater'
 import { logOutUser, popToTop } from '../../store/slices/stateReducer'
 
 export default function ProfileScreen() {
@@ -36,8 +37,7 @@ export default function ProfileScreen() {
             <ScrollView>
                 <View style={styles.phoneNumberView}>
                     <Text style={styles.phoneNumberTitleTxt}>номер Wallet кошелька</Text>
-                    <Text style={styles.phoneNumberTxt}>+{phoneNumber}</Text>
-                    {/* TODO: сделать маску для номера */}
+                    <Text style={styles.phoneNumberTxt}>{phoneNumberMask1(phoneNumber)}</Text>
                 </View>
 
                 <ListArrowButton screen='settings' title='Настройки' />

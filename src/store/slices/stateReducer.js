@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { storeData, getData, removeData } from "../../middleWare/asyncStorage";
-import { fetchAllCurrencyes, fetchAvailableCurrencies, setAndStoreDefaultCurrencyAccount, setDefaultCurrencyAccount } from "./currencyReducer";
+import { fetchAllCurrencyes, fetchAvailableCurrencies, setActiveBills, setAndStoreDefaultCurrencyAccount, setCurrencyArray, setDefaultCurrencyAccount } from "./currencyReducer";
 
 export const initialization = createAsyncThunk(
     'state/initialization',
@@ -132,6 +132,8 @@ export const logOutUser = createAsyncThunk(
             const { idUser } = getState().state.userData
             const { token } = getState().state
             dispatch(removeUserData())
+            dispatch(setCurrencyArray([]))
+            dispatch(setActiveBills([]))
             const res = await fetch(
                 'http://1220295-cj30407.tw1.ru/api/auth/deleteNotificationToken', {
                 method: 'POST',
@@ -280,7 +282,12 @@ const stateSlice = createSlice({
                 phoneNumber: null,
             }
             state.token = null
-            state.pushNotificationSettings = null
+            state.pushNotificationSettings ={
+                refill:null,
+                writeOff:null,
+                incomingBill:null,
+                promotions:null,
+            }
             removeData('userData')
             removeData('defaultCurrencyAccount')
             removeData('pushNotificationSettings')
