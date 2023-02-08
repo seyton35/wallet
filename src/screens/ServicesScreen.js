@@ -1,12 +1,16 @@
 import { ScrollView, StyleSheet, View, } from "react-native"
+import { useSelector } from "react-redux"
 import Header from "../components/Header"
 import Service from "../components/Service"
 
 export default function ServicesScreen() {
-    const servicesArray = [
-        { title: 'перевести со своего счета Wallet', screen: 'currencyСonversion' },
-        { title: 'запросить у другого клиента Wallet', screen: 'clientMoneyRequest' },
-    ]
+    const currencyAccountsArray = useSelector(s => s.currency.currencyArray)
+    const servicesArray = []
+    if (currencyAccountsArray.length > 1) {
+        servicesArray.push({ title: 'перевести со своего счета Wallet', screen: 'currencyСonversion' })
+    }
+    servicesArray.push({ title: 'запросить у другого клиента Wallet', screen: 'clientMoneyRequest' })
+
     return (
         <View style={styles.container}>
             <Header headerText="пополнить счет" />
