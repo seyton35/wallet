@@ -1,7 +1,10 @@
-import { ScrollView, StyleSheet, View, } from "react-native"
-import { useSelector } from "react-redux"
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, } from "react-native"
+import { useDispatch, useSelector } from "react-redux"
+import OcticonsIcon from 'react-native-vector-icons/Octicons'
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+
 import Header from "../components/Header"
-import Service from "../components/Service"
+import { navigate } from "../store/slices/stateReducer"
 
 export default function ServicesScreen() {
     const currencyAccountsArray = useSelector(s => s.currency.currencyArray)
@@ -11,6 +14,19 @@ export default function ServicesScreen() {
     }
     servicesArray.push({ title: 'запросить у другого клиента Wallet', screen: 'clientMoneyRequest' })
 
+    const dispatch = useDispatch()
+
+    function servicePress(screen) {
+        dispatch(navigate(screen))
+    }
+
+    const showIcon = (screen) => {
+        switch (screen) {
+            case 'currencyСonversion': return <OcticonsIcon name='arrow-switch' style={styles.icon} />
+            case 'clientMoneyRequest': return <MaterialCommunityIcon name='handshake-outline' style={styles.icon} />
+        }
+    }
+
     return (
         <View style={styles.container}>
             <Header headerText="пополнить счет" />
@@ -19,14 +35,23 @@ export default function ServicesScreen() {
             >
                 {
                     servicesArray.map((service, index) => {
-                        return <Service
-                            key={index}
-                            service={service}
-                        ></Service>
+                        return (
+                            <TouchableOpacity style={styles.serviceItem}
+                                key={index}
+                                onPress={() => servicePress(service.screen)}
+                            >
+                                <View style={styles.iconBox}>
+                                    {showIcon(service.screen)}
+                                </View>
+                                <View style={styles.serviceView}>
+                                    <Text style={styles.serviceTxt}>{service.title}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )
                     })
                 }
             </ScrollView>
-        </View>
+        </View >
     )
 }
 
@@ -34,6 +59,26 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+
     serviceItem: {
+        flex: 1,
+        paddingVertical:20,
+        marginHorizontal: 2,
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    iconBox: {
+        paddingHorizontal: 10,
+    },
+    icon: {
+        color: '#000',
+        fontSize: 25,
+    },
+    serviceView: {
+        marginHorizontal: 5,
+    },
+    serviceTxt: {
+        color: '#000',
+        fontSize: 17
     }
 })
