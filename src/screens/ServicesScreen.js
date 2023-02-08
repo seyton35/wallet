@@ -22,7 +22,9 @@ export default function ServicesScreen() {
 
     const showIcon = (screen) => {
         switch (screen) {
-            case 'currencyСonversion': return <OcticonsIcon name='arrow-switch' style={styles.icon} />
+            case 'currencyСonversion': return <OcticonsIcon name='arrow-switch' style={[styles.icon, {
+                transform: [{ rotate: '90deg' }]
+            }]} />
             case 'clientMoneyRequest': return <MaterialCommunityIcon name='handshake-outline' style={styles.icon} />
         }
     }
@@ -62,7 +64,7 @@ const styles = StyleSheet.create({
 
     serviceItem: {
         flex: 1,
-        paddingVertical:20,
+        paddingVertical: 20,
         marginHorizontal: 2,
         flexDirection: 'row',
         alignItems: 'center'
