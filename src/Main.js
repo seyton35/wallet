@@ -1,7 +1,6 @@
-import { Alert, BackHandler, StyleSheet, Text, ToastAndroid, View } from 'react-native'
+import { Alert, BackHandler, StyleSheet, ToastAndroid, View } from 'react-native'
 import { useEffect } from 'react'
 import messaging from '@react-native-firebase/messaging'
-
 import { useDispatch, useSelector } from 'react-redux'
 
 import Stack from './navigation/Stack'
@@ -11,7 +10,8 @@ import {
   navigate,
   initialization,
   setToastAndroidMessage,
-  saveNotificationToken
+  saveNotificationToken,
+  popToTop
 } from './store/slices/stateReducer'
 import { setToastMessage } from './store/slices/currencyReducer'
 import PushNotification from 'react-native-push-notification'
@@ -94,14 +94,31 @@ export default function Main() {
     }
   }, [idUser])
 
-
   useEffect(() => {
+    const backAction = () => {
+      if (['register', 'login', 'home',]
+        .includes(currentScreen)) {
+        Alert.alert("выход", "покинуть приложение?", [
+          {
+            text: "нет",
+            onPress: () => null,
+            style: "cancel"
+          },
+          { text: "да", onPress: () => BackHandler.exitApp() }
+        ]);
+      } else if (['allServices', 'history', 'cards', 'profile']
+        .includes(currentScreen)) {
+        dispatch(popToTop('home'))
+      } else dispatch(backButtonPress())
+      return true;
+    }
+
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       backAction
     )
     return () => backHandler.remove()
-  }, [])
+  }, [currentScreen])
 
   useEffect(() => {
     if (stateToastMessage) {
@@ -116,21 +133,6 @@ export default function Main() {
       dispatch(setToastMessage(null))
     }
   }, [currencyToastMessage])
-
-
-  function backAction() {
-    if (['home', 'register', 'login'].includes(currentScreen)) {
-      Alert.alert("выход", "покинуть приложение?", [
-        {
-          text: "нет",
-          onPress: () => null,
-          style: "cancel"
-        },
-        { text: "да", onPress: () => BackHandler.exitApp() }
-      ]);
-      return true;
-    } else dispatch(backButtonPress())
-  }
 
   return (
     <View style={styles.container}>

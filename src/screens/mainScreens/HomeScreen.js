@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity, FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import IconEntypo from "react-native-vector-icons/Entypo";
@@ -6,12 +6,11 @@ import IconIonicons from "react-native-vector-icons/Ionicons";
 
 import Header from "../../components/Header";
 import Bill from "../../components/Bill";
+import CurrencyScrollView from "../../components/CurrencyScrollView";
+import BottomTabsPanel from "../../components/BottomTabsPanel";
 
 import { fetchActiveBills, fetchAllCurrencyes } from "../../store/slices/currencyReducer";
 import { navigate } from "../../store/slices/stateReducer";
-import CurrencyScrollView from "../../components/CurrencyScrollView";
-import { useState } from "react";
-import BottomTabsPanel from "../../components/BottomTabsPanel";
 
 export default function Home() {
     const [refreshing, setRefreshing] = useState(false)
