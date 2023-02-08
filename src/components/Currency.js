@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     currencyBox: {
         marginHorizontal: 10,
         borderRadius: 10,
-        backgroundColor: "#fdbf57",
+        backgroundColor: "#00abfd",
         paddingHorizontal: 10,
         alignItems: 'center',
     },

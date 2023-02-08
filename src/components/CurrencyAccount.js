@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { getCurrencySymbol } from '../middleWare/currencyFormater'
+import { countCut, getCurrencySymbol } from '../middleWare/currencyFormater'
 
 export default function CurrencyAccount({ acc, defaultCurrencyAccount, onPress }) {
     return (
@@ -16,7 +16,7 @@ export default function CurrencyAccount({ acc, defaultCurrencyAccount, onPress }
                     }
                 </View>
                 <View style={styles.currencyInfoBox} >
-                    <Text style={styles.currencyLabel}>{acc.count} {getCurrencySymbol(acc.type)}</Text>
+                    <Text style={styles.currencyLabel}>{countCut(acc.count)} {getCurrencySymbol(acc.type)}</Text>
                     <Text style={styles.currencyText}>
                         {defaultCurrencyAccount == acc.type
                             ? 'Остновной'

@@ -43,7 +43,7 @@ export default function CurrencyScrollView({ currencyArray }) {
                     scrollX={scrollX}
                     dotStyle={styles.dot}
                     inActiveDotOpacity={0.3}
-                    activeDotColor={'#fdbf57'}
+                    activeDotColor={'#00abfd'}
                     containerStyle={styles.dotContainer}
                     wormDot
                 />
