@@ -28,7 +28,7 @@ export const fetchUserConfig = createAsyncThunk(
     async (idUser, { dispatch, getState }) => {
         try {
             const res = await fetch(
-                'http://1220295-cj30407.tw1.ru/api/database/fetchUserConfig', {
+                'https://1220295-cj30407.tw1.ru/api/database/fetchUserConfig', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -61,7 +61,7 @@ export const postPushNotificationSettings = createAsyncThunk(
             const { pushNotificationSettings } = getState().state
             const { idUser } = getState().state.userData
             const res = await fetch(
-                'http://1220295-cj30407.tw1.ru/api/operationsOnUserConfig/postPushNotificationSettings', {
+                'https://1220295-cj30407.tw1.ru/api/operationsOnUserConfig/postPushNotificationSettings', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -83,7 +83,7 @@ export const saveNotificationToken = createAsyncThunk(
     async ({ token, idUser }, { dispatch }) => {
         try {
             const res = await fetch(
-                'http://1220295-cj30407.tw1.ru/api/auth/saveNotificationToken', {
+                'https://1220295-cj30407.tw1.ru/api/auth/saveNotificationToken', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -106,7 +106,7 @@ export const deleteAccount = createAsyncThunk(
             console.log("deleteAccount");
             const { idUser } = getState().state.userData
             const res = await fetch(
-                'http://1220295-cj30407.tw1.ru/api/auth/deleteAccount', {
+                'https://1220295-cj30407.tw1.ru/api/auth/deleteAccount', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -135,7 +135,7 @@ export const logOutUser = createAsyncThunk(
             dispatch(setCurrencyArray([]))
             dispatch(setActiveBills([]))
             const res = await fetch(
-                'http://1220295-cj30407.tw1.ru/api/auth/deleteNotificationToken', {
+                'https://1220295-cj30407.tw1.ru/api/auth/deleteNotificationToken', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -153,7 +153,7 @@ export const registerNewUser = createAsyncThunk(
     async ({ phoneNumber, password }, { dispatch }) => {
         try {
             const res = await fetch(
-                'http://1220295-cj30407.tw1.ru/api/auth/registerNewUser', {
+                'https://1220295-cj30407.tw1.ru/api/auth/registerNewUser', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -183,7 +183,7 @@ export const loginUser = createAsyncThunk(
     'state/loginUser',
     async ({ phoneNumber, password }, { dispatch }) => {
         try {
-            const res = await fetch('http://1220295-cj30407.tw1.ru/api/auth/loginUser', {
+            const res = await fetch('https://1220295-cj30407.tw1.ru/api/auth/loginUser', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
