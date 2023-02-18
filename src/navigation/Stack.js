@@ -20,6 +20,7 @@ import LoginScreen from "../screens/sign/LoginScreen";
 import BillPaymentScreen from "../screens/money_transfer/BillPaymentScreen";
 import ClientMoneyRequestScreen from "../screens/money_transfer/ClientMoneyRequestScreen";
 import CurrencyСonversionScreen from "../screens/money_transfer/CurrencyСonversionScreen";
+import SendMoneyScreen from "../screens/money_transfer/SendMoneyScreen";
 // currency
 import ServicesScreen from "../screens/ServicesScreen";
 import CurrencyRatesScreen from "../screens/usefull/CurrencyRatesScreen";
@@ -57,6 +58,7 @@ export default function Stack() {
 
             case 'service': return <ServicesScreen />
             case 'currencyRates': return <CurrencyRatesScreen />
+            case 'sendMoney': return <SendMoneyScreen />
             case 'currencyСonversion': return <CurrencyСonversionScreen />
             case 'clientMoneyRequest': return <ClientMoneyRequestScreen />
             case 'billPayment': return <BillPaymentScreen />

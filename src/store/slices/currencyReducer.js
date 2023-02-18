@@ -208,6 +208,38 @@ export const fetchActiveBills = createAsyncThunk(
     }
 )
 
+export const sendMoneyRequest = createAsyncThunk(
+    'currency/sendMoneyRequest',
+    async ({ phoneNumber, sender, receiver, sum, rate, comment }, { dispatch, getState }) => {
+        try {
+            const { idUser } = getState().state.userData
+            const res = await fetch(
+                'https://1220295-cj30407.tw1.ru/api/transaction/sendMoneyRequest', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    senderId: idUser,
+                    receiverPhoneNumber: phoneNumber,
+                    senderCur: sender,
+                    receiverCur: receiver,
+                    sum, rate,
+                    comment
+                })
+            })
+            const data = await res.json()
+            dispatch(setToastMessage(data.message))
+            if (res.status == 200 || res.status == 202) {
+                // dispatch(fetchAllCurrencyes(idUser))
+                dispatch(popToTop('home'))
+            }else dispatch(setErrorMessage(data.error))
+        } catch (e) {
+            return e.message
+        }
+    }
+)
+
 export const billPayment = createAsyncThunk(
     'currency/billPayment',
     async ({ idUser, idBill, currencyType, rate }, { dispatch }) => {
@@ -228,8 +260,6 @@ export const billPayment = createAsyncThunk(
                 dispatch(popToTop('home'))
             } else {
             }
-
-
         } catch (e) {
             return e.message
         }

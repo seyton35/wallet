@@ -10,7 +10,7 @@ import { allRus, dayMonthRUS, dayMonthYearRUS, getDayMonthYear } from '../../mid
 import { fetchClosedBills } from '../../store/slices/currencyReducer'
 import Loading from '../../components/Loading'
 import BottomTabsPanel from '../../components/BottomTabsPanel'
-import { getCurrencySymbol } from '../../middleWare/currencyFormater'
+import { countCut, getCurrencySymbol } from '../../middleWare/currencyFormater'
 
 export default function HistoryScreen() {
     const [isPanelActive, setIsPanelActive] = useState(false);
@@ -49,7 +49,9 @@ export default function HistoryScreen() {
         }
         payDate.current = { day, month, year }
         if (isShowDate) {
-            return <Text style={styles.billDateTxt}>{dateString}</Text>
+            return <View style={styles.billDateBox}>
+                <Text style={styles.billDateTxt}>{dateString}</Text>
+            </View>
         }
     }
 
@@ -93,10 +95,9 @@ export default function HistoryScreen() {
             < View style={styles.balanceView}>
                 <Text style={styles.billInfoSumTxt}>
                     {bill.receiver.id == idUser
-                        ? '-'
-                        : '+'
+                        ? '+' + countCut(bill.receiver.sum) + getCurrencySymbol(bill.receiver.currency)
+                        : '-' + countCut(bill.sender.sum) + getCurrencySymbol(bill.sender.currency)
                     }
-                    {bill.sender.sum} {getCurrencySymbol(bill.sender.currency)}
                 </Text>
             </View>
         )
@@ -107,12 +108,13 @@ export default function HistoryScreen() {
         let profitStyle = {}
 
         if (bill.receiver.id == idUser) {
-            balance += '-'
-        } else {
             balance += '+'
             profitStyle.color = 'green'
+            balance += countCut(bill.receiver.sum) + ' ' + getCurrencySymbol(bill.receiver.currency)
+        } else {
+            balance += '-'
+            balance += countCut(bill.sender.sum) + ' ' + getCurrencySymbol(bill.sender.currency)
         }
-        balance += bill.sender.sum + ' ' + getCurrencySymbol(bill.sender.currency)
 
         return (
             <View style={styles.billPanelContainer}>
@@ -144,7 +146,7 @@ export default function HistoryScreen() {
                 </View>
                 <View style={styles.billPanelInfoView}>
                     <Text style={styles.billPanelInfoLabel}>Сумма</Text>
-                    <Text style={styles.billPanelInfoTxt}>{bill.sender.sum} {getCurrencySymbol(bill.sender.currency)}</Text>
+                    <Text style={styles.billPanelInfoTxt}>{countCut(bill.sender.sum)} {getCurrencySymbol(bill.sender.currency)}</Text>
                 </View>
                 <View style={styles.billPanelInfoView}>
                     <Text style={styles.billPanelInfoLabel}>Поставщик услуг</Text>
@@ -163,6 +165,7 @@ export default function HistoryScreen() {
             <Pressable style={styles.billView} key={index}
                 onPress={() => openInfoBillPanel(bill)}
             >
+                {showDate(bill.registerDate)}
                 <View style={styles.billInfoView}>
                     <View style={{ flexDirection: 'row', }}>
                         <View style={styles.bilPicBox}>
@@ -173,7 +176,6 @@ export default function HistoryScreen() {
                             }
                         </View>
                         <View style={styles.billInfoBox}>
-                            {showDate(bill.registerDate)}
                             <Text style={styles.billInfoTypeTxt}>{bill.type}</Text>
                             <Text style={styles.billInfoSenderTxt}>
                                 {bill.sender.id == idUser
@@ -333,6 +335,9 @@ const styles = StyleSheet.create({
     },
 
     billInfoBox: {},
+    billDateBox: { 
+        padding:5
+    },
     billDateTxt: {
         color: '#000',
         fontSize: 14
@@ -349,6 +354,7 @@ const styles = StyleSheet.create({
         color: '#ff4242'
     },
     billInfoCommentView: {
+        marginTop: 5,
         paddingVertical: 5,
         paddingHorizontal: 10,
         backgroundColor: '#ddd',

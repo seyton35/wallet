@@ -9,6 +9,7 @@ import { LogoAssets } from '../../../assets/logoAssets'
 
 import { billPayment, fetchExchangeRate } from '../../store/slices/currencyReducer'
 import { countCut } from '../../middleWare/currencyFormater'
+import { dayMonthYearRUS } from '../../middleWare/dataFormater'
 
 export default function BillPaymentScreen() {
     const { bill } = useSelector(s => s.state.navigationData)
@@ -98,7 +99,7 @@ export default function BillPaymentScreen() {
                     </View>
                     <View style={styles.blockView}>
                         <Text style={styles.labelTxt}>Дата</Text>
-                        <Text style={styles.text}>{bill.registerDate}</Text>
+                        <Text style={styles.text}>{dayMonthYearRUS(bill.registerDate)}</Text>
                     </View>
                     {bill.comment
                         ? <View style={styles.blockView}>
