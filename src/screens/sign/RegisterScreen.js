@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
+import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useDispatch, useSelector } from 'react-redux'
 import Header from '../../components/Header'
 
@@ -77,6 +78,12 @@ export default function RegisterScreen() {
         dispatch(popToTop('login'))
     }
 
+    function genRandomNumber() {
+        let num = '+7'
+        num += Math.floor(Math.random() * 10000000000)
+        setPhoneNumber(num)
+    }
+
     return (
         <View style={styles.container}>
             <Header showHeaderButton={false} />
@@ -103,14 +110,6 @@ export default function RegisterScreen() {
                     <Text style={styles.titleText}>Регистрация</Text>
                 </View>
 
-                {/* <View style={styles.inputView}>
-                    <Text style={styles.text}>логин</Text>
-                    <TextInput style={styles.input}
-                        value={login}
-                        onChangeText={setLogin}
-                        autoFocus={true}
-                    ></TextInput>
-                </View> */}
 
                 <View style={styles.inputView}>
                     <Text style={styles.text}>мобильный номер</Text>
@@ -120,6 +119,13 @@ export default function RegisterScreen() {
                         keyboardType='decimal-pad'
                         autoFocus={true}
                     ></TextInput>
+                    <TouchableOpacity style={styles.genRandNumber}
+                        onPress={genRandomNumber}
+                    >
+                        <Icon style={styles.genRandNumberIcon}
+                            name="dice"
+                        />
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.inputView}>
@@ -188,6 +194,15 @@ const styles = StyleSheet.create({
     errorText: {
         color: '#ff0000',
         fontSize: 13
+    },
+    genRandNumber: {
+        position: 'absolute',
+        bottom: 10,
+        left: '93%'
+    },
+    genRandNumberIcon: {
+        fontSize: 20,
+        color: '#777'
     },
     formView: {
         backgroundColor: '#fff',
