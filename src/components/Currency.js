@@ -1,4 +1,5 @@
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import LinearGradient from "react-native-linear-gradient";
 import { useDispatch } from "react-redux";
 import { countCut, getCurrencySymbol } from "../middleWare/currencyFormater";
 import { selectCurrency } from "../store/slices/currencyReducer";
@@ -17,7 +18,10 @@ export default function Currency({ cur }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.currencyBox}>
+            <LinearGradient style={styles.currencyBox}
+                start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                colors={['#6ccfff', '#00adfd', '#0088ca']}
+            >
                 <View style={styles.walletBox}>
                     <Text style={styles.waletTxt}>{countCut(count)} {getCurrencySymbol(type)}</Text>
                 </View>
@@ -28,7 +32,7 @@ export default function Currency({ cur }) {
                 >
                     <Text style={styles.btnTxt}>Поополнить кошелек</Text>
                 </TouchableOpacity>
-            </View>
+            </LinearGradient>
         </View>
     )
 }
@@ -41,7 +45,6 @@ const styles = StyleSheet.create({
     currencyBox: {
         marginHorizontal: 10,
         borderRadius: 10,
-        backgroundColor: "#00abfd",
         paddingHorizontal: 10,
         alignItems: 'center',
     },
