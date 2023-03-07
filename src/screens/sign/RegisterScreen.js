@@ -79,8 +79,9 @@ export default function RegisterScreen() {
     }
 
     function genRandomNumber() {
-        let num = '+7'
-        num += Math.floor(Math.random() * 10000000000)
+        let num = '+79'
+        num += Math.random() * 1000000000000000
+        num = num.slice(0, 12)
         setPhoneNumber(num)
     }
 
