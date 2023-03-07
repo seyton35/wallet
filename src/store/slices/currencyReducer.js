@@ -147,6 +147,7 @@ export const fetchAvailableCurrencies = createAsyncThunk(
             })
             if (res.status == 200) {
                 const data = await res.json()
+                console.log('data', data)
                 return data.availableCurrencies
             } else return []
         } catch (e) {
@@ -231,7 +232,6 @@ export const sendMoneyRequest = createAsyncThunk(
             const data = await res.json()
             dispatch(setToastMessage(data.message))
             if (res.status == 200 || res.status == 202) {
-                // dispatch(fetchAllCurrencyes(idUser))
                 dispatch(popToTop('home'))
             }else dispatch(setErrorMessage(data.error))
         } catch (e) {

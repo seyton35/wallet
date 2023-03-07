@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { storeData, getData, removeData } from "../../middleWare/asyncStorage";
-import { fetchAllCurrencyes, fetchAvailableCurrencies, setActiveBills, setAndStoreDefaultCurrencyAccount, setCurrencyArray, setDefaultCurrencyAccount } from "./currencyReducer";
+import { fetchAvailableCurrencies, setActiveBills, setAndStoreDefaultCurrencyAccount, setCurrencyArray, setDefaultCurrencyAccount } from "./currencyReducer";
 
 export const initialization = createAsyncThunk(
     'state/initialization',
@@ -16,7 +16,9 @@ export const initialization = createAsyncThunk(
                     dispatch(popToTop('home'))
                 }, 1500);
                 dispatch(fetchAvailableCurrencies())
-            } else dispatch(popToTop('login'))
+            } else setTimeout(() => {
+                dispatch(popToTop('login'))
+            }, 1500);
         } catch (e) {
             console.log(e.message);
         }
@@ -25,7 +27,7 @@ export const initialization = createAsyncThunk(
 
 export const fetchUserConfig = createAsyncThunk(
     'state/fetchUserConfig',
-    async (idUser, { dispatch, getState }) => {
+    async (idUser, { dispatch }) => {
         try {
             const res = await fetch(
                 'https://1220295-cj30407.tw1.ru/api/database/fetchUserConfig', {
@@ -171,6 +173,7 @@ export const registerNewUser = createAsyncThunk(
                 dispatch(setAndStoreDefaultCurrencyAccount(data.defaultCurrencyAccount))
                 dispatch(setIsLogined(true))
                 dispatch(popToTop('home'))
+                dispatch(fetchAvailableCurrencies())
                 dispatch(setToastAndroidMessage(data.message))
             } else dispatch(setErrorMessage(data.error))
         } catch (e) {
@@ -202,6 +205,7 @@ export const loginUser = createAsyncThunk(
                 }))
                 dispatch(setIsLogined(true))
                 dispatch(popToTop('home'))
+                dispatch(fetchAvailableCurrencies())
                 dispatch(setToastAndroidMessage(data.message))
             } else dispatch(setErrorMessage(data.error))
         } catch (e) {
@@ -282,11 +286,11 @@ const stateSlice = createSlice({
                 phoneNumber: null,
             }
             state.token = null
-            state.pushNotificationSettings ={
-                refill:null,
-                writeOff:null,
-                incomingBill:null,
-                promotions:null,
+            state.pushNotificationSettings = {
+                refill: null,
+                writeOff: null,
+                incomingBill: null,
+                promotions: null,
             }
             removeData('userData')
             removeData('defaultCurrencyAccount')
