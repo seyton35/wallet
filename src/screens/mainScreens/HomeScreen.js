@@ -1,8 +1,9 @@
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity, FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import IconEntypo from "react-native-vector-icons/Entypo";
 import IconIonicons from "react-native-vector-icons/Ionicons";
+import IconAntDesign from "react-native-vector-icons/AntDesign";
 
 import Header from "../../components/Header";
 import Bill from "../../components/Bill";
@@ -39,7 +40,6 @@ export default function Home() {
     function allBillsBtnHandler() {
         dispatch(navigate('activeBills'))
     }
-
 
     return (
         <View style={styles.container}>
@@ -98,12 +98,23 @@ export default function Home() {
                                 </View>
                                 <IconEntypo name="chevron-right" style={styles.usefullitemIcon} />
                             </TouchableOpacity>
+
                             <TouchableOpacity style={styles.usefullitemBtn}
                                 onPress={() => dispatch(navigate('currencyRates'))}
                             >
                                 <View style={styles.usefullitemBox}>
                                     <IconIonicons name="bar-chart-outline" style={styles.usefullitemIcon} />
                                     <Text style={styles.usefullitemTxt}>курсы валют</Text>
+                                </View>
+                                <IconEntypo name="chevron-right" style={styles.usefullitemIcon} />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.usefullitemBtn}
+                                onPress={() => dispatch(navigate('about'))}
+                            >
+                                <View style={styles.usefullitemBox}>
+                                    <IconAntDesign name="questioncircleo" style={styles.usefullitemIcon} />
+                                    <Text style={styles.usefullitemTxt}>о приложении</Text>
                                 </View>
                                 <IconEntypo name="chevron-right" style={styles.usefullitemIcon} />
                             </TouchableOpacity>

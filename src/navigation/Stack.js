@@ -23,9 +23,11 @@ import CurrencyСonversionScreen from "../screens/money_transfer/CurrencyСonver
 import SendMoneyScreen from "../screens/money_transfer/SendMoneyScreen";
 // currency
 import ServicesScreen from "../screens/ServicesScreen";
-import CurrencyRatesScreen from "../screens/usefull/CurrencyRatesScreen";
 
 import BillInfoScreen from "../screens/billsManagement/BillInfoScreen";
+//usefull 
+import CurrencyRatesScreen from "../screens/usefull/CurrencyRatesScreen";
+import AboutScreen from "../screens/usefull/AboutScreen";
 // bill lists
 import ActiveBillsScreen from "../screens/ActiveBilsScreen";
 import BillCategoriesScreen from "../screens/billsManagement/BillCategoriesScreen";
@@ -57,6 +59,7 @@ export default function Stack() {
             case 'billInfo': return <BillInfoScreen />
 
             case 'service': return <ServicesScreen />
+            case 'about': return <AboutScreen />
             case 'currencyRates': return <CurrencyRatesScreen />
             case 'sendMoney': return <SendMoneyScreen />
             case 'currencyСonversion': return <CurrencyСonversionScreen />
