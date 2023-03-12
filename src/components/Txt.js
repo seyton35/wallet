@@ -3,11 +3,14 @@ import { useSelector } from 'react-redux'
 
 import { translate } from '../middleWare/translator/translator'
 
-export default function Txt({ children, ...props }) {
+export default function Txt({ children, noTranslate, ...props }) {
     const { language } = useSelector(s => s.state)
     return (
         <Text style={styles.text} {...props}>
-            {translate(children, lang = language)}
+            {noTranslate
+                ? children
+                : translate(children, lang = language)
+            }
         </Text>
     )
 }

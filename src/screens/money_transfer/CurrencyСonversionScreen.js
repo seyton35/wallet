@@ -1,16 +1,19 @@
 import { Picker } from '@react-native-picker/picker'
 import { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Pressable } from 'react-native'
+import { View, StyleSheet, TextInput, TouchableOpacity, ScrollView, Pressable } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-
-import { fetchExchangeRate, resetMessage, currencyСonversion, setErrorMessage } from '../../store/slices/currencyReducer'
+import Octicons from 'react-native-vector-icons/Octicons'
+import Entypo from 'react-native-vector-icons/Entypo'
 
 import Header from '../../components/Header'
+import Txt from '../../components/Txt'
+
+import { fetchExchangeRate, currencyСonversion, } from '../../store/slices/currencyReducer'
 import { countCut, getCurrencySymbol } from '../../middleWare/currencyFormater'
-import OcticonsIcon from 'react-native-vector-icons/Octicons'
-import EntypoIcon from 'react-native-vector-icons/Entypo'
+import { translate } from '../../middleWare/translator/translator'
 
 export default function CurrencyСonversionScreen() {
+    const { language } = useSelector(s => s.state)
     const { selectedCurrency } = useSelector(s => s.currency)
     const [donor, setDonor] = useState()
     const [receiver, setReceiver] = useState()
@@ -58,7 +61,9 @@ export default function CurrencyСonversionScreen() {
         getRate()
     }, [donor])
 
-
+    function tr(text) {
+        return translate(text, language)
+    }
 
     const swapCurrencies = () => {
         const cup = donor
@@ -127,7 +132,7 @@ export default function CurrencyСonversionScreen() {
 
     function conversion() {
         if (sum <= 0) {
-            setMessage('введите сумму')
+            setMessage(tr('введите сумму'))
             return
         }
         if (!message) {
@@ -141,8 +146,8 @@ export default function CurrencyСonversionScreen() {
     }
 
     function showErrors() {
-        if (message) return <Text style={styles.message}>{message}</Text>
-        else if (error) return <Text style={styles.message}>{error}</Text>
+        if (message) return <Txt style={styles.message}>{message}</Txt>
+        else if (error) return <Txt style={styles.message}>{error}</Txt>
     }
 
     return (
@@ -152,7 +157,7 @@ export default function CurrencyСonversionScreen() {
             <ScrollView style={styles.screenScroll}>
 
                 <View style={styles.titleBox}>
-                    <Text style={styles.titleTxt}>Перевод между счетами</Text>
+                    <Txt style={styles.titleTxt}>Перевод между счетами</Txt>
                 </View>
                 <View style={styles.form}>
                     <View style={styles.pickersBox}>
@@ -161,12 +166,12 @@ export default function CurrencyСonversionScreen() {
                             <Pressable style={styles.switchCurrBtn}
                                 onPress={swapCurrencies}
                             >
-                                <OcticonsIcon name='arrow-switch' style={styles.icon} />
+                                <Octicons name='arrow-switch' style={styles.icon} />
                             </Pressable>
                         </View>
 
                         <View style={styles.pickerBox}>
-                            <Text style={styles.labelTxt}>со счета</Text>
+                            <Txt style={styles.labelTxt}>со счета</Txt>
                             <Picker
                                 selectedValue={donor}
                                 onValueChange={(val) => setPickerHandler('donor', val)}
@@ -176,13 +181,13 @@ export default function CurrencyСonversionScreen() {
                                     return (
                                         <Picker.Item
                                             key={index}
-                                            label={`Счет Wallet: ${countCut(cur.count)} ${cur.type}`}
+                                            label={`${tr('Счет Wallet:')} ${countCut(cur.count)} ${cur.type}`}
                                             value={cur.type}
                                         />
                                     )
                                 })}
                             </Picker>
-                            <Text style={styles.labelTxt}>на счет</Text>
+                            <Txt style={styles.labelTxt}>на счет</Txt>
                             <Picker
                                 selectedValue={receiver}
                                 onValueChange={(val) => setPickerHandler('receiver', val)}
@@ -192,7 +197,7 @@ export default function CurrencyСonversionScreen() {
                                     return (
                                         <Picker.Item
                                             key={index}
-                                            label={`Счет Wallet: ${countCut(cur.count)} ${cur.type}`}
+                                            label={`${tr('Счет Wallet:')} ${countCut(cur.count)} ${cur.type}`}
                                             value={cur.type}
                                         />
                                     )
@@ -204,13 +209,13 @@ export default function CurrencyСonversionScreen() {
                     <View style={styles.inputBlock}>
                         <View style={styles.inputLabelBox}>
                             {sum != ''
-                                ? <Text style={styles.inputLabelTxt}>Сумма в {getCurrencySymbol(receiver)}</Text>
+                                ? <Txt style={styles.inputLabelTxt}>{tr('Сумма в')} {getCurrencySymbol(receiver)}</Txt>
                                 : null
                             }
                         </View>
                         <TextInput
                             style={styles.input}
-                            placeholder='Сумма'
+                            placeholder={tr('Сумма')}
                             value={sum}
                             onChangeText={sumHandler}
                             keyboardType='decimal-pad'
@@ -219,13 +224,13 @@ export default function CurrencyСonversionScreen() {
                             ? <Pressable style={styles.inputCrossBox}
                                 onPress={resetSum}
                             >
-                                <EntypoIcon style={styles.inputCrossIcon} name='cross' />
+                                <Entypo style={styles.inputCrossIcon} name='cross' />
                             </Pressable>
                             : null
                         }
                         <View style={styles.limitBox}>
                             {limmits
-                                ? <Text style={styles.limitTxt}>От {limmits.limMin} {getCurrencySymbol(receiver)} до {limmits.limMax} {getCurrencySymbol(receiver)}</Text>
+                                ? <Txt style={styles.limitTxt}>{tr('от')} {limmits.limMin} {getCurrencySymbol(receiver)} {tr('до')} {limmits.limMax} {getCurrencySymbol(receiver)}</Txt>
                                 : null
                             }
                         </View>
@@ -234,20 +239,20 @@ export default function CurrencyСonversionScreen() {
                     {sum != ''
                         ? <View style={styles.commissionBlock}>
                             <View style={styles.commissionBox}>
-                                <Text style={styles.commissionTxt}>комиссия Wallet:</Text>
-                                <Text style={styles.commissionTxt}>0 {getCurrencySymbol(receiver)}</Text>
+                                <Txt style={styles.commissionTxt}>комиссия Wallet:</Txt>
+                                <Txt style={styles.commissionTxt}>0 {getCurrencySymbol(receiver)}</Txt>
                             </View>
                             <View style={styles.commissionBox}>
-                                <Text style={styles.commissionTxt}>Курс конвертации:</Text>
-                                <Text style={styles.commissionTxt}>{showConversionRate()}</Text>
+                                <Txt style={styles.commissionTxt}>Курс конвертации:</Txt>
+                                <Txt style={styles.commissionTxt}>{showConversionRate()}</Txt>
                             </View>
                             <View style={styles.commissionBox}>
-                                <Text style={styles.ammountTxt}>Будет зачислено:</Text>
-                                <Text style={styles.ammountTxt}>{sum} {getCurrencySymbol(receiver)}</Text>
+                                <Txt style={styles.ammountTxt}>Будет зачислено:</Txt>
+                                <Txt style={styles.ammountTxt}>{sum} {getCurrencySymbol(receiver)}</Txt>
                             </View>
                             <View style={styles.commissionBox}>
-                                <Text style={styles.ammountTxt}>Будет списано:</Text>
-                                <Text style={styles.ammountTxt}>{showWriteOffAmmount()}</Text>
+                                <Txt style={styles.ammountTxt}>Будет списано:</Txt>
+                                <Txt style={styles.ammountTxt}>{showWriteOffAmmount()}</Txt>
                             </View>
                         </View>
                         : null
@@ -257,7 +262,7 @@ export default function CurrencyСonversionScreen() {
                     <TouchableOpacity style={styles.conversionBtn}
                         onPress={conversion}
                     >
-                        <Text style={styles.conversionBtnTxt}>Перевести</Text>
+                        <Txt style={styles.conversionBtnTxt}>Перевести</Txt>
                     </TouchableOpacity>
 
                 </View>

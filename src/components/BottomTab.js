@@ -1,9 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, } from 'react-native'
+import { StyleSheet, TouchableOpacity, } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-
 import { useDispatch, useSelector } from 'react-redux';
+
+import Txt from './Txt';
 
 import { popToTop } from '../store/slices/stateReducer';
 
@@ -53,7 +54,7 @@ export default function BottomTab({ tabName }) {
             onPress={tabBtnHandler}
         >
             {buttonIconFormater(tabName)}
-            <Text style={[styles.tabBtnTxt,isActiveText()]}>{buttonTextFormater(tabName)}</Text>
+            <Txt style={[styles.tabBtnTxt, isActiveText()]}>{buttonTextFormater(tabName)}</Txt>
         </TouchableOpacity>
     )
 }
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     },
     tabBtnTxt: {
         color: '#555',
-        fontSize:14
+        fontSize: 14
     },
     tabIcon: {
         color: '#555',

@@ -1,6 +1,8 @@
-import { StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import { useDispatch } from 'react-redux'
-import IconEntypo from "react-native-vector-icons/Entypo";
+import Entypo from "react-native-vector-icons/Entypo";
+
+import Txt from './Txt';
 
 import { navigate } from '../store/slices/stateReducer'
 
@@ -11,8 +13,8 @@ export default function ListArrowButton({ screen, title }) {
         <TouchableOpacity style={styles.btn}
             onPress={() => dispatch(navigate(screen))}
         >
-            <Text style={styles.btnTxt}>{title}</Text>
-            <IconEntypo name="chevron-right" style={styles.btnIcon} />
+            <Txt style={styles.btnTxt}>{title}</Txt>
+            <Entypo name="chevron-right" style={styles.btnIcon} />
         </TouchableOpacity>
     )
 }

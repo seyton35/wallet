@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { useEffect } from 'react'
+import { Image, StyleSheet,  View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { flag40x40Assets } from '../../../assets/flag40x40Assets'
 
 import Header from '../../components/Header'
+import Txt from '../../components/Txt'
 import Loading from '../../components/Loading'
+
+import { flag40x40Assets } from '../../../assets/flag40x40Assets'
 import { fetchAvailableCurrencyRates } from '../../store/slices/currencyReducer'
 
 export default function CurrencyRatesScreen() {
@@ -28,13 +30,13 @@ export default function CurrencyRatesScreen() {
                 <Loading />
                 : <>
                     <View style={[styles.rateBlock, { paddingVertical: 0, paddingTop: 10 }]} >
-                        <Text style={styles.rateTitleTxt}>Валюта</Text>
+                        <Txt style={styles.rateTitleTxt}>Валюта</Txt>
                         <View style={styles.rateValBox}>
                             <View style={styles.rateBoxItem}>
-                                <Text style={styles.rateTitleTxt}>Покупка</Text>
+                                <Txt style={styles.rateTitleTxt}>Покупка</Txt>
                             </View>
                             <View style={styles.rateBoxItem}>
-                                <Text style={styles.rateTitleTxt}>Продажа</Text>
+                                <Txt style={styles.rateTitleTxt}>Продажа</Txt>
                             </View>
                         </View>
                     </View>
@@ -55,14 +57,14 @@ export default function CurrencyRatesScreen() {
                                             style={{ width: 40, height: 40, borderRadius: 20, }}
                                         />
                                     </View>
-                                    <Text style={styles.rateCurTxt}>{type}</Text>
+                                    <Txt style={styles.rateCurTxt}>{type}</Txt>
                                 </View>
                                 <View style={styles.rateValBox}>
                                     <View style={styles.rateBoxItem}>
-                                        <Text style={styles.rateValTxt}>{val}</Text>
+                                        <Txt style={styles.rateValTxt}>{val}</Txt>
                                     </View>
                                     <View style={styles.rateBoxItem}>
-                                        <Text style={styles.rateValTxt}>{val}</Text>
+                                        <Txt style={styles.rateValTxt}>{val}</Txt>
                                     </View>
                                 </View>
                             </View>)

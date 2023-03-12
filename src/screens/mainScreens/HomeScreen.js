@@ -1,24 +1,26 @@
 import { useEffect, useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, FlatList } from "react-native";
+import { View, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import IconEntypo from "react-native-vector-icons/Entypo";
 import IconIonicons from "react-native-vector-icons/Ionicons";
 import IconAntDesign from "react-native-vector-icons/AntDesign";
 
 import Header from "../../components/Header";
+import Txt from "../../components/Txt";
 import Bill from "../../components/Bill";
 import CurrencyScrollView from "../../components/CurrencyScrollView";
 import BottomTabsPanel from "../../components/BottomTabsPanel";
 
 import { fetchActiveBills, fetchAllCurrencyes } from "../../store/slices/currencyReducer";
 import { navigate } from "../../store/slices/stateReducer";
+import { translate } from "../../middleWare/translator/translator";
 
 export default function Home() {
     const [refreshing, setRefreshing] = useState(false)
 
-    const { currencyArray } = useSelector(s => s.currency)
+    const { currencyArray, activeBills } = useSelector(s => s.currency)
+    const { language } = useSelector(s => s.state)
     const { idUser } = useSelector(s => s.state.userData)
-    const { activeBills } = useSelector(s => s.currency)
 
     const dispatch = useDispatch()
 
@@ -55,14 +57,14 @@ export default function Home() {
                         {activeBills.length > 0
                             ?
                             <View style={styles.issuesScroll}>
-                                <Text style={styles.issuesScrollTxt}>
+                                <Txt style={styles.issuesScrollTxt}>
                                     {function () {
                                         const len = activeBills.length
-                                        if (len == 1) return len + ' неоплаченный счет'
-                                        else if (5 > len || len > 1) return len + ' неоплаченных счета'
-                                        else return len + ' неоплаченных счетов'
+                                        if (len == 1) return len + ' ' + translate('неоплаченный счет', language)
+                                        else if (5 > len || len > 1) return len + ' ' + translate('неоплаченных счета',language)
+                                        else return len + ' ' + translate('неоплаченных счетов',language)
                                     }()}
-                                </Text>
+                                </Txt>
                                 {activeBills.map((bill, index) => {
                                     if (index >= 3) {
                                         return null
@@ -77,7 +79,7 @@ export default function Home() {
                                     <TouchableOpacity style={styles.allBillsBtn}
                                         onPress={allBillsBtnHandler}
                                     >
-                                        <Text style={styles.allIssuesBtnTxt}>Все счета</Text>
+                                        <Txt style={styles.allIssuesBtnTxt}>Все счета</Txt>
                                     </TouchableOpacity>
                                     : null
                                 }
@@ -87,14 +89,14 @@ export default function Home() {
 
                         <View style={styles.usefullBlock}>
                             <View style={styles.blockLabelBox}>
-                                <Text style={styles.blockLabelTxt}>Полезное</Text>
+                                <Txt style={styles.blockLabelTxt}>Полезное</Txt>
                             </View>
                             <TouchableOpacity style={styles.usefullitemBtn}
                                 onPress={() => dispatch(navigate('billCategories'))}
                             >
                                 <View style={styles.usefullitemBox}>
                                     <IconIonicons name="file-tray-full-outline" style={styles.usefullitemIcon} />
-                                    <Text style={styles.usefullitemTxt}>счета к оплате</Text>
+                                    <Txt style={styles.usefullitemTxt}>счета к оплате</Txt>
                                 </View>
                                 <IconEntypo name="chevron-right" style={styles.usefullitemIcon} />
                             </TouchableOpacity>
@@ -104,7 +106,7 @@ export default function Home() {
                             >
                                 <View style={styles.usefullitemBox}>
                                     <IconIonicons name="bar-chart-outline" style={styles.usefullitemIcon} />
-                                    <Text style={styles.usefullitemTxt}>курсы валют</Text>
+                                    <Txt style={styles.usefullitemTxt}>курсы валют</Txt>
                                 </View>
                                 <IconEntypo name="chevron-right" style={styles.usefullitemIcon} />
                             </TouchableOpacity>
@@ -114,7 +116,7 @@ export default function Home() {
                             >
                                 <View style={styles.usefullitemBox}>
                                     <IconAntDesign name="questioncircleo" style={styles.usefullitemIcon} />
-                                    <Text style={styles.usefullitemTxt}>о приложении</Text>
+                                    <Txt style={styles.usefullitemTxt}>о приложении</Txt>
                                 </View>
                                 <IconEntypo name="chevron-right" style={styles.usefullitemIcon} />
                             </TouchableOpacity>
@@ -153,7 +155,7 @@ const styles = StyleSheet.create({
         width: '90%',
         marginHorizontal: 20,
         borderRadius: 10,
-        padding: 20
+        padding: 20,
     },
     issuesScrollTxt: {
         color: '#000',

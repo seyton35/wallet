@@ -1,5 +1,6 @@
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { Modal, StyleSheet,  TouchableOpacity, View } from 'react-native'
+
+import Txt from './Txt'
 
 export default function ModalButtonList({ visible, onPress, data, onClose, animationType = "fade" }) {
 
@@ -21,7 +22,7 @@ export default function ModalButtonList({ visible, onPress, data, onClose, anima
                         <TouchableOpacity key={index} style={styles.itemBtn}
                             onPress={() => onPress(el, index)}
                         >
-                            <Text style={styles.itemBtnText}>{el}</Text>
+                            <Txt style={styles.itemBtnText}>{el}</Txt>
                         </TouchableOpacity>
                     )}
                 </TouchableOpacity>

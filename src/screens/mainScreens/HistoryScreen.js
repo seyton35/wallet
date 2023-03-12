@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
-import { StyleSheet, Text, View, Image, FlatList, Pressable } from 'react-native'
+import { StyleSheet, View, Image, FlatList, Pressable } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import Icon from 'react-native-vector-icons/AntDesign'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import { SwipeablePanel } from 'rn-swipeable-panel'
 
 import Header from '../../components/Header'
+import Txt from '../../components/Txt'
+import Loading from '../../components/Loading'
+import BottomTabsPanel from '../../components/BottomTabsPanel'
 
 import { allRus, dayMonthRUS, dayMonthYearRUS, getDayMonthYear } from '../../middleWare/dataFormater'
 import { fetchClosedBills } from '../../store/slices/currencyReducer'
-import Loading from '../../components/Loading'
-import BottomTabsPanel from '../../components/BottomTabsPanel'
 import { countCut, getCurrencySymbol } from '../../middleWare/currencyFormater'
 
 export default function HistoryScreen() {
@@ -50,7 +51,7 @@ export default function HistoryScreen() {
         payDate.current = { day, month, year }
         if (isShowDate) {
             return <View style={styles.billDateBox}>
-                <Text style={styles.billDateTxt}>{dateString}</Text>
+                <Txt style={styles.billDateTxt}>{dateString}</Txt>
             </View>
         }
     }
@@ -68,7 +69,7 @@ export default function HistoryScreen() {
         if (closedBills.length == 0 && pending == false) {
             return (
                 <View style={styles.billListStatusView}>
-                    <Text style={styles.billListStatusText}> здесь пока ничего нет</Text >
+                    <Txt style={styles.billListStatusText}>здесь пока ничего нет</Txt >
                 </View>)
         }
         else if (closedBills.length == 0 && pending) {
@@ -76,7 +77,7 @@ export default function HistoryScreen() {
         }
     }
 
-    function showStatusRUS(status) {
+    function getStatusText(status) {
         switch (status) {
             case 'rejected': return 'Отменен'
             case 'active': return 'Выставлен'
@@ -93,12 +94,12 @@ export default function HistoryScreen() {
     function showBalance(bill) {
         return (
             < View style={styles.balanceView}>
-                <Text style={styles.billInfoSumTxt}>
+                <Txt style={styles.billInfoSumTxt}>
                     {bill.receiver.id == idUser
                         ? '+' + countCut(bill.receiver.sum) + getCurrencySymbol(bill.receiver.currency)
                         : '-' + countCut(bill.sender.sum) + getCurrencySymbol(bill.sender.currency)
                     }
-                </Text>
+                </Txt>
             </View>
         )
     }
@@ -120,41 +121,41 @@ export default function HistoryScreen() {
             <View style={styles.billPanelContainer}>
                 <View style={styles.billPanelBasicInfoView}>
                     <Image source={{ uri: 'https://reactjs.org/logo-og.png' }} style={styles.billPanelBasicInfoPic} />
-                    <Text style={styles.billPanelBasicInfoTypeTxt}>{bill.type}</Text>
-                    <Text style={styles.billPanelBasicInfoNumberTxt}>{bill.sender.number}</Text>
-                    <Text style={[styles.billPanelBasicInfoSumTxt, profitStyle]}>{balance}</Text>
+                    <Txt style={styles.billPanelBasicInfoTypeTxt}>{bill.type}</Txt>
+                    <Txt style={styles.billPanelBasicInfoNumberTxt}>{bill.sender.number}</Txt>
+                    <Txt style={[styles.billPanelBasicInfoSumTxt, profitStyle]}>{balance}</Txt>
                 </View>
 
                 {bill.comment
                     ? <View style={styles.billPanelInfoCommentView}>
-                        <Text style={styles.billPanelInfoCommentLabel}>Комментарий</Text>
-                        <Text style={styles.billPanelInfoCommentTxt}>{bill.comment}</Text>
+                        <Txt style={styles.billPanelInfoCommentLabel}>Комментарий</Txt>
+                        <Txt noTranslate={true} style={styles.billPanelInfoCommentTxt}>{bill.comment}</Txt>
                     </View>
                     : null
                 }
 
                 <View style={styles.billPanelInfoView}>
-                    <Text style={styles.billPanelInfoLargeLabel}>Детали платежа</Text>
+                    <Txt style={styles.billPanelInfoLargeLabel}>Детали платежа</Txt>
                 </View>
                 <View style={styles.billPanelInfoView}>
-                    <Text style={styles.billPanelInfoLabel}>Статус</Text>
-                    <Text style={styles.billPanelInfoTxt}>{showStatusRUS(bill.status)}</Text>
+                    <Txt style={styles.billPanelInfoLabel}>Статус</Txt>
+                    <Txt style={styles.billPanelInfoTxt}>{getStatusText(bill.status)}</Txt>
                 </View>
                 <View style={styles.billPanelInfoView}>
-                    <Text style={styles.billPanelInfoLabel}>Дата и время</Text>
-                    <Text style={styles.billPanelInfoTxt}>{allRus(bill.registerDate)}</Text>
+                    <Txt style={styles.billPanelInfoLabel}>Дата и время</Txt>
+                    <Txt style={styles.billPanelInfoTxt}>{allRus(bill.registerDate)}</Txt>
                 </View>
                 <View style={styles.billPanelInfoView}>
-                    <Text style={styles.billPanelInfoLabel}>Сумма</Text>
-                    <Text style={styles.billPanelInfoTxt}>{countCut(bill.sender.sum)} {getCurrencySymbol(bill.sender.currency)}</Text>
+                    <Txt style={styles.billPanelInfoLabel}>Сумма</Txt>
+                    <Txt style={styles.billPanelInfoTxt}>{countCut(bill.sender.sum)} {getCurrencySymbol(bill.sender.currency)}</Txt>
                 </View>
                 <View style={styles.billPanelInfoView}>
-                    <Text style={styles.billPanelInfoLabel}>Поставщик услуг</Text>
-                    <Text style={styles.billPanelInfoTxt}>{bill.type}</Text>
+                    <Txt style={styles.billPanelInfoLabel}>Поставщик услуг</Txt>
+                    <Txt style={styles.billPanelInfoTxt}>{bill.type}</Txt>
                 </View>
                 <View style={styles.billPanelInfoView}>
-                    <Text style={styles.billPanelInfoLabel}>Номер счета</Text>
-                    <Text style={styles.billPanelInfoTxt}>{bill.sender.number}</Text>
+                    <Txt style={styles.billPanelInfoLabel}>Номер счета</Txt>
+                    <Txt style={styles.billPanelInfoTxt}>{bill.sender.number}</Txt>
                 </View>
             </View>
         )
@@ -171,18 +172,18 @@ export default function HistoryScreen() {
                         <View style={styles.bilPicBox}>
                             <Image source={{ uri: 'https://reactjs.org/logo-og.png' }} style={styles.billPic} />
                             {bill.status == 'rejected'
-                                ? <Icon name='exclamationcircle' style={styles.billRejectedIcon} />
+                                ? <AntDesign name='exclamationcircle' style={styles.billRejectedIcon} />
                                 : null
                             }
                         </View>
                         <View style={styles.billInfoBox}>
-                            <Text style={styles.billInfoTypeTxt}>{bill.type}</Text>
-                            <Text style={styles.billInfoSenderTxt}>
+                            <Txt style={styles.billInfoTypeTxt}>{bill.type}</Txt>
+                            <Txt style={styles.billInfoSenderTxt}>
                                 {bill.sender.id == idUser
                                     ? bill.receiver.number
                                     : bill.sender.number
                                 }
-                            </Text>
+                            </Txt>
                         </View>
                     </View>
                     {showBalance(bill)}
@@ -191,7 +192,7 @@ export default function HistoryScreen() {
                     bill.comment
                         ?
                         <View style={styles.billInfoCommentView}>
-                            <Text style={styles.billInfoCommentTxt}>{bill.comment}</Text>
+                            <Txt style={styles.billInfoCommentTxt}>{bill.comment}</Txt>
                         </View>
                         : null
                 }

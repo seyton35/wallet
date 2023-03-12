@@ -1,19 +1,26 @@
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import Icon from 'react-native-vector-icons/Entypo'
+import Entypo from 'react-native-vector-icons/Entypo'
 
 import Header from '../components/Header'
+import Txt from '../components/Txt'
 
 import { rejectBill } from '../store/slices/currencyReducer'
 import { navigate } from '../store/slices/stateReducer'
 import * as dataFormater from '../middleWare/dataFormater'
 import { getCurrencySymbol } from '../middleWare/currencyFormater'
+import { translate } from '../middleWare/translator/translator'
 
 export default function ActiveBillsScreen() {
+    const { language } = useSelector(s => s.state)
     const { activeBills } = useSelector(s => s.currency)
     const { idUser } = useSelector(s => s.state.userData)
 
     const dispatch = useDispatch()
+
+    function tr(text) {
+        return translate(text, language)
+    }
 
     function billBtnHandler(bill) {
         dispatch(navigate({
@@ -24,15 +31,15 @@ export default function ActiveBillsScreen() {
 
     function rejectBillBtnHandler(bill) {
         Alert.alert(
-            "Отклонить счет",
-            `вы дейсвительно хотите отклонить этот счет?`,
+            tr("Отклонить счет"),
+            tr("вы дейсвительно хотите отклонить этот счет?"),
             [
                 {
-                    text: 'отмена',
+                    text: tr('отмена'),
                     onPress: null
                 },
                 {
-                    text: 'отклонить',
+                    text: tr('отклонить'),
                     onPress: () => {
                         dispatch(rejectBill({
                             idUser, idBill: bill._id
@@ -53,14 +60,14 @@ export default function ActiveBillsScreen() {
                         onPress={() => billBtnHandler(bill)}
                     >
                         <View style={styles.billInfoView}>
-                            <Text style={styles.billInfoSenderTxt}>{bill.sender.number}</Text>
-                            <Text style={styles.billInfoSumTxt}>{bill.sender.sum} {getCurrencySymbol(bill.sender.currency)}</Text>
-                            <Text style={styles.billInfoDateTxt}>{dataFormater.allRus(bill.registerDate)}</Text>
+                            <Txt style={styles.billInfoSenderTxt}>{bill.sender.number}</Txt>
+                            <Txt style={styles.billInfoSumTxt}>{bill.sender.sum} {getCurrencySymbol(bill.sender.currency)}</Txt>
+                            <Txt style={styles.billInfoDateTxt}>{dataFormater.allRus(bill.registerDate)}</Txt>
                         </View>
                         <TouchableOpacity style={styles.rejectBillBtn}
                             onPress={() => rejectBillBtnHandler(bill)}
                         >
-                            <Icon name='dots-three-vertical' style={styles.rejectBillIcon}/>
+                            <Entypo name='dots-three-vertical' style={styles.rejectBillIcon} />
                         </TouchableOpacity>
                     </TouchableOpacity>
                 })}

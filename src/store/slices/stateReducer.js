@@ -209,7 +209,7 @@ export const registerNewUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
     'state/loginUser',
-    async ({ phoneNumber, password }, { dispatch }) => {
+    async ({ phoneNumber, password }, { dispatch, getState }) => {
         try {
             const res = await fetch('https://1220295-cj30407.tw1.ru/api/auth/loginUser', {
                 method: 'POST',

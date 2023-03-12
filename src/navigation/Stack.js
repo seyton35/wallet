@@ -2,8 +2,6 @@ import { StyleSheet, View } from "react-native";
 
 import { useSelector } from "react-redux";
 
-// components
-import BottomTab from '../components/BottomTab'
 // screens
 import GreetingScreen from "../screens/noStack/GreetingScreen";
 import Error from "../screens/ErrorScreen";

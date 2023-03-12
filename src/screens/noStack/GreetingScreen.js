@@ -1,7 +1,10 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, View } from 'react-native'
 import { useSelector } from 'react-redux'
-import { LogoAssets } from '../../../assets/logoAssets'
+
 import LoadingSpiner from '../../components/animated/LoadingSpiner'
+import Txt from '../../components/Txt'
+
+import { LogoAssets } from '../../../assets/logoAssets'
 
 export default function GreetingScreen() {
   const loading = useSelector(s => s.state.loading)
@@ -13,13 +16,13 @@ export default function GreetingScreen() {
           source={LogoAssets['Wallet']}
           style={styles.LogoPic}
         />
-        <Text style={styles.LogoText}>Wallet</Text>
-        <Text style={styles.text}>не является настоящим банком</Text>
+        <Txt style={styles.LogoText}>Wallet</Txt>
+        <Txt style={styles.text}>не является настоящим банком</Txt>
       </View>
       <View style={styles.greetingBox}>
         {loading
           ? <View style={styles.loadingBox}>
-            <Text style={styles.text}>loading... </Text>
+            <Txt style={styles.text}>загрузка</Txt>
             <View style={styles.iconBox}>
               <LoadingSpiner size={20} />
             </View>
@@ -35,12 +38,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor:'#fff'
+    backgroundColor: '#fff'
   },
   greetingBox: {
     height: '50%',
     justifyContent: 'flex-end',
-    alignItems:'center'
+    alignItems: 'center'
   },
   LogoPic: {
     width: 50,
@@ -52,7 +55,7 @@ const styles = StyleSheet.create({
   },
   loadingBox: {
     height: '50%',
-
+    paddingRight: 5,
     flexDirection: 'row',
     alignItems: 'center',
   },

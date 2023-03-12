@@ -1,9 +1,10 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, } from "react-native"
+import { Image, ScrollView, StyleSheet, TouchableOpacity, View, } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import Header from "../../components/Header"
+import Txt from "../../components/Txt"
 import BottomTabsPanel from "../../components/BottomTabsPanel"
+
 import { navigate } from "../../store/slices/stateReducer"
 import { LogoAssets } from "../../../assets/logoAssets"
 
@@ -39,7 +40,7 @@ export default function ServicesScreen() {
                                     />
                                 </View>
                                 <View style={styles.serviceView}>
-                                    <Text style={styles.serviceTxt}>{service.title}</Text>
+                                    <Txt style={styles.serviceTxt}>{service.title}</Txt>
                                 </View>
                             </TouchableOpacity>
                         )

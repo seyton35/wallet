@@ -1,6 +1,6 @@
-import { Animated, StyleSheet, Text, View } from 'react-native'
+import { Animated, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import Icon from 'react-native-vector-icons/AntDesign'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
 export default function LoadingSpiner({ size }) {
 
@@ -28,7 +28,7 @@ export default function LoadingSpiner({ size }) {
             <Animated.View style={{
                 transform: [{ rotate: spin }]
             }}>
-                <Icon name='loading1' style={{ color: 'black', fontSize: size }}></Icon>
+                <AntDesign name='loading1' style={{ color: 'black', fontSize: size }}></AntDesign>
             </Animated.View>
         </View>
     )

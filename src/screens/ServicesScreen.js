@@ -1,9 +1,11 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, } from "react-native"
+import { ScrollView, StyleSheet, TouchableOpacity, View, } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
-import OcticonsIcon from 'react-native-vector-icons/Octicons'
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import Octicons from 'react-native-vector-icons/Octicons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import Header from "../components/Header"
+import Txt from "../components/Txt"
+
 import { navigate } from "../store/slices/stateReducer"
 
 export default function ServicesScreen() {
@@ -22,16 +24,16 @@ export default function ServicesScreen() {
 
     const showIcon = (screen) => {
         switch (screen) {
-            case 'currencyСonversion': return <OcticonsIcon name='arrow-switch' style={[styles.icon, {
+            case 'currencyСonversion': return <Octicons name='arrow-switch' style={[styles.icon, {
                 transform: [{ rotate: '90deg' }]
             }]} />
-            case 'clientMoneyRequest': return <MaterialCommunityIcon name='handshake-outline' style={styles.icon} />
+            case 'clientMoneyRequest': return <MaterialCommunityIcons name='handshake-outline' style={styles.icon} />
         }
     }
 
     return (
         <View style={styles.container}>
-            <Header headerText="пополнить счет" />
+            <Header headerText="Пополнить счет" />
             <ScrollView
                 style={styles.serviceScroll}
             >
@@ -46,7 +48,7 @@ export default function ServicesScreen() {
                                     {showIcon(service.screen)}
                                 </View>
                                 <View style={styles.serviceView}>
-                                    <Text style={styles.serviceTxt}>{service.title}</Text>
+                                    <Txt style={styles.serviceTxt}>{service.title}</Txt>
                                 </View>
                             </TouchableOpacity>
                         )

@@ -1,7 +1,8 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 
 import Header from '../../components/Header'
+import Txt from '../../components/Txt'
 
 import { navigate } from '../../store/slices/stateReducer'
 
@@ -18,7 +19,7 @@ export default function BillCategoriesScreen() {
                     <TouchableOpacity style={styles.categoryBtn}
                         onPress={() => dispatch(navigate('activeBills'))}
                     >
-                        <Text style={styles.categoryBtnTxt}>Неоплаченные счета</Text>
+                        <Txt style={styles.categoryBtnTxt}>Неоплаченные счета</Txt>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.categoryView}>
@@ -30,7 +31,7 @@ export default function BillCategoriesScreen() {
                             }
                         }))}
                     >
-                        <Text style={styles.categoryBtnTxt}>Выставленные счета</Text>
+                        <Txt style={styles.categoryBtnTxt}>Выставленные счета</Txt>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.categoryView}>
@@ -43,7 +44,7 @@ export default function BillCategoriesScreen() {
                             }
                         }))}
                     >
-                        <Text style={styles.categoryBtnTxt}>Входящие счета</Text>
+                        <Txt style={styles.categoryBtnTxt}>Входящие счета</Txt>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -51,7 +52,7 @@ export default function BillCategoriesScreen() {
             <TouchableOpacity style={styles.makeBillBtn}
                 onPress={(() => dispatch(navigate('clientMoneyRequest')))}
             >
-                <Text style={styles.makeBillBtnTxt}>Выставить новый счет</Text>
+                <Txt style={styles.makeBillBtnTxt}>Выставить новый счет</Txt>
             </TouchableOpacity>
         </View>
     )

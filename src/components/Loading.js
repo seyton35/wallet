@@ -1,11 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native'
-import LoadingSpiner from './animated/LoadingSpiner'
+import { StyleSheet, View } from 'react-native'
 
+import LoadingSpiner from './animated/LoadingSpiner'
+import Txt from './Txt'
 
 export default function Loading() {
     return (
         <View style={styles.billListStatusView}>
-            <Text style={styles.billListStatusText}>загрузка </Text>
+            <Txt style={styles.billListStatusText}>загрузка</Txt>
             <LoadingSpiner size={17} />
         </View>)
 }
@@ -21,6 +22,7 @@ const styles = StyleSheet.create({
     },
     billListStatusText: {
         fontSize: 17,
-        color: '#000'
+        color: '#000',
+        paddingRight:5
     },
 })

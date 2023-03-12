@@ -1,11 +1,14 @@
 import { useState } from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, TextInput, TouchableOpacity } from 'react-native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { useDispatch, useSelector } from 'react-redux'
+
 import Header from '../../components/Header'
+import Txt from '../../components/Txt'
 
 import { popToTop, registerNewUser, setErrorMessage, setLanguage } from '../../store/slices/stateReducer'
+import { translate } from '../../middleWare/translator/translator'
 
 export default function RegisterScreen() {
     const [phoneNumber, setPhoneNumber] = useState('+')
@@ -18,6 +21,10 @@ export default function RegisterScreen() {
     const { language, errorMessage } = useSelector(s => s.state)
 
     const dispatch = useDispatch()
+
+    function tr(text) {
+        return translate(text, language)
+    }
 
     function phoneNumHandler(val) {
         let num = val.split('')
@@ -33,7 +40,7 @@ export default function RegisterScreen() {
             } else {
                 setIsPhoneOk(false)
                 if (num.length > 11) {
-                    dispatch(setErrorMessage('слишком длинный номер'))
+                    dispatch(setErrorMessage(tr('слишком длинный номер')))
                 } else dispatch(setErrorMessage())
             }
         }
@@ -49,7 +56,7 @@ export default function RegisterScreen() {
     function repeatPasswordHandler(val) {
         setRepeatPassword(val)
         if (val !== password) {
-            dispatch(setErrorMessage('повторный пароль не совпадает'))
+            dispatch(setErrorMessage(tr('повторный пароль не совпадает')))
         } else {
             dispatch(setErrorMessage())
         }
@@ -60,7 +67,7 @@ export default function RegisterScreen() {
             dispatch(setErrorMessage())
             return true
         } else {
-            dispatch(setErrorMessage('повторный пароль не совпадает'))
+            dispatch(setErrorMessage(tr('повторный пароль не совпадает')))
             return false
         }
     }
@@ -71,7 +78,7 @@ export default function RegisterScreen() {
             dispatch(registerNewUser({
                 phoneNumber, password
             }))
-        } else dispatch(setErrorMessage('некорректный логин или пароль'))
+        } else dispatch(setErrorMessage(tr('некорректный логин или пароль')))
     }
 
     function changeAuth() {
@@ -104,30 +111,30 @@ export default function RegisterScreen() {
 
             {errorMessage
                 ? < View style={styles.errorView}>
-                    <Text style={styles.errorText}>{errorMessage}</Text>
+                    <Txt style={styles.errorText}>{errorMessage}</Txt>
                 </View>
                 : null
             }
 
             <View style={styles.changeAuthBox}>
-                <Text style={styles.changeAuthTxt}>уже есть кошелек?</Text>
+                <Txt style={styles.changeAuthTxt}>уже есть кошелек?</Txt>
                 <TouchableOpacity
                     style={styles.changeAuthBtn}
                     onPress={changeAuth}
                 >
-                    <Text style={styles.changeAuthBtnTxt}>войти</Text>
+                    <Txt style={styles.changeAuthBtnTxt}>войти</Txt>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.formView}>
 
                 <View style={styles.titleView}>
-                    <Text style={styles.titleText}>Регистрация</Text>
+                    <Txt style={styles.titleText}>Регистрация</Txt>
                 </View>
 
 
                 <View style={styles.inputView}>
-                    <Text style={styles.text}>мобильный номер</Text>
+                    <Txt style={styles.text}>мобильный номер</Txt>
                     <TextInput style={styles.input}
                         value={phoneNumber}
                         onChangeText={phoneNumHandler}
@@ -144,7 +151,7 @@ export default function RegisterScreen() {
                 </View>
 
                 <View style={styles.inputView}>
-                    <Text style={styles.text}>пароль</Text>
+                    <Txt style={styles.text}>пароль</Txt>
                     <TextInput style={styles.input}
                         value={password}
                         onChangeText={passwordHandler}
@@ -154,7 +161,7 @@ export default function RegisterScreen() {
                 </View>
 
                 <View style={styles.inputView}>
-                    <Text style={styles.text}>пароль повторно</Text>
+                    <Txt style={styles.text}>пароль повторно</Txt>
                     <TextInput style={styles.input}
                         value={repeatPassword}
                         onChangeText={repeatPasswordHandler}
@@ -168,7 +175,7 @@ export default function RegisterScreen() {
             <TouchableOpacity style={styles.btn}
                 onPress={enterBtnHandler}
             >
-                <Text style={styles.btnText}>зарегистрироваться</Text>
+                <Txt style={styles.btnText}>зарегистрироваться</Txt>
             </TouchableOpacity>
         </View>
     )

@@ -1,10 +1,13 @@
 import { useState } from 'react'
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { useDispatch, useSelector } from 'react-redux'
+
 import Header from '../../components/Header'
+import Txt from '../../components/Txt'
 
 import { loginUser, popToTop, setErrorMessage, setLanguage } from '../../store/slices/stateReducer'
+import { translate } from '../../middleWare/translator/translator'
 
 
 export default function LoginScreen() {
@@ -17,6 +20,10 @@ export default function LoginScreen() {
     const { language, errorMessage } = useSelector(s => s.state)
 
     const dispatch = useDispatch()
+
+    function tr(text) {
+        return translate(text, language)
+    }
 
     function phoneNumHandler(val) {
         let num = val.split('')
@@ -32,7 +39,7 @@ export default function LoginScreen() {
             } else {
                 setIsPhoneOk(false)
                 if (num.length > 11) {
-                    dispatch(setErrorMessage('слишком длинный номер'))
+                    dispatch(setErrorMessage(tr('слишком длинный номер')))
                 } else dispatch(setErrorMessage())
             }
         }
@@ -50,7 +57,7 @@ export default function LoginScreen() {
             dispatch(loginUser({
                 phoneNumber, password
             }))
-        } else dispatch(setErrorMessage('некорректный логин или пароль'))
+        } else dispatch(setErrorMessage(tr('некорректный логин или пароль')))
     }
 
     function changeAuth() {
@@ -75,29 +82,29 @@ export default function LoginScreen() {
 
             {errorMessage
                 ? < View style={styles.errorView}>
-                    <Text style={styles.errorText}>{errorMessage}</Text>
+                    <Txt style={styles.errorText}>{errorMessage}</Txt>
                 </View>
                 : null
             }
 
             <View style={styles.changeAuthBox}>
-                <Text style={styles.changeAuthTxt}>еще нет кошелека?</Text>
+                <Txt style={styles.changeAuthTxt}>еще нет кошелека?</Txt>
                 <TouchableOpacity
                     style={styles.changeAuthBtn}
                     onPress={changeAuth}
                 >
-                    <Text style={styles.changeAuthBtnTxt}>зарегистрироваться</Text>
+                    <Txt style={styles.changeAuthBtnTxt}>зарегистрироваться</Txt>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.formView}>
 
                 <View style={styles.titleView}>
-                    <Text style={styles.titleText}>Вход</Text>
+                    <Txt style={styles.titleText}>Вход</Txt>
                 </View>
 
                 <View style={styles.inputView}>
-                    <Text style={styles.text}>мобильный номер</Text>
+                    <Txt style={styles.text}>мобильный номер</Txt>
                     <TextInput style={styles.input}
                         value={phoneNumber}
                         onChangeText={val => phoneNumHandler(val)}
@@ -107,7 +114,7 @@ export default function LoginScreen() {
                 </View>
 
                 <View style={styles.inputView}>
-                    <Text style={styles.text}>пароль</Text>
+                    <Txt style={styles.text}>пароль</Txt>
                     <TextInput style={styles.input}
                         value={password}
                         onChangeText={passwordHandler}
@@ -121,7 +128,7 @@ export default function LoginScreen() {
             <TouchableOpacity style={styles.btn}
                 onPress={enterBtnHandler}
             >
-                <Text style={styles.btnText}>войти</Text>
+                <Txt style={styles.btnText}>войти</Txt>
             </TouchableOpacity>
         </View>
     )

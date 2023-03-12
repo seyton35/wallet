@@ -1,15 +1,19 @@
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Header from '../../components/Header'
+import Txt from '../../components/Txt'
 import BottomTabsPanel from '../../components/BottomTabsPanel'
 import ListArrowButton from '../../components/ListArrowButton'
 import SliderCheckBox from '../../components/SliderCheckBox'
+
 import { deleteAccount, postPushNotificationSettings } from '../../store/slices/stateReducer'
+import { translate } from '../../middleWare/translator/translator'
 
 export default function SettingsScreen() {
     const { refill, writeOff, incomingBill, promotions } = useSelector(s => s.state.pushNotificationSettings)
     const currencyAccountsArray = useSelector(s => s.currency.currencyArray)
+    const { language } = useSelector(s => s.state)
 
     const dispatch = useDispatch()
 
@@ -20,17 +24,21 @@ export default function SettingsScreen() {
         }))
     }
 
+    function tr(text) {
+        return translate(text, language)
+    }
+
     const deleteAccountBtnHendler = () => {
         Alert.alert(
-            "Удалить кошелек",
-            "Вы действительно хотите удалить кошелек?",
+            tr("Удалить кошелек"),
+            tr("Вы действительно хотите удалить кошелек?"),
             [
                 {
-                    text: 'отмена',
+                    text: tr('отмена'),
                     onPress: null
                 },
                 {
-                    text: 'да',
+                    text: tr('да'),
                     onPress: currencyCaution
                 }
             ]
@@ -49,15 +57,15 @@ export default function SettingsScreen() {
         }
         if (flag) {
             Alert.alert(
-                "Удалить кошелек",
-                "В кошельке еще остались деньги, рекомендуем вывести их перед удалением",
+                tr("Удалить кошелек"),
+                tr("В кошельке еще остались деньги, рекомендуем вывести их перед удалением"),
                 [
                     {
-                        text: 'хорошо',
+                        text: tr('хорошо'),
                         onPress: null
                     },
                     {
-                        text: 'все равно удалить',
+                        text: tr('удалить сейчас'),
                         onPress: acceptDeleting
                     }
                 ]
@@ -69,15 +77,15 @@ export default function SettingsScreen() {
 
     const acceptDeleting = () => {
         Alert.alert(
-            "Внимание!",
-            "Удаление кошелька не может быть отменено!\nПодолжить?",
+            tr("Внимание!"),
+            tr("Удаление кошелька не может быть отменено!\nПодолжить?"),
             [
                 {
-                    text: 'отмена',
+                    text: tr('отмена'),
                     onPress: null
                 },
                 {
-                    text: 'удалить',
+                    text: tr('удалить'),
                     onPress: () => dispatch(deleteAccount())
                 }
             ]
@@ -86,35 +94,35 @@ export default function SettingsScreen() {
 
     return (
         <View style={styles.container}>
-            <Header headerText='Нстройки' />
+            <Header headerText='Настройки' />
 
             <ScrollView>
                 <ListArrowButton screen='setDefaultCurrency' title='Счет по умолчанию' />
 
                 <View style={styles.block}>
                     <View style={styles.blockLabelBox}>
-                        <Text style={styles.blockLabelTxt}>Push-уведомления</Text>
+                        <Txt style={styles.blockLabelTxt}>Push-уведомления</Txt>
                     </View>
                     <View style={styles.blockItemBox}>
-                        <Text style={styles.blockItemTxt}>Пополнение</Text>
+                        <Txt style={styles.blockItemTxt}>Пополнение</Txt>
                         <SliderCheckBox check={refill}
                             onPress={() => checkBoxTapHandler(!refill, 'refill')}
                         />
                     </View>
                     <View style={styles.blockItemBox}>
-                        <Text style={styles.blockItemTxt}>Списание</Text>
+                        <Txt style={styles.blockItemTxt}>Списание</Txt>
                         <SliderCheckBox check={writeOff}
                             onPress={() => checkBoxTapHandler(!writeOff, 'writeOff')}
                         />
                     </View>
                     <View style={styles.blockItemBox}>
-                        <Text style={styles.blockItemTxt}>Входящий счет</Text>
+                        <Txt style={styles.blockItemTxt}>Входящий счет</Txt>
                         <SliderCheckBox check={incomingBill}
                             onPress={() => checkBoxTapHandler(!incomingBill, 'incomingBill')}
                         />
                     </View>
                     <View style={styles.blockItemBox}>
-                        <Text style={styles.blockItemTxt}>Новости и акции</Text>
+                        <Txt style={styles.blockItemTxt}>Новости и акции</Txt>
                         <SliderCheckBox check={promotions}
                             onPress={() => checkBoxTapHandler(!promotions, 'promotions')}
                         />
@@ -124,7 +132,7 @@ export default function SettingsScreen() {
                 <TouchableOpacity style={styles.deleteAccBox}
                     onPress={deleteAccountBtnHendler}
                 >
-                    <Text style={styles.deleteAccText}>Удалить кошелек</Text>
+                    <Txt style={styles.deleteAccText}>Удалить кошелек</Txt>
                 </TouchableOpacity>
             </ScrollView>
 

@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react'
-import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import Icon from 'react-native-vector-icons/Entypo'
 
 import Header from '../../components/Header'
+import Txt from '../../components/Txt'
 
 import { LogoAssets } from '../../../assets/logoAssets'
-
 import { billPayment, fetchExchangeRate } from '../../store/slices/currencyReducer'
 import { countCut } from '../../middleWare/currencyFormater'
 import { dayMonthYearRUS } from '../../middleWare/dataFormater'
+import { translate } from '../../middleWare/translator/translator'
 
 export default function BillPaymentScreen() {
+    const { language } = useSelector(s => s.state)
     const { bill } = useSelector(s => s.state.navigationData)
     const { currencyArray } = useSelector(s => s.currency)
     const { rate } = useSelector(s => s.currency)
@@ -35,6 +37,10 @@ export default function BillPaymentScreen() {
         }
     }, [selectedCurrency])
 
+    function tr(text) {
+        return translate(text, language)
+    }
+
     function getDefaultCurrencyAccount() {
         for (let i = 0; i < currencyArray.length; i++) {
             const acc = currencyArray[i];
@@ -56,15 +62,15 @@ export default function BillPaymentScreen() {
 
     function payBtnHandler() {
         Alert.alert(
-            'Оплатита',
-            'вы действительно хотите оплатить счет?',
+            tr('Оплатита'),
+            tr('вы действительно хотите оплатить счет?'),
             [
                 {
-                    text: 'отмена',
+                    text: tr('отмена'),
                     onPress: () => null
                 },
                 {
-                    text: 'оплатить',
+                    text: tr('оплатить'),
                     onPress: () => {
                         pay()
                     }
@@ -94,17 +100,17 @@ export default function BillPaymentScreen() {
 
                 <View style={styles.cardView}>
                     <View style={styles.blockView}>
-                        <Text style={styles.labelTxt}>Адресат</Text>
-                        <Text style={styles.text}>{bill.sender.number}</Text>
+                        <Txt style={styles.labelTxt}>Адресат</Txt>
+                        <Txt style={styles.text}>{bill.sender.number}</Txt>
                     </View>
                     <View style={styles.blockView}>
-                        <Text style={styles.labelTxt}>Дата</Text>
-                        <Text style={styles.text}>{dayMonthYearRUS(bill.registerDate)}</Text>
+                        <Txt style={styles.labelTxt}>Дата</Txt>
+                        <Txt style={styles.text}>{dayMonthYearRUS(bill.registerDate)}</Txt>
                     </View>
                     {bill.comment
                         ? <View style={styles.blockView}>
-                            <Text style={styles.labelTxt}>Комментарий</Text>
-                            <Text style={styles.text}>{bill.comment}</Text>
+                            <Txt style={styles.labelTxt}>Комментарий</Txt>
+                            <Txt style={styles.text}>{bill.comment}</Txt>
                         </View>
                         : null
                     }
@@ -112,7 +118,7 @@ export default function BillPaymentScreen() {
 
                 <View style={styles.cardView}>
                     <View style={[styles.blockView, { borderStyle: 'solid' }]}>
-                        <Text style={styles.labelTxt}>способы оплаты</Text>
+                        <Txt style={styles.labelTxt}>способы оплаты</Txt>
                         {currencyArray.map((currency, index) => {
                             if (index < shownCurrencyLimit || showAllCurrency) {
                                 return <TouchableOpacity style={styles.currencyView} key={index}
@@ -122,7 +128,7 @@ export default function BillPaymentScreen() {
                                         source={LogoAssets['Wallet']}
                                         style={styles.currencyLogoPic}
                                     />
-                                    <Text style={styles.currencyTxt}>{countCut(currency.count)} {currency.type}</Text>
+                                    <Txt style={styles.currencyTxt}>{countCut(currency.count)} {currency.type}</Txt>
                                     {currency.type == selectedCurrency.type
                                         ? <Icon name='chevron-left' style={styles.moreCurrencyIcon} /> : null
                                     }
@@ -135,7 +141,7 @@ export default function BillPaymentScreen() {
                             onPress={moreCurrencyBtnHandler}
                         >
                             <Icon name='dots-three-horizontal' style={styles.moreCurrencyIcon} />
-                            <Text style={styles.currencyTxt}>Другие способы оплаты</Text>
+                            <Txt style={styles.currencyTxt}>Другие способы оплаты</Txt>
                         </TouchableOpacity>
                         : null
                     }
@@ -143,35 +149,35 @@ export default function BillPaymentScreen() {
 
                 <View style={styles.cardView}>
                     <View style={styles.blockView}>
-                        <Text style={styles.labelTxt}>сумма</Text>
-                        <Text style={styles.text}>{bill.sender.sum} {bill.sender.currency}</Text>
+                        <Txt style={styles.labelTxt}>сумма</Txt>
+                        <Txt style={styles.text}>{bill.sender.sum} {bill.sender.currency}</Txt>
                     </View>
                     <View style={styles.costBlockView}>
                         <View style={styles.costItem}>
-                            <Text style={styles.commissionTxt}>коммисия Wallet</Text>
-                            <Text style={styles.commissionTxt}>0,00 {bill.sender.currency}</Text>
+                            <Txt style={styles.commissionTxt}>коммисия Wallet</Txt>
+                            <Txt style={styles.commissionTxt}>0,00 {bill.sender.currency}</Txt>
                         </View>
                         <View style={styles.costItem}>
-                            <Text style={styles.commissionTxt}>коммисия</Text>
-                            <Text style={styles.commissionTxt}>0,00 {bill.sender.currency}</Text>
+                            <Txt style={styles.commissionTxt}>коммисия</Txt>
+                            <Txt style={styles.commissionTxt}>0,00 {bill.sender.currency}</Txt>
                         </View>
                         {selectedCurrency.type != bill.sender.currency // TODO: 1большей валюты = ххх меньшей
                             ? <View style={styles.costItem}>
-                                <Text style={styles.costDataTxt}>курс конвертации</Text>
-                                <Text style={styles.costDataTxt}>1 {bill.sender.currency} = {1 * rate} {selectedCurrency.type}</Text>
+                                <Txt style={styles.costDataTxt}>курс конвертации</Txt>
+                                <Txt style={styles.costDataTxt}>1 {bill.sender.currency} = {1 * rate} {selectedCurrency.type}</Txt>
                             </View>
                             : null
                         }
                         <View style={styles.costItem}>
-                            <Text style={[styles.costDataTxt, { color: '#000' }]}>итого к оплате</Text>
-                            <Text style={[styles.costDataTxt, { color: '#000', fontWeight: "bold" }]}>{calculateCost()}</Text>
+                            <Txt style={[styles.costDataTxt, { color: '#000' }]}>итого к оплате</Txt>
+                            <Txt style={[styles.costDataTxt, { color: '#000', fontWeight: "bold" }]}>{calculateCost()}</Txt>
                         </View>
                     </View>
                 </View>
 
                 <TouchableOpacity style={styles.payBtn}
                     onPress={payBtnHandler}>
-                    <Text style={styles.payBtnTxt}>Оплатить</Text>
+                    <Txt style={styles.payBtnTxt}>Оплатить</Txt>
                 </TouchableOpacity>
 
             </ScrollView>

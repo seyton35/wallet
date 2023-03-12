@@ -1,13 +1,16 @@
-import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { LogoAssets } from '../../assets/logoAssets'
+import Txt from './Txt'
 
+import { LogoAssets } from '../../assets/logoAssets'
 import { billPayment } from '../store/slices/currencyReducer'
 import { navigate } from '../store/slices/stateReducer'
+import { translate } from '../middleWare/translator/translator'
 
 export default function Issue({ bill }) {
     const { idUser } = useSelector(s => s.state.userData)
+    const { language } = useSelector(s => s.state)
     const { currencyArray } = useSelector(s => s.currency)
 
 
@@ -46,17 +49,21 @@ export default function Issue({ bill }) {
         }
     }
 
+    function tr(text) {
+        return translate(text, language)
+    }
+
     function payBtnHandler() {
         Alert.alert(
             "Оплата",
-            `оплатить счет ${bill.type} на сумму ${bill.sender.sum} ${bill.sender.currency}?`,
+            `${tr('оплатить счет')} ${bill.type} ${tr('на сумму')} ${bill.sender.sum} ${bill.sender.currency}?`,
             [
                 {
-                    text: 'отмена',
+                    text: tr('отмена'),
                     onPress: null
                 },
                 {
-                    text: 'оплатить',
+                    text: tr('оплатить'),
                     onPress: () => { pay() }
                 }
             ]
@@ -75,14 +82,14 @@ export default function Issue({ bill }) {
                     />
                 </View>
                 <View>
-                    <Text style={styles.billType}>{bill.type}</Text>
-                    <Text style={styles.billSum}>{bill.sender.sum} {bill.sender.currency}</Text>
+                    <Txt style={styles.billType}>{bill.type}</Txt>
+                    <Txt style={styles.billSum}>{bill.sender.sum} {bill.sender.currency}</Txt>
                 </View>
             </View>
             <TouchableOpacity style={styles.payBtn}
                 onPress={payBtnHandler}
             >
-                <Text style={styles.payBtnTxt}>Оплатить</Text>
+                <Txt style={styles.payBtnTxt}>Оплатить</Txt>
             </TouchableOpacity>
         </TouchableOpacity>
     )

@@ -1,8 +1,11 @@
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { useDispatch, useSelector } from 'react-redux'
+
 import BottomTabsPanel from '../../components/BottomTabsPanel'
 import ListArrowButton from '../../components/ListArrowButton'
+import Txt from '../../components/Txt'
+
 import { phoneNumberMask1 } from '../../middleWare/phoneNumberFormater'
 import { logOutUser, popToTop, postLanguage } from '../../store/slices/stateReducer'
 
@@ -50,8 +53,8 @@ export default function ProfileScreen() {
 
             <ScrollView>
                 <View style={styles.phoneNumberView}>
-                    <Text style={styles.phoneNumberTitleTxt}>номер Wallet кошелька</Text>
-                    <Text style={styles.phoneNumberTxt}>{phoneNumberMask1(phoneNumber)}</Text>
+                    <Txt style={styles.phoneNumberTitleTxt}>номер Wallet кошелька</Txt>
+                    <Txt style={styles.phoneNumberTxt}>{phoneNumberMask1(phoneNumber)}</Txt>
                 </View>
 
                 <ListArrowButton screen='settings' title='Настройки' />
@@ -60,7 +63,7 @@ export default function ProfileScreen() {
                 <TouchableOpacity style={styles.signOutBtn}
                     onPress={signOutBtnHandler}
                 >
-                    <Text style={styles.signOutBtnTxt}>выйти из приложения</Text>
+                    <Txt style={styles.signOutBtnTxt}>выйти из приложения</Txt>
                 </TouchableOpacity>
             </ScrollView>
 
@@ -77,7 +80,8 @@ const styles = StyleSheet.create({
     choiceLangBtn: {
         position: 'absolute',
         top: 10,
-        right: 10
+        right: 10,
+        zIndex: 100
     },
     choiceLangIcon: {
         fontSize: 25,

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet,  TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Header from '../../components/Header'
+import Txt from '../../components/Txt'
 import ModalRangeDatePicker from '../../components/ModalRangeDatePicker'
+
 import { getCurrencySymbol } from '../../middleWare/currencyFormater'
-
 import { allRus } from '../../middleWare/dataFormater'
-
 import { fetchBillsByCategory } from '../../store/slices/currencyReducer'
 import { backButtonPress, navigate } from '../../store/slices/stateReducer'
 
@@ -83,19 +83,19 @@ export default function BillsListScreen() {
                             <View style={styles.billView}>
 
                                 <View style={styles.billBox}>
-                                    <Text style={styles.billReceiverTxt}>{bill.receiver.number}</Text>
-                                    <Text>{bill.status == 'success'
+                                    <Txt style={styles.billReceiverTxt}>{bill.receiver.number}</Txt>
+                                    <Txt>{bill.status == 'success'
                                         ? bill.receiver.sum + ' ' + getCurrencySymbol(bill.receiver.currency)
                                         : bill.sender.sum + ' ' + getCurrencySymbol(bill.sender.currency)
                                     }
-                                    </Text>
+                                    </Txt>
                                 </View>
                                 <View style={styles.billBox}>
-                                    <Text>{bill.sender.number}</Text>
+                                    <Txt>{bill.sender.number}</Txt>
                                 </View>
                                 <View style={styles.billBox}>
-                                    <Text>{allRus(bill.registerDate)}</Text>
-                                    <Text>{bill.status}</Text>
+                                    <Txt>{allRus(bill.registerDate)}</Txt>
+                                    <Txt>{bill.status}</Txt>
                                 </View>
 
                             </View>

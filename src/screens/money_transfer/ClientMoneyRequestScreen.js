@@ -1,11 +1,13 @@
-import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
 import { useEffect, useState } from 'react'
 import { Picker } from '@react-native-picker/picker'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { clientMoneyRequest, resetMessage, setErrorMessage } from '../../store/slices/currencyReducer'
-
 import Header from '../../components/Header'
+import Txt from '../../components/Txt'
+
+import { clientMoneyRequest, resetMessage, setErrorMessage } from '../../store/slices/currencyReducer'
+import { translate } from '../../middleWare/translator/translator'
 
 export default function ClientMoneyRequestScreen() {
   const [commentView, setCommentView] = useState(false)
@@ -22,6 +24,7 @@ export default function ClientMoneyRequestScreen() {
   const { availableCurrencies } = useSelector(s => s.currency)
   const { errormessage } = useSelector(s => s.currency)
 
+  const { language } = useSelector(s => s.state)
   const sender = useSelector(s => s.state.userData.phoneNumber)
 
   const dispatch = useDispatch()
@@ -34,6 +37,10 @@ export default function ClientMoneyRequestScreen() {
     })
 
   }, [])
+
+  function tr(text) {
+    return translate(text,language)
+  }
 
   function phoneNumHandler(num) {
     if (num == '') {
@@ -68,7 +75,7 @@ export default function ClientMoneyRequestScreen() {
       const { limMax, limMin } = moneyRequestLimits
       if (val > limMax || val < limMin) {
         setIsSumOk(false)
-        dispatch(setErrorMessage('сумма платежа не должна выходить за пределы лимитов.'))
+        dispatch(setErrorMessage(tr('сумма платежа не должна выходить за пределы лимитов.')))
       } else {
         setIsSumOk(true)
         dispatch(setErrorMessage())
@@ -79,15 +86,15 @@ export default function ClientMoneyRequestScreen() {
   function MoneyRequestoBtnHandler() {
     if (isPhoneOk && isSumOk) {
       Alert.alert(
-        "выставить счет",
-        'вы действительно хотите выставить счет?',
+        tr("выставить счет"),
+        tr('вы действительно хотите выставить счет?'),
         [
           {
-            text: 'отмена',
+            text: tr('отмена'),
             onPress: () => null
           },
           {
-            text: 'выставить',
+            text: tr('выставить'),
             onPress: () => makeRequest()
           },
         ]
@@ -107,18 +114,18 @@ export default function ClientMoneyRequestScreen() {
 
   return (
     <View style={styles.container}>
-      <Header headerText='выставить счет' />
+      <Header headerText='Выставить счет' />
 
       {errormessage
         ? < View style={styles.errorView}>
-          <Text style={styles.errorText}>{errormessage}</Text>
+          <Txt style={styles.errorText}>{errormessage}</Txt>
         </View>
         : null
       }
 
       <ScrollView>
         <View style={styles.form}>
-          <Text style={styles.hint}>Адресат</Text>
+          <Txt style={styles.hint}>Адресат</Txt>
           <TextInput
             style={styles.TextInput}
             keyboardType='decimal-pad'
@@ -141,12 +148,12 @@ export default function ClientMoneyRequestScreen() {
               onPress={() => setCommentView(true)}
             >
               {/* TODO: добавить  <Icon> */}
-              <Text>комментарий</Text>
+              <Txt>комментарий</Txt>
             </TouchableOpacity>
           }
         </View>
         <View style={styles.form}>
-          <Text style={styles.hint}>Валюта счета</Text>
+          <Txt style={styles.hint}>Валюта счета</Txt>
           <Picker
             selectedValue={pickerCurrency}
             onValueChange={pickerCurrencyHandler}
@@ -172,7 +179,7 @@ export default function ClientMoneyRequestScreen() {
             placeholder='сумма'>
           </TextInput>
           {moneyRequestLimits
-            ? <Text>от {moneyRequestLimits.limMin} до {moneyRequestLimits.limMax}</Text>
+            ? <Txt>от {moneyRequestLimits.limMin} до {moneyRequestLimits.limMax}</Txt>
             : null
           }
         </View>
@@ -180,7 +187,7 @@ export default function ClientMoneyRequestScreen() {
           style={styles.btn}
           onPress={MoneyRequestoBtnHandler}
         >
-          <Text style={styles.btnTxt}>выставить</Text>
+          <Txt style={styles.btnTxt}>выставить</Txt>
         </TouchableOpacity>
       </ScrollView>
     </View>

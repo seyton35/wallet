@@ -1,7 +1,10 @@
-import { Image, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import IconEntypo from 'react-native-vector-icons/Entypo'
+import { Image, Linking, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import Entypo from 'react-native-vector-icons/Entypo'
+
 import BottomTabsPanel from '../../components/BottomTabsPanel'
 import Header from '../../components/Header'
+import Txt from '../../components/Txt'
+
 import { aboutAssets } from '../../../assets/aboutAssets'
 
 export default function AboutScreen() {
@@ -17,7 +20,7 @@ export default function AboutScreen() {
                 {children}
             </View>
             <View style={styles.openURLBtnBox}>
-                <IconEntypo name="chevron-right" style={styles.openURLBtnIcon} />
+                <Entypo name="chevron-right" style={styles.openURLBtnIcon} />
             </View>
         </TouchableOpacity>)
     }
@@ -30,20 +33,20 @@ export default function AboutScreen() {
                     url={'https://hh.ru/resume/1cfafe96ff09c3a3480039ed1f6e6134326c34'}
                 >
                     <Image style={styles.openURLBtnLogo} source={aboutAssets.hhRu}></Image>
-                    <Text style={styles.openURLBtnText}>мое резюме</Text>
+                    <Txt style={styles.openURLBtnText}>мое резюме</Txt>
                 </OpenURL>
 
                 <OpenURL style={styles.openURLBtn}
                     url={'https://apps.rustore.ru/app/com.wallet'}
                 >
                     <Image style={styles.openURLBtnLogo} source={aboutAssets.ruStore}></Image>
-                    <Text style={styles.openURLBtnText}>страница приложения</Text>
+                    <Txt style={styles.openURLBtnText}>страница приложения</Txt>
                 </OpenURL>
 
                 {/* <OpenURL style={styles.openURLBtn}
                     url={'https://apps.rustore.ru/?devId=bhxQcu299ncTTLrbkj9MYt3OV0mL4z29&appType=MAIN'}
                 >
-                    <Text style={styles.openURLBtnText}>открыть страницу разработчика</Text>
+                    <Txt style={styles.openURLBtnText}>открыть страницу разработчика</Txt>
                 </OpenURL> */}
             </ScrollView>
             <BottomTabsPanel />

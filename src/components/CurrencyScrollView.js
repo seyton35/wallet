@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { StyleSheet, Text, View, Dimensions, Animated } from 'react-native'
+import { StyleSheet, View, Dimensions, Animated } from 'react-native'
 import { ScalingDot } from "react-native-animated-pagination-dots";
 
 import Currency from './Currency'

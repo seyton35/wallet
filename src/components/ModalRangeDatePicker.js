@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { Modal, StyleSheet, Text, Pressable, View } from "react-native";
+import { useState } from "react";
+import { Modal, StyleSheet, Pressable, View } from "react-native";
 import DatePicker from 'react-native-date-picker'
+
+import Txt from "./Txt";
 
 const DAY_MC = 86400000
 const MONTH_MC = 2592000000
@@ -58,10 +60,10 @@ export default function ModalRangeDatePicker({ setDate, onCancelPress }) {
                     <View style={styles.modalView}>
 
                         <Pressable onPress={() => setDateOnFocus('date1')} style={[styles.dateView, isFocusedDate('date1')]}>
-                            <Text style={styles.dateTxt}>{date1.toLocaleDateString()}</Text>
+                            <Txt style={styles.dateTxt}>{date1.toLocaleDateString()}</Txt>
                         </Pressable>
                         <Pressable onPress={() => setDateOnFocus('date2')} style={[styles.dateView, isFocusedDate('date2')]}>
-                            <Text style={styles.dateTxt}>{date2.toLocaleDateString()}</Text>
+                            <Txt style={styles.dateTxt}>{date2.toLocaleDateString()}</Txt>
                         </Pressable>
 
                         <View style={styles.datePickerView}>
@@ -75,10 +77,10 @@ export default function ModalRangeDatePicker({ setDate, onCancelPress }) {
 
                         <View style={styles.modalBtnBox}>
                             <Pressable style={styles.modalBtn} onPress={cancelBtnHandler}>
-                                <Text style={styles.modalBtnTxt}>отмена</Text>
+                                <Txt style={styles.modalBtnTxt}>отмена</Txt>
                             </Pressable>
                             <Pressable style={styles.modalBtn} onPress={confirmBtnHandler}>
-                                <Text style={styles.modalBtnTxt}>готово</Text>
+                                <Txt style={styles.modalBtnTxt}>готово</Txt>
                             </Pressable>
                         </View>
 

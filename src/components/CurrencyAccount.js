@@ -1,7 +1,8 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { countCut, getCurrencySymbol } from '../middleWare/currencyFormater'
+
+import Txt from './Txt'
 
 export default function CurrencyAccount({ acc, defaultCurrencyAccount, onPress }) {
     return (
@@ -11,18 +12,18 @@ export default function CurrencyAccount({ acc, defaultCurrencyAccount, onPress }
             >
                 <View style={styles.currencyInfoBox} >
                     {defaultCurrencyAccount == acc.type
-                        ? <Icon name='check-circle' size={35} style={[{ color: 'green' }, styles.icon]} />
-                        : <Icon name='checkbox-blank-circle' size={35} style={[{ color: '#d3d3d3' }, styles.icon]} />
+                        ? <MaterialCommunityIcons name='check-circle' size={35} style={[{ color: 'green' }, styles.icon]} />
+                        : <MaterialCommunityIcons name='checkbox-blank-circle' size={35} style={[{ color: '#d3d3d3' }, styles.icon]} />
                     }
                 </View>
                 <View style={styles.currencyInfoBox} >
-                    <Text style={styles.currencyLabel}>{countCut(acc.count)} {getCurrencySymbol(acc.type)}</Text>
-                    <Text style={styles.currencyText}>
+                    <Txt style={styles.currencyLabel}>{countCut(acc.count)} {getCurrencySymbol(acc.type)}</Txt>
+                    <Txt style={styles.currencyTxt}>
                         {defaultCurrencyAccount == acc.type
                             ? 'Остновной'
                             : 'Дополнительный'
                         } счет в {acc.type}
-                    </Text>
+                    </Txt>
                 </View>
             </TouchableOpacity>
         </View>
@@ -50,5 +51,5 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight: '700'
     },
-    currencyText: {},
+    currencyTxt: {},
 })

@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
-import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import Icon from 'react-native-vector-icons/Entypo'
-
+import Entypo from 'react-native-vector-icons/Entypo'
 
 import Header from '../../components/Header'
+import Txt from '../../components/Txt'
+
 import { LogoAssets } from '../../../assets/logoAssets'
 import { countCut, getCurrencySymbol } from '../../middleWare/currencyFormater'
 import { Picker } from '@react-native-picker/picker'
 import { fetchExchangeRate, sendMoneyRequest, setErrorMessage } from '../../store/slices/currencyReducer'
+import { translate } from '../../middleWare/translator/translator'
 
 
 export default function SendMoneyScreen() {
@@ -32,6 +34,7 @@ export default function SendMoneyScreen() {
     const [moneyRequestLimits, setMoneyRequestLimits] = useState()
 
     const rate = useSelector(s => s.currency.rate)
+    const { language } = useSelector(s => s.state)
 
     const dispatch = useDispatch()
 
@@ -45,6 +48,10 @@ export default function SendMoneyScreen() {
     useEffect(() => {
         getRate()
     }, [pickerCurrency, selectedCurrency])
+
+    function tr(text) {
+        return translate(text, language)
+    }
 
     function phoneNumHandler(num) {
         dispatch(setErrorMessage())
@@ -82,7 +89,7 @@ export default function SendMoneyScreen() {
         if (sum > limMax || sum < limMin) {
             setIsSumOk(false)
         }
-        dispatch(setErrorMessage('сумма платежа не должна выходить за пределы лимитов.'))
+        dispatch(setErrorMessage(tr('сумма платежа не должна выходить за пределы лимитов.')))
         setPickerCurrency(cur)
         for (let i = 0; i < availableCurrencies.length; i++) {
             const el = availableCurrencies[i];
@@ -103,7 +110,7 @@ export default function SendMoneyScreen() {
             const { limMax, limMin } = moneyRequestLimits
             if (val > limMax || val < limMin) {
                 setIsSumOk(false)
-                dispatch(setErrorMessage('сумма платежа не должна выходить за пределы лимитов.'))
+                dispatch(setErrorMessage(tr('сумма платежа не должна выходить за пределы лимитов.')))
             } else {
                 setIsSumOk(true)
                 dispatch(setErrorMessage())
@@ -140,9 +147,10 @@ export default function SendMoneyScreen() {
 
     function sendMoneyBtnHandler() {
         if (!isPhoneOk) {
-            dispatch(setErrorMessage('некорректный номер'))
+            d
+            dispatch(setErrorMessage(tr('некорректный номер')))
         } else if (selectedCurrency.count < sum * rate) {
-            dispatch(setErrorMessage('недостаточно средств на счету'))
+            dispatch(setErrorMessage(tr('недостаточно средств на счету')))
         } else {
             dispatch(setErrorMessage())
             sendMoney()
@@ -169,7 +177,7 @@ export default function SendMoneyScreen() {
 
             {errormessage
                 ? < View style={styles.errorView}>
-                    <Text style={styles.errorText}>{errormessage}</Text>
+                    <Txt style={styles.errorText}>{errormessage}</Txt>
                 </View>
                 : null
             }
@@ -178,7 +186,7 @@ export default function SendMoneyScreen() {
             <ScrollView>
 
                 <View style={styles.form}>
-                    <Text style={styles.formItemLabel}>Адресат</Text>
+                    <Txt style={styles.formItemLabel}>Адресат</Txt>
                     <TextInput
                         style={styles.TextInput}
                         keyboardType='decimal-pad'
@@ -193,7 +201,7 @@ export default function SendMoneyScreen() {
                             onChangeText={setComment}
                             maxLength={100}
                             multiline
-                            placeholder='комментарий'
+                            placeholder={tr('комментарий')}
                         ></TextInput>
 
                         : <TouchableOpacity
@@ -201,14 +209,14 @@ export default function SendMoneyScreen() {
                             onPress={() => setCommentView(true)}
                         >
                             {/* TODO: добавить  <Icon> */}
-                            <Text>комментарий</Text>
+                            <Txt>комментарий</Txt>
                         </TouchableOpacity>
                     }
                 </View>
 
                 <View style={styles.form}>
                     <View style={[styles.blockView, { borderStyle: 'solid' }]}>
-                        <Text style={styles.labelTxt}>способы оплаты</Text>
+                        <Txt style={styles.labelTxt}>способы оплаты</Txt>
                         {currencyArray.map((currency, index) => {
                             if (index < shownCurrencyLimit || showAllCurrency) {
                                 return <TouchableOpacity style={styles.currencyView} key={index}
@@ -218,9 +226,9 @@ export default function SendMoneyScreen() {
                                         source={LogoAssets['Wallet']}
                                         style={styles.currencyLogoPic}
                                     />
-                                    <Text style={styles.currencyTxt}>{countCut(currency.count)} {currency.type}</Text>
+                                    <Txt style={styles.currencyTxt}>{countCut(currency.count)} {currency.type}</Txt>
                                     {currency.type == selectedCurrency.type
-                                        ? <Icon name='chevron-left' style={styles.moreCurrencyIcon} /> : null
+                                        ? <Entypo name='chevron-left' style={styles.moreCurrencyIcon} /> : null
                                     }
                                 </TouchableOpacity>
                             }
@@ -230,15 +238,15 @@ export default function SendMoneyScreen() {
                         ? <TouchableOpacity style={styles.moreCurrencyBtn}
                             onPress={moreCurrencyBtnHandler}
                         >
-                            <Icon name='dots-three-horizontal' style={styles.moreCurrencyIcon} />
-                            <Text style={styles.currencyTxt}>Другие способы оплаты</Text>
+                            <Entypo name='dots-three-horizontal' style={styles.moreCurrencyIcon} />
+                            <Txt style={styles.currencyTxt}>Другие способы оплаты</Txt>
                         </TouchableOpacity>
                         : null
                     }
                 </View>
 
                 <View style={styles.form}>
-                    <Text style={styles.hint}>Валюта счета</Text>
+                    <Txt style={styles.hint}>Валюта счета</Txt>
                     <Picker
                         selectedValue={pickerCurrency}
                         onValueChange={pickerCurrencyHandler}
@@ -261,31 +269,31 @@ export default function SendMoneyScreen() {
                         value={sum}
                         onChangeText={val => sumHandler(val)}
                         keyboardType='decimal-pad'
-                        placeholder='сумма'>
+                        placeholder={tr('сумма')}>
                     </TextInput>
                     {moneyRequestLimits
-                        ? <Text>от {moneyRequestLimits.limMin} до {moneyRequestLimits.limMax}</Text>
+                        ? <Txt>{tr('от')} {moneyRequestLimits.limMin} {tr('до')} {moneyRequestLimits.limMax}</Txt>
                         : null
                     }
                     {sum != ''
                         ? <View style={styles.commissionBlock}>
                             <View style={styles.commissionBox}>
-                                <Text style={styles.commissionTxt}>комиссия Wallet:</Text>
-                                <Text style={styles.commissionTxt}>0 {getCurrencySymbol(pickerCurrency)}</Text>
+                                <Txt style={styles.commissionTxt}>комиссия Wallet:</Txt>
+                                <Txt style={styles.commissionTxt}>0 {getCurrencySymbol(pickerCurrency)}</Txt>
                             </View>
                             {selectedCurrency.type == pickerCurrency
                                 ? null
                                 : <View style={styles.commissionBox}>
-                                    <Text style={styles.commissionTxt}>Курс конвертации:</Text>
-                                    <Text style={styles.commissionTxt}>{showConversionRate()}</Text>
+                                    <Txt style={styles.commissionTxt}>Курс конвертации:</Txt>
+                                    <Txt style={styles.commissionTxt}>{showConversionRate()}</Txt>
                                 </View>
                             }
                             <View style={[styles.commissionBox, {
                                 borderTopColor: '#888',
                                 borderTopWidth: 1
                             }]}>
-                                <Text style={styles.ammountTxt}>Итог к оплате:</Text>
-                                <Text style={styles.ammountTxt}>{showWriteOffAmmount()}</Text>
+                                <Txt style={styles.ammountTxt}>Итог к оплате:</Txt>
+                                <Txt style={styles.ammountTxt}>{showWriteOffAmmount()}</Txt>
                             </View>
                         </View>
                         : null
@@ -296,7 +304,7 @@ export default function SendMoneyScreen() {
                     style={styles.btn}
                     onPress={sendMoneyBtnHandler}
                 >
-                    <Text style={styles.btnTxt}>Перевести</Text>
+                    <Txt style={styles.btnTxt}>Перевести</Txt>
                 </TouchableOpacity>
 
             </ScrollView>
