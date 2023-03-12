@@ -84,6 +84,7 @@ export default function RegisterScreen() {
         num += Math.random() * 1000000000000000
         num = num.slice(0, 12)
         setPhoneNumber(num)
+        setIsPhoneOk(true)
     }
 
     return (
