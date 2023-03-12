@@ -1,13 +1,15 @@
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import { useDispatch, useSelector } from 'react-redux'
 import BottomTabsPanel from '../../components/BottomTabsPanel'
 import ListArrowButton from '../../components/ListArrowButton'
 import { phoneNumberMask1 } from '../../middleWare/phoneNumberFormater'
-import { logOutUser, popToTop } from '../../store/slices/stateReducer'
+import { logOutUser, popToTop, postLanguage } from '../../store/slices/stateReducer'
 
 export default function ProfileScreen() {
 
     const { phoneNumber } = useSelector(s => s.state.userData)
+    const { language } = useSelector(s => s.state)
 
     const dispatch = useDispatch()
 
@@ -34,6 +36,18 @@ export default function ProfileScreen() {
     return (
         <View style={styles.container}>
 
+            <TouchableOpacity style={styles.choiceLangBtn}
+                onPress={() => {
+                    if (language == 'ru') {
+                        dispatch(postLanguage('en'))
+                    } else {
+                        dispatch(postLanguage('ru'))
+                    }
+                }}
+            >
+                <AntDesign name='earth' style={styles.choiceLangIcon} />
+            </TouchableOpacity>
+
             <ScrollView>
                 <View style={styles.phoneNumberView}>
                     <Text style={styles.phoneNumberTitleTxt}>номер Wallet кошелька</Text>
@@ -59,6 +73,15 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
     container: {
         height: '100%'
+    },
+    choiceLangBtn: {
+        position: 'absolute',
+        top: 10,
+        right: 10
+    },
+    choiceLangIcon: {
+        fontSize: 25,
+        color: '#00abfd'
     },
     phoneNumberView: {
         alignItems: 'center',
