@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import { useDispatch, useSelector } from 'react-redux'
 import Header from '../../components/Header'
 
-import { loginUser, popToTop, setErrorMessage } from '../../store/slices/stateReducer'
+import { loginUser, popToTop, setErrorMessage, setLanguage } from '../../store/slices/stateReducer'
 
 
 export default function LoginScreen() {
@@ -13,7 +14,7 @@ export default function LoginScreen() {
     const [isPhoneOk, setIsPhoneOk] = useState(false)
     const [isPasswordOk, setIsPasswordOk] = useState(false)
 
-    const {errorMessage} = useSelector(s => s.state)
+    const { language, errorMessage } = useSelector(s => s.state)
 
     const dispatch = useDispatch()
 
@@ -60,6 +61,17 @@ export default function LoginScreen() {
     return (
         <View style={styles.container}>
             <Header showHeaderButton={false} />
+            <TouchableOpacity style={styles.choiceLangBtn}
+                onPress={() => {
+                    if (language == 'ru') {
+                        dispatch(setLanguage('en'))
+                    } else {
+                        dispatch(setLanguage('ru'))
+                    }
+                }}
+            >
+                <AntDesign name='earth' style={styles.choiceLangIcon} />
+            </TouchableOpacity>
 
             {errorMessage
                 ? < View style={styles.errorView}>
@@ -118,6 +130,15 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    choiceLangBtn: {
+        position: 'absolute',
+        top: 10,
+        right: 10
+    },
+    choiceLangIcon: {
+        fontSize: 25,
+        color: '#00abfd'
     },
     changeAuthBox: {
         flexDirection: 'row',

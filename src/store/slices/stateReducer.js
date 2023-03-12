@@ -8,6 +8,7 @@ export const initialization = createAsyncThunk(
     async (_, { dispatch }) => {
         try {
             const data = await getData('userData')
+            const language = await getData('language')
             if (data !== null) {
                 dispatch(setUserDataWithoutStore(data))
                 dispatch(setIsLogined(true))
@@ -17,6 +18,7 @@ export const initialization = createAsyncThunk(
                 }, 1500);
                 dispatch(fetchAvailableCurrencies())
             } else setTimeout(() => {
+                dispatch(setLanguage(language))
                 dispatch(popToTop('login'))
             }, 1500);
         } catch (e) {
@@ -39,9 +41,10 @@ export const fetchUserConfig = createAsyncThunk(
             })
             if (res.status == 200) {
                 const data = await res.json()
-                console.log(data.config);
+                console.log('config', data.config);
                 dispatch(storeAndSetAllPushNotificationSettings(data.config.pushNotificationSettings))
                 dispatch(setDefaultCurrencyAccount(data.config.defaultCurrencyAccount))
+                dispatch(storeAndSetLanguage(data.config.language))
             }
             else {
                 const defaultCurrencyAccount = await getData('defaultCurrencyAccount')
@@ -74,6 +77,26 @@ export const postPushNotificationSettings = createAsyncThunk(
                 dispatch(storeAndSetPushNotificationSettings({ flag: !flag, field }))
                 dispatch(setToastAndroidMessage('попробуйте позже'))
             }
+        } catch (e) {
+            console.log(e.message);
+        }
+    }
+)
+
+export const postLanguage = createAsyncThunk(
+    'state/postLanguage',
+    async (language, { dispatch, getState }) => {
+        try {
+            dispatch(storeAndSetLanguage(language))
+            const { idUser } = getState().state.userData
+            const res = await fetch(
+                'https://1220295-cj30407.tw1.ru/api/operationsOnUserConfig/postLanguage', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ idUser, language })
+            })
         } catch (e) {
             console.log(e.message);
         }
@@ -152,7 +175,7 @@ export const logOutUser = createAsyncThunk(
 
 export const registerNewUser = createAsyncThunk(
     'state/registerNewUser',
-    async ({ phoneNumber, password }, { dispatch }) => {
+    async ({ phoneNumber, password }, { dispatch, getState }) => {
         try {
             const res = await fetch(
                 'https://1220295-cj30407.tw1.ru/api/auth/registerNewUser', {
@@ -165,6 +188,8 @@ export const registerNewUser = createAsyncThunk(
             const data = await res.json()
             console.log(data);
             if (res.status === 200) {
+                const { language } = getState().state
+                dispatch(postLanguage(language))
                 dispatch(setErrorMessage(null))
                 dispatch(storeAndSetUserData({
                     id: data.id,
@@ -197,6 +222,8 @@ export const loginUser = createAsyncThunk(
             console.log(data);
             if (res.status === 200) {
                 console.log('logined');
+                const { language } = getState().state
+                dispatch(postLanguage(language))
                 dispatch(fetchUserConfig(data.id))
                 dispatch(setErrorMessage(null))
                 dispatch(storeAndSetUserData({
@@ -217,6 +244,7 @@ export const loginUser = createAsyncThunk(
 const stateSlice = createSlice({
     name: 'state',
     initialState: {
+        language: 'ru',
         loading: false,
         currentScreen: 'greeting',
         prevScreen: null,
@@ -240,6 +268,13 @@ const stateSlice = createSlice({
         errorMessage: null,
     },
     reducers: {
+        setLanguage(state, action) {
+            state.language = action.payload
+        },
+        storeAndSetLanguage(state, action) {
+            storeData('language', action.payload)
+            state.language = action.payload
+        },
         navigate(state, action) {
             state.prevScreen = state.currentScreen
             if (action.payload.data == null) {
@@ -295,6 +330,7 @@ const stateSlice = createSlice({
             removeData('userData')
             removeData('defaultCurrencyAccount')
             removeData('pushNotificationSettings')
+            removeData('language')
         },
         setUserDataWithoutStore(state, action) {
             state.userData = action.payload
@@ -343,6 +379,8 @@ const stateSlice = createSlice({
 })
 
 export const {
+    setLanguage,
+    storeAndSetLanguage,
     navigate,
     popToTop,
     backButtonPress,

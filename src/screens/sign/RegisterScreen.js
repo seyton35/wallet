@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome5'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import { useDispatch, useSelector } from 'react-redux'
 import Header from '../../components/Header'
 
-import { popToTop, registerNewUser, setErrorMessage } from '../../store/slices/stateReducer'
+import { popToTop, registerNewUser, setErrorMessage, setLanguage } from '../../store/slices/stateReducer'
 
 export default function RegisterScreen() {
     const [phoneNumber, setPhoneNumber] = useState('+')
@@ -14,7 +15,7 @@ export default function RegisterScreen() {
     const [isPhoneOk, setIsPhoneOk] = useState(false)
     const [isPasswordOk, setIsPasswordOk] = useState(false)
 
-    const { errorMessage } = useSelector(s => s.state)
+    const { language, errorMessage } = useSelector(s => s.state)
 
     const dispatch = useDispatch()
 
@@ -88,6 +89,18 @@ export default function RegisterScreen() {
     return (
         <View style={styles.container}>
             <Header showHeaderButton={false} />
+            <TouchableOpacity style={styles.choiceLangBtn}
+                onPress={() => {
+                    if (language == 'ru') {
+                        dispatch(setLanguage('en'))
+                    } else {
+                        dispatch(setLanguage('ru'))
+                    }
+                }}
+            >
+                <AntDesign name='earth' style={styles.choiceLangIcon} />
+            </TouchableOpacity>
+
             {errorMessage
                 ? < View style={styles.errorView}>
                     <Text style={styles.errorText}>{errorMessage}</Text>
@@ -123,7 +136,7 @@ export default function RegisterScreen() {
                     <TouchableOpacity style={styles.genRandNumber}
                         onPress={genRandomNumber}
                     >
-                        <Icon style={styles.genRandNumberIcon}
+                        <FontAwesome5 style={styles.genRandNumberIcon}
                             name="dice"
                         />
                     </TouchableOpacity>
@@ -163,6 +176,15 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    choiceLangBtn: {
+        position: 'absolute',
+        top: 10,
+        right: 10
+    },
+    choiceLangIcon: {
+        fontSize: 25,
+        color: '#00abfd'
     },
     changeAuthBox: {
         flexDirection: 'row',
