@@ -1,6 +1,7 @@
 import { Alert, BackHandler, StyleSheet, ToastAndroid, View } from 'react-native'
 import { useEffect } from 'react'
 import messaging from '@react-native-firebase/messaging'
+import PushNotification from 'react-native-push-notification'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Stack from './navigation/Stack'
@@ -13,14 +14,19 @@ import {
   saveNotificationToken,
   popToTop
 } from './store/slices/stateReducer'
-import PushNotification from 'react-native-push-notification'
+import { translate } from './middleWare/translator/translator'
 
 export default function Main() {
   const stateToastMessage = useSelector(s => s.state.toastAndroidMessage)
   const currentScreen = useSelector(s => s.state.currentScreen)
   const { idUser } = useSelector(s => s.state.userData)
+  const { language } = useSelector(s => s.state)
 
   const dispatch = useDispatch()
+
+  function tr(text, slice = false) {
+    translate(text, language, slice)
+  }
 
   async function init() {
     dispatch(initialization())
@@ -68,8 +74,8 @@ export default function Main() {
     const data = message.data
     PushNotification.localNotification({
       channelId: 'chanel_1',
-      title,
-      message: body,
+      title: tr(title, true),
+      message: tr(body, true),
       playSound: true,
       soundName: 'coins',
       userInfo: data

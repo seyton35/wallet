@@ -3,22 +3,13 @@ import { useSelector } from 'react-redux'
 
 import { translate } from '../middleWare/translator/translator'
 
-export default function Txt({ children, noTranslate = false, slice = false, ...props }) {
+export default function Txt({ children, noTranslate = false, slice, ...props }) {
     const { language } = useSelector(s => s.state)
-
-    if (slice) {
-        const arr = children.split(' ')
-        const res = arr.map(el => {
-            return translate(el, language)
-        })
-        children = res.join(' ')
-    }
-
     return (
         <Text style={styles.text} {...props}>
             {noTranslate
                 ? children
-                : translate(children, lang = language)
+                : translate(children, lang = language, slice)
             }
         </Text>
     )

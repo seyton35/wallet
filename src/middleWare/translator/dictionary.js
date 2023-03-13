@@ -74,7 +74,7 @@ export const dictionary = {
     'страница приложения': { en: 'application page', ua: 'сторінка додатка', },
     //Settings
     'Push-уведомления': { en: 'Push Notifications', ua: 'Push-сповіщення', },
-    'Пополнение': { en: 'Replenishment', ua: 'Поповнення', },
+    'Пополнение': { en: 'Refill', ua: 'Поповнення', },
     'Списание': { en: 'Write-off', ua: 'Списання', },
     'Входящий счет': { en: 'Incoming invoice', ua: 'Вхідний рахунок', },
     'Новости и акции': { en: 'News and promotions', ua: 'Новини та акції', },
@@ -201,6 +201,7 @@ export const dictionary = {
     'пользователь с таким номером не существует': { en: 'user with this number does not exist', ua: 'користувач з таким номером не існує', },
     'счет успешно выставлен': { en: 'billed successfully', ua: 'рахунок успішно виставлено', },
     'перевод успешно выполнен': { en: 'translation successfully completed', ua: 'переклад успішно виконано', },
+    'перевод выполнен': { en: 'translation completed', ua: 'переклад виконано', },
     'счет не найден': { en: 'bill not found', ua: 'рахунок не знайдено', },
     'счет уже оплачен': { en: 'bill already paid', ua: 'рахунок вже сплачено', },
     'счет успешно оплачен': { en: 'bill successfully paid', ua: 'рахунок успішно сплачено', },
@@ -213,6 +214,8 @@ export const dictionary = {
     'вам выставлен счет': { en: 'you have been billed', ua: 'вам виставлено рахунок', },
     'зачисленно': { en: 'credited', ua: 'зараховано', },
     'Списано': { en: 'Written off', ua: 'Списано', },
+    'Перевод': { en: 'Translation', ua: 'Перекладено', },
+    'на': { en: 'on', ua: 'на', },
     '': { en: '', ua: '', },
     //Date mont short
     'янв': { en: 'jan', ua: 'сiч.', },
