@@ -246,6 +246,7 @@ const stateSlice = createSlice({
     name: 'state',
     initialState: {
         language: 'ru',
+        availableLanguages: ['ru', 'en', 'ua'],
         loading: false,
         currentScreen: 'greeting',
         prevScreen: null,

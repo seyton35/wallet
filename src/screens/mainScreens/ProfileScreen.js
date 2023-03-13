@@ -1,9 +1,12 @@
-import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { useState } from 'react'
+import { Alert, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { useDispatch, useSelector } from 'react-redux'
+// import { flag40x40Assets } from '../../../assets/flag40x40Assets'
 
 import BottomTabsPanel from '../../components/BottomTabsPanel'
 import ListArrowButton from '../../components/ListArrowButton'
+import ModalButtonList from '../../components/ModalButtonList'
 import Txt from '../../components/Txt'
 
 import { phoneNumberMask1 } from '../../middleWare/phoneNumberFormater'
@@ -11,9 +14,10 @@ import { translate } from '../../middleWare/translator/translator'
 import { logOutUser, popToTop, postLanguage } from '../../store/slices/stateReducer'
 
 export default function ProfileScreen() {
+    const [showSelectLanguage, setShowSelectLanguage] = useState(false)
 
     const { phoneNumber } = useSelector(s => s.state.userData)
-    const { language } = useSelector(s => s.state)
+    const { language, availableLanguages } = useSelector(s => s.state)
 
     const dispatch = useDispatch()
 
@@ -41,20 +45,31 @@ export default function ProfileScreen() {
         )
     }
 
+    function selectLanguageHandler() {
+        setShowSelectLanguage(true)
+    }
+
+    function selectLanguage(language) {
+        dispatch(postLanguage(language))
+        setShowSelectLanguage(false)
+    }
+
     return (
         <View style={styles.container}>
 
             <TouchableOpacity style={styles.choiceLangBtn}
-                onPress={() => {
-                    if (language == 'ru') {
-                        dispatch(postLanguage('en'))
-                    } else {
-                        dispatch(postLanguage('ru'))
-                    }
-                }}
+                onPress={selectLanguageHandler}
             >
                 <AntDesign name='earth' style={styles.choiceLangIcon} />
             </TouchableOpacity>
+
+            <ModalButtonList
+                visible={showSelectLanguage}
+                onPress={(res) => selectLanguage(res)}
+                onClose={() => setShowSelectLanguage(false)}
+                data={availableLanguages} >
+                {/* <Image source={flag40x40Assets.UAH} style={{ width: 40, height: 40, marginRight:10}} /> */}
+            </ModalButtonList>
 
             <ScrollView>
                 <View style={styles.phoneNumberView}>

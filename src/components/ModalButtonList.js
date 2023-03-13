@@ -1,8 +1,8 @@
-import { Modal, StyleSheet,  TouchableOpacity, View } from 'react-native'
+import { Modal, StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import Txt from './Txt'
 
-export default function ModalButtonList({ visible, onPress, data, onClose, animationType = "fade" }) {
+export default function ModalButtonList({ children, visible, onPress, data, onClose, animationType = "fade" }) {
 
     function isVisible() {
         if (!visible) {
@@ -22,6 +22,7 @@ export default function ModalButtonList({ visible, onPress, data, onClose, anima
                         <TouchableOpacity key={index} style={styles.itemBtn}
                             onPress={() => onPress(el, index)}
                         >
+                            {children}
                             <Txt style={styles.itemBtnText}>{el}</Txt>
                         </TouchableOpacity>
                     )}
@@ -51,7 +52,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         padding: 10,
         borderBottomColor: 'gray',
-        borderBottomWidth: .7
+        borderBottomWidth: .7,
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     itemBtnText: {
         color: '#000',

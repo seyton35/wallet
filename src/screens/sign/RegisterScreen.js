@@ -6,10 +6,13 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import Header from '../../components/Header'
 import Txt from '../../components/Txt'
+import ModalButtonList from '../../components/ModalButtonList'
 
 import { popToTop, registerNewUser, setErrorMessage, setLanguage } from '../../store/slices/stateReducer'
 
 export default function RegisterScreen() {
+    const [showSelectLanguage, setShowSelectLanguage] = useState(false)
+
     const [phoneNumber, setPhoneNumber] = useState('+')
     const [password, setPassword] = useState()
     const [repeatPassword, setRepeatPassword] = useState()
@@ -17,7 +20,7 @@ export default function RegisterScreen() {
     const [isPhoneOk, setIsPhoneOk] = useState(false)
     const [isPasswordOk, setIsPasswordOk] = useState(false)
 
-    const { language, errorMessage } = useSelector(s => s.state)
+    const { language, availableLanguages, errorMessage } = useSelector(s => s.state)
 
     const dispatch = useDispatch()
 
@@ -89,20 +92,28 @@ export default function RegisterScreen() {
         setIsPhoneOk(true)
     }
 
+    function selectLanguage(language) {
+        dispatch(setLanguage(language))
+        setShowSelectLanguage(false)
+    }
+
     return (
         <View style={styles.container}>
-            <Header showHeaderButton={false} />
+
             <TouchableOpacity style={styles.choiceLangBtn}
-                onPress={() => {
-                    if (language == 'ru') {
-                        dispatch(setLanguage('en'))
-                    } else {
-                        dispatch(setLanguage('ru'))
-                    }
-                }}
+                onPress={() => setShowSelectLanguage(true)}
             >
                 <AntDesign name='earth' style={styles.choiceLangIcon} />
             </TouchableOpacity>
+
+            <ModalButtonList
+                visible={showSelectLanguage}
+                onPress={(res) => selectLanguage(res)}
+                onClose={() => setShowSelectLanguage(false)}
+                data={availableLanguages} >
+            </ModalButtonList>
+
+            <Header showHeaderButton={false} />
 
             {errorMessage
                 ? < View style={styles.errorView}>
@@ -183,7 +194,8 @@ const styles = StyleSheet.create({
     choiceLangBtn: {
         position: 'absolute',
         top: 10,
-        right: 10
+        right: 10,
+        zIndex: 100
     },
     choiceLangIcon: {
         fontSize: 25,
