@@ -8,7 +8,7 @@ export default function CurrencyAccount({ acc, defaultCurrencyAccount, onPress }
     return (
         <View style={styles.currencyItem}>
             <TouchableOpacity style={styles.currencyBtn}
-                onPress={()=>onPress(acc)}
+                onPress={() => onPress(acc)}
             >
                 <View style={styles.currencyInfoBox} >
                     {defaultCurrencyAccount == acc.type
@@ -18,11 +18,11 @@ export default function CurrencyAccount({ acc, defaultCurrencyAccount, onPress }
                 </View>
                 <View style={styles.currencyInfoBox} >
                     <Txt style={styles.currencyLabel}>{countCut(acc.count)} {getCurrencySymbol(acc.type)}</Txt>
-                    <Txt style={styles.currencyTxt}>
+                    <Txt slice style={styles.currencyTxt}>
                         {defaultCurrencyAccount == acc.type
-                            ? 'Остновной'
-                            : 'Дополнительный'
-                        } счет в {acc.type}
+                            ? `Остновной счет в ${acc.type}`
+                            : `Дополнительный счет в ${acc.type}`
+                        }
                     </Txt>
                 </View>
             </TouchableOpacity>

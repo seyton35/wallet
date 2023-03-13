@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet,  TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Header from '../../components/Header'
@@ -7,7 +7,7 @@ import Txt from '../../components/Txt'
 import ModalRangeDatePicker from '../../components/ModalRangeDatePicker'
 
 import { getCurrencySymbol } from '../../middleWare/currencyFormater'
-import { allRus } from '../../middleWare/dataFormater'
+import { fullDate } from '../../middleWare/dataFormater'
 import { fetchBillsByCategory } from '../../store/slices/currencyReducer'
 import { backButtonPress, navigate } from '../../store/slices/stateReducer'
 
@@ -94,7 +94,7 @@ export default function BillsListScreen() {
                                     <Txt>{bill.sender.number}</Txt>
                                 </View>
                                 <View style={styles.billBox}>
-                                    <Txt>{allRus(bill.registerDate)}</Txt>
+                                    <Txt slice>{fullDate(bill.registerDate)}</Txt>
                                     <Txt>{bill.status}</Txt>
                                 </View>
 

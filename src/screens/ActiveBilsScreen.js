@@ -62,7 +62,7 @@ export default function ActiveBillsScreen() {
                         <View style={styles.billInfoView}>
                             <Txt style={styles.billInfoSenderTxt}>{bill.sender.number}</Txt>
                             <Txt style={styles.billInfoSumTxt}>{bill.sender.sum} {getCurrencySymbol(bill.sender.currency)}</Txt>
-                            <Txt style={styles.billInfoDateTxt}>{dataFormater.allRus(bill.registerDate)}</Txt>
+                            <Txt slice style={styles.billInfoDateTxt}>{dataFormater.fullDate(bill.registerDate)}</Txt>
                         </View>
                         <TouchableOpacity style={styles.rejectBillBtn}
                             onPress={() => rejectBillBtnHandler(bill)}

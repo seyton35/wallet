@@ -5,7 +5,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import Header from '../../components/Header'
 import Txt from '../../components/Txt'
 
-import { allRus } from '../../middleWare/dataFormater'
+import { fullDate } from '../../middleWare/dataFormater'
 
 export default function BillInfoScreen() {
     const { bill, headerText } = useSelector(s => s.state.navigationData)
@@ -59,7 +59,7 @@ export default function BillInfoScreen() {
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.infoBtn}>
                     <Txt style={styles.infoLabel}>Дата счета</Txt>
-                    <Txt style={styles.infoTxt}>{allRus(bill.registerDate)}</Txt>
+                    <Txt slice style={styles.infoTxt}>{fullDate(bill.registerDate)}</Txt>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.infoBtn}>
                     <Txt style={styles.infoLabel}>Выставлен</Txt>

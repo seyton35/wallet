@@ -51,6 +51,11 @@ export const dictionary = {
     //Profile
     'номер Wallet кошелька': { en: 'Wallet number', ua: 'номер Wallet гаманця', },
     'выйти из приложения': { en: 'exit app', ua: 'вийти з додатку', },
+    //Profilealerts
+    'выйти из кошелька': { en: 'exit from account', ua: 'вийти з гаманця', },
+    'в следующий раз вам придется ввести номер кошелька и пароль': { en: 'next time you will have to enter your wallet number and password', ua: 'наступного разу вам доведеться ввести номер гаманця та пароль', },
+    'выйти': { en: 'exit', ua: 'вийти', },
+    '': { en: '', ua: '', },
     //Service
     'Пополнить счет': { en: 'Top up account', ua: 'Поповнити рахунок', },
     'перевести со своего счета Wallet': { en: 'transfer from your Wallet account', ua: 'перекласти зі свого рахунку Wallet', },
@@ -127,6 +132,19 @@ export const dictionary = {
     'Отклонить счет': { en: 'Reject invoice', ua: 'Відхилити рахунок', },
     'вы дейсвительно хотите отклонить этот счет?': { en: 'do you really want to reject this invoice?', ua: 'ви дійсно хочете відхилити цей рахунок?', },
     'отклонить': { en: 'reject', ua: 'відхилити', },
+    //defaultCurrencyAccount
+    'Открыть счет': { en: 'Open an account', ua: 'Відкрити рахунок', },
+    'Основной': { en: 'Main', ua: 'Основний', },
+    'Дополнительный': { en: 'Additional', ua: 'Додатковий', },
+    'счет': { en: 'account', ua: 'рахунок', },
+    'счет': { en: 'account', ua: '', },
+    'в': { en: 'in', ua: 'у', },
+    //defaultCurrencyAccount alerts
+    'нет доступных валют': { en: 'no more currencies available', ua: 'немає доступних валют', },
+    '': { en: '', ua: '', },
+    '': { en: '', ua: '', },
+    '': { en: '', ua: '', },
+
 
     //Header
     'Услуги': { en: 'Services', ua: 'Послуги', },
@@ -140,6 +158,7 @@ export const dictionary = {
     'Платеж': { en: 'Payment', ua: 'Платіж', },
     'Выставить счет': { en: 'Invocie a bill', ua: 'Виставити рахунок', },
     'неоплаченные счета': { en: 'unpaid bills', ua: 'неоплачені рахунки', },
+    'Счет по умолчанию': { en: 'Default currency', ua: 'Рахунок за замовчуванням', },
 
     //BottomTabs
     'главная': { en: 'main', ua: 'головна', },
@@ -168,7 +187,59 @@ export const dictionary = {
     //Datepicker
     'готово': { en: 'ok', ua: 'готово', },
 
-    //alert
+    //alerts
     'отмена': { en: 'cancel', ua: 'відміна', },
+    'некоректные данные при регистрации': { en: 'incorrect registration data', ua: 'некоректні дані під час реєстрації', },
+    'этот номер телефона уже занят': { en: 'this phone number is already in use', ua: 'цей номер телефону вже зайнятий', },
+    'регистрация прощла успешно': { en: 'registration completed successfully', ua: 'реєстрація пройшла успішно', },
+    'что-то пошло не так': { en: 'something went wrong', ua: 'щось пішло не так', },
+    'некоректные данные при авторизации': { en: 'incorrect login details', ua: 'некоректні дані під час авторизації', },
+    'пользователь не существует': { en: 'user does not exist', ua: 'користувач не існує', },
+    'добро пожаловать': { en: 'welcome', ua: 'ласкаво просимо', },
+    'не правильный номер телефона или пароль': { en: 'incorrect phone number or password', ua: 'неправильний номер телефону або пароль', },
+    'это ваш номер': { en: 'this is your number', ua: 'це ваш номер', },
+    'пользователь с таким номером не существует': { en: 'user with this number does not exist', ua: 'користувач з таким номером не існує', },
+    'счет успешно выставлен': { en: 'billed successfully', ua: 'рахунок успішно виставлено', },
+    'перевод успешно выполнен': { en: 'translation successfully completed', ua: 'переклад успішно виконано', },
+    'счет не найден': { en: 'bill not found', ua: 'рахунок не знайдено', },
+    'счет уже оплачен': { en: 'bill already paid', ua: 'рахунок вже сплачено', },
+    'счет успешно оплачен': { en: 'bill successfully paid', ua: 'рахунок успішно сплачено', },
+    'неправильный номер': { en: 'wrong number', ua: 'невірний номер', },
+    'ошибка': { en: 'error', ua: 'помилка', },
+    'Адресат не имеет счета выбранной валюты': { en: 'The recipient does not have an account in the selected currency', ua: 'Адресат не має рахунку вибраної валюти', },
+    'счет отклонен': { en: 'bill declined', ua: 'рахунок відхилений', },
+    '': { en: '', ua: '', },
+    //pushNotification
+    'вам выставлен счет': { en: 'you have been billed', ua: 'вам виставлено рахунок', },
+    'зачисленно': { en: 'credited', ua: 'зараховано', },
+    'Списано': { en: 'Written off', ua: 'Списано', },
+    '': { en: '', ua: '', },
+    //Date mont short
+    'янв': { en: 'jan', ua: 'сiч.', },
+    'фев.': { en: 'feb', ua: 'лют.', },
+    'марта': { en: 'mar', ua: 'бер.', },
+    'апр.': { en: 'apr', ua: 'квiт.', },
+    'мая': { en: 'may', ua: 'трав.', },
+    'июня': { en: 'jun', ua: 'черв.', },
+    'июля': { en: 'jul', ua: 'лип.', },
+    'авг.': { en: 'aug', ua: 'серп.', },
+    'сен.': { en: 'sep', ua: 'вер.', },
+    'окт.': { en: 'oct', ua: 'жовт.', },
+    'ноя.': { en: 'now', ua: 'лист.', },
+    'дек.': { en: 'dec', ua: 'груд.', },
+    //Date mont full
+    'ЯНВАРЯ': { en: 'JANUARY', ua: 'СІЧЕНЬ', },
+    'ФЕВРАЛЯ': { en: 'FEBRUARY', ua: 'ЛЮТИЙ', },
+    'МАРТА': { en: 'MARCH', ua: 'БЕРЕЗЕНЬ', },
+    'АПРЕЛЯ': { en: 'APRIL', ua: 'КВІТЕНЬ', },
+    'МАЙА': { en: 'MAY', ua: 'ТРАВЕНЬ', },
+    'ИЮНЯ': { en: 'JUNE', ua: 'ЧЕРВЕНЬ', },
+    'ИЮЛЯ': { en: 'JULY', ua: 'ЛИПЕНЬ', },
+    'АВГУСТА': { en: 'AUGUST', ua: 'СЕРПЕНЬ', },
+    'СЕНТЯБРЯ': { en: 'SEPTEMBER', ua: 'ВЕРЕСЕНЬ', },
+    'ОКТЯБРЯ': { en: 'OCTOBER', ua: 'ЖОВТЕНЬ', },
+    'НОЯБРЯ': { en: 'NOVEMBER', ua: 'ЛИСТОПАД', },
+    'ДЕКАБРЯ': { en: 'DECEMBER', ua: 'ГРУДЕНЬ', },
+    'г.': { en: 'y.', ua: 'р.', },
     '': { en: '', ua: '', },
 }

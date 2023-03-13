@@ -13,12 +13,10 @@ import {
   saveNotificationToken,
   popToTop
 } from './store/slices/stateReducer'
-import { setToastMessage } from './store/slices/currencyReducer'
 import PushNotification from 'react-native-push-notification'
 
 export default function Main() {
   const stateToastMessage = useSelector(s => s.state.toastAndroidMessage)
-  const currencyToastMessage = useSelector(s => s.currency.toastAndroidMessage)
   const currentScreen = useSelector(s => s.state.currentScreen)
   const { idUser } = useSelector(s => s.state.userData)
 
@@ -126,13 +124,6 @@ export default function Main() {
       dispatch(setToastAndroidMessage(null))
     }
   }, [stateToastMessage])
-
-  useEffect(() => {
-    if (currencyToastMessage) {
-      ToastAndroid.show(currencyToastMessage, 0)
-      dispatch(setToastMessage(null))
-    }
-  }, [currencyToastMessage])
 
   return (
     <View style={styles.container}>

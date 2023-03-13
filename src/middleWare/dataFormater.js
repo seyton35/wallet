@@ -1,4 +1,4 @@
-export function allRus(date) {
+export function fullDate(date) {
     const d = new Date(new Date(date).getTime())
     const month = shirtMonthRUS(d.getMonth())
     const day = d.getDate()
@@ -8,17 +8,17 @@ export function allRus(date) {
     return day + ' ' + month + ' ' + year + ' г. ' + time
 }
 
-export function dayMonthYearRUS(date) {
+export function dayMonthYear(date) {
     const d = new Date(new Date(date).getTime())
-    const month = longMonthRUS(d.getMonth())
+    const month = fullMonth(d.getMonth())
     const day = d.getDate()
     const year = d.getFullYear()
 
     return day + ' ' + month + ' ' + year
 }
-export function dayMonthRUS(date) {
+export function dayMonth(date) {
     const d = new Date(new Date(date).getTime())
-    const month = longMonthRUS(d.getMonth())
+    const month = fullMonth(d.getMonth())
     const day = d.getDate()
 
     return day + ' ' + month
@@ -36,31 +36,24 @@ export function getDayMonthYear(date) {
     }
 }
 
-function addZero(num) {
-    if (num < 10) {
-        num = "0" + num
-    }
-    return num
-}
-
 function shirtMonthRUS(month) {
     switch (month) {
         case 0: return 'янв.'
         case 1: return 'фев.'
         case 2: return 'марта'
         case 3: return 'апр.'
-        case 4: return 'майа'
+        case 4: return 'мая'
         case 5: return 'июня'
         case 6: return 'июля'
         case 7: return 'авг.'
         case 8: return 'сен.'
-        case 9: return 'ноя.'
-        case 10: return 'окт.'
+        case 9: return 'окт.'
+        case 10: return 'ноя.'
         case 11: return 'дек.'
         default: return 'err'
     }
 }
-function longMonthRUS(month) {
+function fullMonth(month) {
     switch (month) {
         case 0: return 'ЯНВАРЯ'
         case 1: return 'ФЕВРАЛЯ'
@@ -71,8 +64,8 @@ function longMonthRUS(month) {
         case 6: return 'ИЮЛЯ'
         case 7: return 'АВГУСТА'
         case 8: return 'СЕНТЯБРЯ'
-        case 9: return 'НОЯБРЯ'
-        case 10: return 'ОКТЯБРЯ'
+        case 9: return 'ОКТЯБРЯ'
+        case 10: return 'НОЯБРЯ'
         case 11: return 'ДЕКАБРЯ'
         default: return 'ERR'
     }

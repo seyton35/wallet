@@ -8,7 +8,6 @@ import Header from '../../components/Header'
 import Txt from '../../components/Txt'
 
 import { popToTop, registerNewUser, setErrorMessage, setLanguage } from '../../store/slices/stateReducer'
-import { translate } from '../../middleWare/translator/translator'
 
 export default function RegisterScreen() {
     const [phoneNumber, setPhoneNumber] = useState('+')
@@ -21,10 +20,6 @@ export default function RegisterScreen() {
     const { language, errorMessage } = useSelector(s => s.state)
 
     const dispatch = useDispatch()
-
-    function tr(text) {
-        return translate(text, language)
-    }
 
     function phoneNumHandler(val) {
         let num = val.split('')
@@ -40,7 +35,7 @@ export default function RegisterScreen() {
             } else {
                 setIsPhoneOk(false)
                 if (num.length > 11) {
-                    dispatch(setErrorMessage(tr('слишком длинный номер')))
+                    dispatch(setErrorMessage('слишком длинный номер'))
                 } else dispatch(setErrorMessage())
             }
         }
@@ -56,7 +51,7 @@ export default function RegisterScreen() {
     function repeatPasswordHandler(val) {
         setRepeatPassword(val)
         if (val !== password) {
-            dispatch(setErrorMessage(tr('повторный пароль не совпадает')))
+            dispatch(setErrorMessage('повторный пароль не совпадает'))
         } else {
             dispatch(setErrorMessage())
         }
@@ -67,7 +62,7 @@ export default function RegisterScreen() {
             dispatch(setErrorMessage())
             return true
         } else {
-            dispatch(setErrorMessage(tr('повторный пароль не совпадает')))
+            dispatch(setErrorMessage('повторный пароль не совпадает'))
             return false
         }
     }
@@ -78,7 +73,7 @@ export default function RegisterScreen() {
             dispatch(registerNewUser({
                 phoneNumber, password
             }))
-        } else dispatch(setErrorMessage(tr('некорректный логин или пароль')))
+        } else dispatch(setErrorMessage('некорректный логин или пароль'))
     }
 
     function changeAuth() {

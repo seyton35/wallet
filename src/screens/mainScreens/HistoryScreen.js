@@ -9,7 +9,7 @@ import Txt from '../../components/Txt'
 import Loading from '../../components/Loading'
 import BottomTabsPanel from '../../components/BottomTabsPanel'
 
-import { allRus, dayMonthRUS, dayMonthYearRUS, getDayMonthYear } from '../../middleWare/dataFormater'
+import { fullDate, dayMonth, dayMonthYear, getDayMonthYear } from '../../middleWare/dataFormater'
 import { fetchClosedBills } from '../../store/slices/currencyReducer'
 import { countCut, getCurrencySymbol } from '../../middleWare/currencyFormater'
 
@@ -36,22 +36,22 @@ export default function HistoryScreen() {
         const { day, month, year } = getDayMonthYear(date)
         if (payDate.current == null) {
             payDate.current = { day, month, year }
-            dateString = dayMonthYearRUS(date)
+            dateString = dayMonthYear(date)
             isShowDate = true
         } else if (payDate.current.day !== day ||
             payDate.current.month !== month) {
             if (payDate.current.year !== year) {
-                dateString = dayMonthYearRUS(date)
+                dateString = dayMonthYear(date)
             }
             else {
-                dateString = dayMonthRUS(date)
+                dateString = dayMonth(date)
             }
             isShowDate = true
         }
         payDate.current = { day, month, year }
         if (isShowDate) {
             return <View style={styles.billDateBox}>
-                <Txt style={styles.billDateTxt}>{dateString}</Txt>
+                <Txt slice style={styles.billDateTxt}>{dateString}</Txt>
             </View>
         }
     }
@@ -129,7 +129,7 @@ export default function HistoryScreen() {
                 {bill.comment
                     ? <View style={styles.billPanelInfoCommentView}>
                         <Txt style={styles.billPanelInfoCommentLabel}>Комментарий</Txt>
-                        <Txt noTranslate={true} style={styles.billPanelInfoCommentTxt}>{bill.comment}</Txt>
+                        <Txt noTranslate style={styles.billPanelInfoCommentTxt}>{bill.comment}</Txt>
                     </View>
                     : null
                 }
@@ -143,7 +143,7 @@ export default function HistoryScreen() {
                 </View>
                 <View style={styles.billPanelInfoView}>
                     <Txt style={styles.billPanelInfoLabel}>Дата и время</Txt>
-                    <Txt style={styles.billPanelInfoTxt}>{allRus(bill.registerDate)}</Txt>
+                    <Txt slice style={styles.billPanelInfoTxt}>{fullDate(bill.registerDate)}</Txt>
                 </View>
                 <View style={styles.billPanelInfoView}>
                     <Txt style={styles.billPanelInfoLabel}>Сумма</Txt>
@@ -192,7 +192,7 @@ export default function HistoryScreen() {
                     bill.comment
                         ?
                         <View style={styles.billInfoCommentView}>
-                            <Txt style={styles.billInfoCommentTxt}>{bill.comment}</Txt>
+                            <Txt noTranslate style={styles.billInfoCommentTxt}>{bill.comment}</Txt>
                         </View>
                         : null
                 }

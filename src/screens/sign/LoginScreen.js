@@ -7,8 +7,6 @@ import Header from '../../components/Header'
 import Txt from '../../components/Txt'
 
 import { loginUser, popToTop, setErrorMessage, setLanguage } from '../../store/slices/stateReducer'
-import { translate } from '../../middleWare/translator/translator'
-
 
 export default function LoginScreen() {
     const [phoneNumber, setPhoneNumber] = useState('+')
@@ -20,10 +18,6 @@ export default function LoginScreen() {
     const { language, errorMessage } = useSelector(s => s.state)
 
     const dispatch = useDispatch()
-
-    function tr(text) {
-        return translate(text, language)
-    }
 
     function phoneNumHandler(val) {
         let num = val.split('')
@@ -39,7 +33,7 @@ export default function LoginScreen() {
             } else {
                 setIsPhoneOk(false)
                 if (num.length > 11) {
-                    dispatch(setErrorMessage(tr('слишком длинный номер')))
+                    dispatch(setErrorMessage('слишком длинный номер'))
                 } else dispatch(setErrorMessage())
             }
         }
@@ -57,7 +51,7 @@ export default function LoginScreen() {
             dispatch(loginUser({
                 phoneNumber, password
             }))
-        } else dispatch(setErrorMessage(tr('некорректный логин или пароль')))
+        } else dispatch(setErrorMessage('некорректный логин или пароль'))
     }
 
     function changeAuth() {

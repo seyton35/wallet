@@ -9,7 +9,7 @@ import Txt from '../../components/Txt'
 import { LogoAssets } from '../../../assets/logoAssets'
 import { billPayment, fetchExchangeRate } from '../../store/slices/currencyReducer'
 import { countCut } from '../../middleWare/currencyFormater'
-import { dayMonthYearRUS } from '../../middleWare/dataFormater'
+import { dayMonthYear } from '../../middleWare/dataFormater'
 import { translate } from '../../middleWare/translator/translator'
 
 export default function BillPaymentScreen() {
@@ -105,7 +105,7 @@ export default function BillPaymentScreen() {
                     </View>
                     <View style={styles.blockView}>
                         <Txt style={styles.labelTxt}>Дата</Txt>
-                        <Txt style={styles.text}>{dayMonthYearRUS(bill.registerDate)}</Txt>
+                        <Txt slice style={styles.text}>{dayMonthYear(bill.registerDate)}</Txt>
                     </View>
                     {bill.comment
                         ? <View style={styles.blockView}>

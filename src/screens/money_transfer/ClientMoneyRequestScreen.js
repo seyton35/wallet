@@ -39,7 +39,7 @@ export default function ClientMoneyRequestScreen() {
   }, [])
 
   function tr(text) {
-    return translate(text,language)
+    return translate(text, language)
   }
 
   function phoneNumHandler(num) {
@@ -140,7 +140,7 @@ export default function ClientMoneyRequestScreen() {
               onChangeText={setCommentText}
               maxLength={100}
               multiline
-              placeholder='комментарий'
+              placeholder={tr('комментарий')}
             ></TextInput>
 
             : <TouchableOpacity
@@ -176,10 +176,10 @@ export default function ClientMoneyRequestScreen() {
             value={sum}
             onChangeText={val => sumHandler(val)}
             keyboardType='decimal-pad'
-            placeholder='сумма'>
+            placeholder={tr('сумма')}>
           </TextInput>
           {moneyRequestLimits
-            ? <Txt>от {moneyRequestLimits.limMin} до {moneyRequestLimits.limMax}</Txt>
+            ? <Txt>{tr('от')} {moneyRequestLimits.limMin} {tr('до')} {moneyRequestLimits.limMax}</Txt>
             : null
           }
         </View>

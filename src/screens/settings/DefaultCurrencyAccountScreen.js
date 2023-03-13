@@ -1,12 +1,15 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useState } from 'react'
 
-import { openCurrencyAccount, postDefaultCurrencyAccount, setToastMessage } from '../../store/slices/currencyReducer'
 import CurrencyAccount from '../../components/CurrencyAccount'
 import Header from '../../components/Header'
+import Txt from '../../components/Txt'
 import ModalButtonList from '../../components/ModalButtonList'
+
+import { openCurrencyAccount, postDefaultCurrencyAccount } from '../../store/slices/currencyReducer'
+import { setToastAndroidMessage } from '../../store/slices/stateReducer'
 
 export default function DefaultCurrencyAccount() {
     const currencyAccountsArr = useSelector(s => s.currency.currencyArray)
@@ -63,7 +66,7 @@ export default function DefaultCurrencyAccount() {
         }
         if (flag) setVisible(true)
         else {
-            dispatch(setToastMessage('нет доступных валют'))
+            dispatch(setToastAndroidMessage('нет доступных валют'))
             setOpenCurrencyAccountBtnDisabled(true)
         }
     }
@@ -83,7 +86,7 @@ export default function DefaultCurrencyAccount() {
                 onClose={closeModal}
             />
 
-            <Header headerText='счет по умолчанию' />
+            <Header headerText='Счет по умолчанию' />
             <ScrollView style={styles.scrollView}>
                 {currencyAccountsArr.map((acc, index) =>
                     <CurrencyAccount
@@ -104,7 +107,7 @@ export default function DefaultCurrencyAccount() {
                             <Icon name='plus' size={25} style={[{ color: 'black', }, styles.icon]} />
                         </View>
                         <View style={styles.openCurrencyBox} >
-                            <Text style={styles.openCurrencyLabel}>Открыть счет</Text>
+                            <Txt style={styles.openCurrencyLabel}>Открыть счет</Txt>
                         </View>
                     </TouchableOpacity>
                     {openCurrencyAccountBtnDisabled

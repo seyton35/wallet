@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { storeData, getData, removeData } from "../../middleWare/asyncStorage";
+import { translate } from "../../middleWare/translator/translator";
 import { fetchAvailableCurrencies, setActiveBills, setAndStoreDefaultCurrencyAccount, setCurrencyArray, setDefaultCurrencyAccount } from "./currencyReducer";
 
 export const initialization = createAsyncThunk(
@@ -342,7 +343,7 @@ const stateSlice = createSlice({
             state.isLogined = action.payload
         },
         setToastAndroidMessage(state, action) {
-            state.toastAndroidMessage = action.payload
+            state.toastAndroidMessage = translate(action.payload, state.language)
         },
         storeAndSetPushNotificationSettings(state, action) {
             state.pushNotificationSettings[action.payload.field] = action.payload.flag

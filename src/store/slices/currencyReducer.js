@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { storeData } from "../../middleWare/asyncStorage";
-import { popToTop } from "./stateReducer";
+import { setToastAndroidMessage, popToTop } from "./stateReducer";
 
 
 export const fetchAllCurrencyes = createAsyncThunk(
@@ -21,7 +21,7 @@ export const fetchAllCurrencyes = createAsyncThunk(
             if (res.status == 200) {
                 dispatch(setCurrencyArray(data.currencyesArr))
             } else {
-                dispatch(setToastMessage(data.message))
+                dispatch(setToastAndroidMessage(data.message))
             }
         } catch (e) {
             return e.message
@@ -48,7 +48,7 @@ export const postDefaultCurrencyAccount = createAsyncThunk(
             if (res.status == 200) {
                 dispatch(setAndStoreDefaultCurrencyAccount(currency))
             } else {
-                dispatch(setToastMessage(data.message))
+                dispatch(setToastAndroidMessage(data.message))
             }
         } catch (e) {
             return e.message
@@ -75,7 +75,7 @@ export const openCurrencyAccount = createAsyncThunk(
             if (res.status == 200) {
                 dispatch(fetchAllCurrencyes(idUser))
             } else {
-                dispatch(setToastMessage(data.message))
+                dispatch(setToastAndroidMessage(data.message))
             }
         } catch (e) {
             return e.message
@@ -124,7 +124,7 @@ export const currencyСonversion = createAsyncThunk(
             if (res.status == 200) {
                 dispatch(setErrorMessage(null))
                 dispatch(popToTop('home'))
-                dispatch(setToastMessage(data.message))
+                dispatch(setToastAndroidMessage(data.message))
                 dispatch(resetValueAfterRequest())
             } else dispatch(setErrorMessage(data.message))
 
@@ -174,7 +174,7 @@ export const clientMoneyRequest = createAsyncThunk(
             const data = await res.json()
             if (res.status == 200) {
                 dispatch(setErrorMessage(null))
-                dispatch(setToastMessage(data.message))
+                dispatch(setToastAndroidMessage(data.message))
                 dispatch(setRequestStatus(data.status))
                 dispatch(resetValueAfterRequest())
                 dispatch(popToTop('home'))
@@ -230,10 +230,10 @@ export const sendMoneyRequest = createAsyncThunk(
                 })
             })
             const data = await res.json()
-            dispatch(setToastMessage(data.message))
+            dispatch(setToastAndroidMessage(data.message))
             if (res.status == 200 || res.status == 202) {
                 dispatch(popToTop('home'))
-            }else dispatch(setErrorMessage(data.error))
+            } else dispatch(setErrorMessage(data.error))
         } catch (e) {
             return e.message
         }
@@ -253,7 +253,7 @@ export const billPayment = createAsyncThunk(
                 body: JSON.stringify({ idUser, idBill, currencyType, rate })
             })
             const data = await res.json()
-            dispatch(setToastMessage(data.message))
+            dispatch(setToastAndroidMessage(data.message))
             if (res.status == 200 || res.status == 202) {
                 dispatch(fetchActiveBills(idUser))
                 dispatch(fetchAllCurrencyes(idUser))
@@ -281,9 +281,9 @@ export const rejectBill = createAsyncThunk(
             })
             const data = await res.json()
             if (res.status == 200) {
-                dispatch(setToastMessage(data.message))
+                dispatch(setToastAndroidMessage(data.message))
                 dispatch(fetchActiveBills(idUser))
-            } else dispatch(setToastMessage(data.message))
+            } else dispatch(setToastAndroidMessage(data.message))
 
 
         } catch (e) {
@@ -308,7 +308,7 @@ export const fetchClosedBills = createAsyncThunk(
             if (res.status == 200) {
                 dispatch(setClosedBills(data.closedBills))
             }
-            // else dispatch(setToastMessage(data.message))
+            // else dispatch(setToastAndroidMessage(data.message))
 
 
         } catch (e) {
@@ -377,7 +377,6 @@ const currencySlice = createSlice({
         transferStatus: null,
         availableCurrencies: [],
         availableCurrencyRates: [],
-        toastAndroidMessage: null,
         requestStatus: null,
         activeBills: [],
         closedBills: [],
@@ -400,9 +399,6 @@ const currencySlice = createSlice({
         setRequestStatus(state, action) {
             state.requestStatus = action.payload
         },
-        setToastMessage(state, action) {
-            state.toastAndroidMessage = action.payload
-        },
         setErrorMessage(state, action) {
             state.errormessage = action.payload
         },
@@ -412,7 +408,6 @@ const currencySlice = createSlice({
             state.errormessage = null
             state.rate = null
             state.transferStatus = null
-            state.toastAndroidMessage = null
             state.requestStatus = null
         },
         resetMessage(state, action) {
@@ -469,7 +464,6 @@ export const {
     setCurrencyArray,
     selectCurrency,
     setRequestStatus,
-    setToastMessage,
     setErrorMessage,
     resetValueAfterRequest,
     resetMessage,

@@ -7,6 +7,7 @@ import ListArrowButton from '../../components/ListArrowButton'
 import Txt from '../../components/Txt'
 
 import { phoneNumberMask1 } from '../../middleWare/phoneNumberFormater'
+import { translate } from '../../middleWare/translator/translator'
 import { logOutUser, popToTop, postLanguage } from '../../store/slices/stateReducer'
 
 export default function ProfileScreen() {
@@ -16,17 +17,21 @@ export default function ProfileScreen() {
 
     const dispatch = useDispatch()
 
+    function tr(text) {
+        return translate(text, language)
+    }
+
     function signOutBtnHandler() {
         Alert.alert(
-            "выйти из кошелька",
-            "в следующий раз вам придется ввести номер кошелька и пароль",
+            tr("выйти из кошелька"),
+            tr("в следующий раз вам придется ввести номер кошелька и пароль"),
             [
                 {
-                    text: 'отмена',
+                    text: tr('отмена'),
                     onPress: null
                 },
                 {
-                    text: 'выйти',
+                    text: tr('выйти'),
                     onPress: () => {
                         dispatch(logOutUser())
                         dispatch(popToTop('login'))
