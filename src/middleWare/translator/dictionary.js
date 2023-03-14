@@ -137,7 +137,6 @@ export const dictionary = {
     'Основной': { en: 'Main', ua: 'Основний', },
     'Дополнительный': { en: 'Additional', ua: 'Додатковий', },
     'счет': { en: 'account', ua: 'рахунок', },
-    'счет': { en: 'account', ua: '', },
     'в': { en: 'in', ua: 'у', },
     //defaultCurrencyAccount alerts
     'нет доступных валют': { en: 'no more currencies available', ua: 'немає доступних валют', },

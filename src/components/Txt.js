@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux'
 
 import { translate } from '../middleWare/translator/translator'
 
-export default function Txt({ children, noTranslate = false, slice, ...props }) {
+export default function Txt({ children, style, noTranslate = false, slice, ...props }) {
     const { language } = useSelector(s => s.state)
     return (
-        <Text style={styles.text} {...props}>
+        <Text style={[styles.text, style]} {...props}>
             {noTranslate
                 ? children
                 : translate(children, lang = language, slice)
@@ -17,8 +17,9 @@ export default function Txt({ children, noTranslate = false, slice, ...props }) 
 
 const styles = StyleSheet.create({
     text: {
-        flex: 1,
         fontSize: 14,
-        color: '#000'
+        color: '#000',
+        // fontFamily: 'OpenSans',
+        fontFamily: 'Ubuntu-Regular',
     },
 })

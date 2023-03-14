@@ -1,12 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+
 import Header from '../components/Header'
+import Txt from '../components/Txt'
 
 export default function HelpScreen() {
     return (
         <View >
             <Header headerText='Помощь' />
             <View style={styles.container}>
-                <Text style={styles.text}>Вы остаетесь без помощи</Text>
+                <Txt style={styles.text}>Вы остаетесь без помощи</Txt>
             </View>
         </View>
     )
