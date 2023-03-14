@@ -187,7 +187,7 @@ export default function ClientMoneyRequestScreen() {
           style={styles.btn}
           onPress={MoneyRequestoBtnHandler}
         >
-          <Txt style={styles.btnTxt}>выставить</Txt>
+          <Txt style={styles.btnTxt}>Выставить</Txt>
         </TouchableOpacity>
       </ScrollView>
     </View>

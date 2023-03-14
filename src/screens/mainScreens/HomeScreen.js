@@ -147,7 +147,6 @@ const styles = StyleSheet.create({
     blockLabelTxt: {
         color: '#000',
         fontSize: 23,
-        fontWeight: "bold"
     },
 
     issuesScroll: {

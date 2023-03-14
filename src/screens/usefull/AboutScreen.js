@@ -43,11 +43,12 @@ export default function AboutScreen() {
                     <Txt style={styles.openURLBtnText}>страница приложения</Txt>
                 </OpenURL>
 
-                {/* <OpenURL style={styles.openURLBtn}
-                    url={'https://apps.rustore.ru/?devId=bhxQcu299ncTTLrbkj9MYt3OV0mL4z29&appType=MAIN'}
+                <OpenURL style={styles.openURLBtn}
+                    url={'mailto:seyton3500@gmail.com'}
                 >
-                    <Txt style={styles.openURLBtnText}>открыть страницу разработчика</Txt>
-                </OpenURL> */}
+                    <Image style={styles.openURLBtnLogo} source={aboutAssets.gmail}></Image>
+                    <Txt style={styles.openURLBtnText}>написатьна мне на почту</Txt>
+                </OpenURL>
             </ScrollView>
             <BottomTabsPanel />
         </View>

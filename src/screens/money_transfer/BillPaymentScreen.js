@@ -266,8 +266,7 @@ const styles = StyleSheet.create({
         borderRadius: 3
     },
     payBtnTxt: {
-        color: '#000',
-        fontSize: 20,
-        fontWeight: 'bold'
+        color: '#fff',
+        fontSize: 17,
     }
 })
