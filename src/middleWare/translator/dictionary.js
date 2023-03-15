@@ -70,6 +70,11 @@ export const dictionary = {
     'Покупка': { en: 'Purchase', ua: 'Покупка', },
     'Продажа': { en: 'Sale', ua: 'Продаж', },
     //About
+    'Wallet — не настоящий банк': { en: 'Wallet is not a real bank', ua: 'Wallet – не справжній банк', },
+    'данное приложение не производит никаких операций над реальными деньгами.': { en: 'This application does not make any operations with real money.', ua: 'цей додаток не здійснює жодних операцій над реальними грошима.', },
+    'разработано мной в качестве pet-проекта для резюме и для повышения навыков программирования': { en: 'developed by me as a pet-project for a resume and to improve programming skills', ua: 'розроблено мною як pet-проект для резюме та для підвищення навичок програмування', },
+    'Понравилось приложение? Пожалуйста, оцените его в магазине:': { en: 'Liked the app? Please rate it in the store:', ua: 'Сподобався додаток? Будь ласка, оцініть його в магазині:', },
+    'Нашли ошибку или есть предложения по улучшению? свяжитесь со мной:': { en: 'Found a bug or have suggestions for improvement? contact me:', ua: "Знайшли помилку чи є пропозиції щодо покращення? зв'яжіться зі мною:", },
     'мое резюме': { en: 'my resume', ua: 'моє резюме', },
     'страница приложения': { en: 'application page', ua: 'сторінка додатка', },
     //Settings
@@ -151,7 +156,7 @@ export const dictionary = {
     'Карты': { en: 'Cards', ua: 'Карти', },
     'Счета': { en: 'Bills', ua: 'Рахунки', },
     'Курсы валют': { en: 'Exchange rates', ua: 'Курси валют', },
-    'О прилложении': { en: 'About app', ua: 'Про додаток', },
+    'О приложении': { en: 'About app', ua: 'Про додаток', },
     'Настройки': { en: 'Setrtings', ua: 'Налаштування', },
     'Первести на Wallet': { en: 'Transfer to Wallet', ua: 'Перекласти на Wallet', },
     'Платеж': { en: 'Payment', ua: 'Платіж', },

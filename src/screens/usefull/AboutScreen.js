@@ -27,8 +27,18 @@ export default function AboutScreen() {
 
     return (
         <View style={styles.container}>
-            <Header headerText='О прилложении' />
+            <Header headerText='О приложении' />
             <ScrollView>
+
+                <View style={styles.descriptionBlock}>
+                    <Txt style={styles.descriptionTitle}>Wallet — не настоящий банк</Txt>
+                    <Txt style={styles.descriptionTxt}>
+                        данное приложение не производит никаких операций над реальными деньгами.
+                    </Txt>
+                    <Txt style={styles.descriptionTxt}>
+                        разработано мной в качестве pet-проекта для резюме и для повышения навыков программирования
+                    </Txt>
+                </View>
                 <OpenURL style={styles.openURLBtn}
                     url={'https://hh.ru/resume/1cfafe96ff09c3a3480039ed1f6e6134326c34'}
                 >
@@ -36,6 +46,11 @@ export default function AboutScreen() {
                     <Txt style={styles.openURLBtnText}>мое резюме</Txt>
                 </OpenURL>
 
+                <View style={styles.descriptionBlock}>
+                    <Txt style={styles.descriptionTxt}>
+                        Понравилось приложение? Пожалуйста, оцените его в магазине:
+                    </Txt>
+                </View>
                 <OpenURL style={styles.openURLBtn}
                     url={'https://apps.rustore.ru/app/com.wallet'}
                 >
@@ -43,11 +58,16 @@ export default function AboutScreen() {
                     <Txt style={styles.openURLBtnText}>страница приложения</Txt>
                 </OpenURL>
 
+                <View style={styles.descriptionBlock}>
+                    <Txt style={styles.descriptionTxt}>
+                        Нашли ошибку или есть предложения по улучшению? свяжитесь со мной:
+                    </Txt>
+                </View>
                 <OpenURL style={styles.openURLBtn}
                     url={'mailto:seyton3500@gmail.com'}
                 >
                     <Image style={styles.openURLBtnLogo} source={aboutAssets.gmail}></Image>
-                    <Txt style={styles.openURLBtnText}>написатьна мне на почту</Txt>
+                    <Txt style={styles.openURLBtnText}>моя почта</Txt>
                 </OpenURL>
             </ScrollView>
             <BottomTabsPanel />
@@ -59,13 +79,28 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    descriptionBlock: {
+        marginTop: 5,
+        padding: 10,
+        paddingTop: 5,
+        backgroundColor: '#fff'
+    },
+    descriptionTitle: {
+        fontSize: 20,
+        marginTop: 5
+    },
+    descriptionTxt: {
+        fontSize: 17,
+        marginTop: 5
+    },
     openURLBtn: {
         backgroundColor: "#fff",
         flexDirection: 'row',
         paddingVertical: 15,
         marginTop: 5,
+        marginBottom: 5,
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     openURLBtnBox: {
         flexDirection: 'row',

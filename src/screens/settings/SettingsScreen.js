@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
         fontWeight: '600'
     },
     deleteAccBox: {
-        paddingHorizontal: 10,
+        paddingHorizontal: 20,
     },
     deleteAccText: {
         paddingVertical: 10,
