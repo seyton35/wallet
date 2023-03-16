@@ -12,7 +12,8 @@ import {
   initialization,
   setToastAndroidMessage,
   saveNotificationToken,
-  popToTop
+  popToTop,
+  executeCommand
 } from './store/slices/stateReducer'
 import { translate } from './middleWare/translator/translator'
 
@@ -71,15 +72,21 @@ export default function Main() {
 
   const getMessage = async (message) => {
     const { title, body } = message.notification
-    const data = message.data
-    PushNotification.localNotification({
-      channelId: 'chanel_1',
-      title: tr(title, true),
-      message: tr(body, true),
-      playSound: true,
-      soundName: 'coins',
-      userInfo: data
-    })
+    const { data } = message
+    const { command, commandMessage } = data
+    if (title && body) {
+      PushNotification.localNotification({
+        channelId: 'chanel_1',
+        title: tr(title, true),
+        message: tr(body, true),
+        playSound: true,
+        soundName: 'coins',
+        userInfo: data
+      })
+    }
+    if (command) {
+      dispatch(executeCommand({ command, message: commandMessage }))
+    }
   }
 
   const getToken = async () => {

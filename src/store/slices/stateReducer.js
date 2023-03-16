@@ -4,6 +4,25 @@ import { storeData, getData, removeData } from "../../middleWare/asyncStorage";
 import { translate } from "../../middleWare/translator/translator";
 import { fetchAvailableCurrencies, setActiveBills, setAndStoreDefaultCurrencyAccount, setCurrencyArray, setDefaultCurrencyAccount } from "./currencyReducer";
 
+export const executeCommand = createAsyncThunk(
+    'state/executeCommand',
+    async ({ command, message }, { dispatch }) => {
+        switch (command) {
+            case 'test':
+                console.log(command);
+                console.log('test')
+                break;
+            case 'message':
+                console.log(message)
+                console.log(command);
+                break;
+            case 'logOut':
+                dispatch(logOutUser())
+                dispatch(popToTop('register'))
+                break;
+        }
+    }
+)
 export const initialization = createAsyncThunk(
     'state/initialization',
     async (_, { dispatch }) => {
