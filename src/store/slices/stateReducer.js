@@ -264,6 +264,7 @@ export const loginUser = createAsyncThunk(
 const stateSlice = createSlice({
     name: 'state',
     initialState: {
+        version: '1.6.0',
         language: 'ru',
         availableLanguages: ['ru', 'en', 'ua'],
         loading: false,

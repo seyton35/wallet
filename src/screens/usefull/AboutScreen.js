@@ -6,8 +6,11 @@ import Header from '../../components/Header'
 import Txt from '../../components/Txt'
 
 import { aboutAssets } from '../../../assets/aboutAssets'
+import { useSelector } from 'react-redux'
 
 export default function AboutScreen() {
+
+    const { version } = useSelector(s => s.state)
 
     const OpenURL = ({ url, children, ...props }) => {
         const handlePress = async () => {
@@ -69,6 +72,11 @@ export default function AboutScreen() {
                     <Image style={styles.openURLBtnLogo} source={aboutAssets.gmail}></Image>
                     <Txt style={styles.openURLBtnText}>моя почта</Txt>
                 </OpenURL>
+
+                <View style={styles.versionBox}>
+                    <Txt style={styles.versionTxt}>wallet {version}</Txt>
+                </View>
+
             </ScrollView>
             <BottomTabsPanel />
         </View>
@@ -118,5 +126,15 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         marginHorizontal: 5
-    }
+    },
+    versionBox: {
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        padding:20
+    },
+    versionTxt: {
+        color: '#888',
+        fontSize: 14,
+    },
+
 })
